@@ -1,0 +1,27 @@
+﻿<Window x:Class="TheNewInterface.AddUser"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="添加人员" WindowStartupLocation="CenterScreen"
+        MinHeight="300" MaxHeight="300"
+        MinWidth="350" MaxWidth="350">
+    <Grid>
+        <StackPanel VerticalAlignment="Center">
+            <WrapPanel Margin="0,0,0,10">
+                <Label Content="人员名称:" Name="lab_name" Width="80" Height="25"  VerticalContentAlignment="Center" />
+
+                <ComboBox Name="cmb_LoadUserName" Width="100" Height="25"  HorizontalAlignment="Left" SelectionChanged="cmb_LoadUserName_SelectionChanged"/>
+                
+                <Button Name="btn_delete" Width="80" Height="25" Margin="5,0,0,0" Content="删除" VerticalContentAlignment="Center" Click="btn_delete_Click"/>
+            </WrapPanel>
+           <WrapPanel>
+                <Label Content="人员名称:" Name="lab_Cname" Width="80" Height="25"  VerticalContentAlignment="Center" />
+                <TextBox Name="txt_username" Width="200" Height="25" VerticalContentAlignment="Center"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,10,0,0">
+                <Label Content="人员编号:" Name="lab_nameNum" Width="80" Height="25"  VerticalContentAlignment="Center" />
+                <TextBox Name="txt_userNumber" Width="200" Height="25" VerticalContentAlignment="Center"/>
+            </WrapPanel>
+            <Button Content="添加" Name="btn_Add" Width="80" Height="25" Click="btn_Add_Click" Margin="0,10,0,0"/>
+        </StackPanel>
+    </Grid>
+</Window>

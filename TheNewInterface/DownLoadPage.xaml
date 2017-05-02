@@ -1,0 +1,15 @@
+﻿<Window x:Class="TheNewInterface.DownLoadPage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="DownLoadPage" Height="300" Width="300">
+    <Grid>
+        <StackPanel>
+            <Button Name="btn_click" Width="80" Height="25" Content="click" Click="btn_click_Click"/>
+            <Canvas Width="150" Height="150" Name="can_TEST">
+
+            </Canvas>
+        </StackPanel>
+
+     
+    </Grid>
+</Window>

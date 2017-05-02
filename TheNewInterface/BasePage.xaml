@@ -1,0 +1,54 @@
+﻿<Window x:Class="TheNewInterface.BasePage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="基本信息配置" Height="350" Width="550"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Name="DataConfig">
+            <WrapPanel>
+                <Label Content="软件路径：" Width="80" Height="25" VerticalContentAlignment="Center"/>
+                <TextBox Name="txt_DataPath" Width="300" Height="25" VerticalContentAlignment="Center" />
+                <Button Name="btn_SetPath" Width="80" Height="25" Content="选择路径" Click="btn_SetPath_Click" Margin="5,0,0,0"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,10,0,0">
+                <Label Content="报表导出：" Width="80" Height="25" VerticalContentAlignment="Center"/>
+                <TextBox Name="txt_Report" Width="300" Height="25" VerticalContentAlignment="Center" />
+                <Button Name="btn_SetReportPath" Width="80" Height="25" Content="选择路径" Click="btn_SetReportPath_Click" Margin="5,0,0,0"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,10,0,0">
+                <Label Content="软件类型：" Width="80" Height="25" VerticalContentAlignment="Center"/>
+                <ComboBox Name="cmb_SoftType" Width="100" Height="25" VerticalContentAlignment="Center" />
+            </WrapPanel>
+            <WrapPanel Margin="0,10,0,0">
+                <Label Content="单位名称：" Width="80" Height="25" VerticalContentAlignment="Center"/>
+                <ComboBox Name="cmb_Company" Width="100" Height="25" VerticalContentAlignment="Center" SelectionChanged="cmb_Company_SelectionChanged" />
+                <TextBox Name="txt_CompanyNum" Width="100" Height="25" Margin='5,0,5,0' VerticalContentAlignment="Center"/>
+                <Button Content="添加地区" Height="25" Width="80" Name="btn_AddDQBM" VerticalContentAlignment="Center" Click="btn_AddDQBM_Click"/>
+                </WrapPanel>
+            <WrapPanel Margin="0,10,0,0">
+                <Label Content="装置编号：" Width="80" Height="25" VerticalContentAlignment="Center"/>
+                <TextBox Name="txt_equipment" Width="250" Height="25" VerticalContentAlignment="Center" />
+            </WrapPanel>
+            <WrapPanel Margin="0,10,0,0">
+                <Label Content="检定员：" Width="80" Height="25" VerticalContentAlignment="Center"/>
+                <ComboBox Name="cmb_Jyy" Width="100" Height="25" VerticalContentAlignment="Center" SelectionChanged="cmb_Jyy_SelectionChanged" />
+                <TextBox Name="txt_Jyy" Width="200" Height="25" Margin='5,0,0,0' VerticalContentAlignment="Center" />
+                <Button Content="添加人员" Name="btn_AddMember" Width="80" Height="25" VerticalContentAlignment="Center" Margin="5,0,0,0" Click="btn_AddMember_Click" />
+            </WrapPanel>
+            <WrapPanel Margin="0,10,0,0">
+                <Label Content="核验员：" Width="80" Height="25" VerticalContentAlignment="Center"/>
+                <ComboBox Name="cmb_Hyy" Width="100" Height="25" VerticalContentAlignment="Center" SelectionChanged="cmb_Hyy_SelectionChanged"/>
+                <TextBox Name="txt_Hyy" Width="200" Height="25" Margin='5,0,0,0' VerticalContentAlignment="Center"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,10,0,0">
+                <Label Content="铅封一位置：" Width="80" Height="25" VerticalContentAlignment="Center"/>
+                <ComboBox Name="cmb_Seal01" Width="80" Height="25" VerticalContentAlignment="Center" />
+                <Label Content="铅封二位置：" Width="80" Height="25" VerticalContentAlignment="Center"/>
+                <ComboBox Name="cmb_Seal02" Width="80" Height="25" VerticalContentAlignment="Center" />
+                <Label Content="铅封三位置：" Width="80" Height="25" VerticalContentAlignment="Center"/>
+                <ComboBox Name="cmb_Seal03" Width="80" Height="25" VerticalContentAlignment="Center" />
+            </WrapPanel>
+            <Button Content="保存" Name="btn_Save" Width="80" Height="25" Click="btn_Save_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,15,0,0"/>
+        </StackPanel>
+    </Grid>
+</Window>
