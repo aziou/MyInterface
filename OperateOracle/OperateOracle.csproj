@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="csFunctionOracle.cs" />
     <Compile Include="DataTableMember.cs" />
+    <Compile Include="operateData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

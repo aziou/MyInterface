@@ -16,7 +16,8 @@ using System.Collections.ObjectModel;
 using System.Threading;
 using System.Diagnostics;
 using System.Windows.Threading;
-
+using TheNewInterface.ViewModel;
+using OperateOracle;
 namespace TheNewInterface
 {
     /// <summary>
@@ -30,8 +31,10 @@ namespace TheNewInterface
             this.DataContext = TheNewInterface.ViewModel.AllMeterInfo.CreateInstance();
            
         }
+        public string TableName;
         Thread UpdateThread;
         public readonly string BaseConfigPath = System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml";
+        #region Tab 001
         private void Btn_Config_Click(object sender, RoutedEventArgs e)
         {
             BasePage basepage = new BasePage();
@@ -577,7 +580,79 @@ namespace TheNewInterface
                 cmb_WorkNumList.Items.Add(temp);
             }
         }
+        private void cmb_Condition_Loaded(object sender, RoutedEventArgs e)
+        {
+            cmb_Condition.Items.Add("检定时间:");
+            cmb_Condition.Items.Add("资产编号:");
 
+            cmb_Condition.SelectedIndex = 0;
+
+
+        }
+
+        private void cmb_Condition_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+
+            switch (cmb_Condition.SelectedIndex)
+            {
+                case 0:
+                    ReLoadCheckTime();
+                    break;
+                case 1:
+                    cmb_CheckTime.Items.Clear();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void btn_FindMeter_Click(object sender, RoutedEventArgs e)
+        {
+            if (cmb_Condition.SelectedIndex == 1)
+            {
+                if (cmb_CheckTime.Text == "")
+                {
+                    MessageBox.Show("请输入你要查询的资产编号！");
+                    return;
+                }
+                #region 软件类型判断
+                switch (csPublicMember.strSoftType)
+                {
+                    case "CL3000G":
+                    case "CL3000F":
+                    case "CL3000DV80":
+                        csPublicMember.strCondition = "chrjlbh";
+                        csPublicMember.strTableName = "meterinfo";
+                        break;
+                    case "CL3000S":
+                        csPublicMember.strCondition = "AVR_ASSET_NO";
+                        csPublicMember.strTableName = "METER_INFO";
+                        break;
+
+                }
+
+                #endregion
+                try
+                {
+
+                    string Sql = string.Format("Select  * from {0} where {1} ='{2}'", csPublicMember.strTableName, csPublicMember.strCondition, cmb_CheckTime.Text);
+                    List<MeterBaseInfoFactor> tempBaseInfo = new List<MeterBaseInfoFactor>();
+                    ObservableCollection<MeterBaseInfoFactor> baseInfo = new ObservableCollection<MeterBaseInfoFactor>();
+                    OperateData.PublicFunction csFunction = new OperateData.PublicFunction();
+                    baseInfo = csFunction.GetBaseInfo("", Sql, csPublicMember.strSoftType);
+
+                    ViewModel.AllMeterInfo.CreateInstance().MeterBaseInfo = baseInfo;
+
+                }
+                catch (Exception Ex)
+                {
+                }
+            }
+        }
+        #endregion
+
+        #region 删除中间库
         private void btn_deldteAllMis_Click(object sender, RoutedEventArgs e)
         {
             if (cmb_WorkNumList.Text.Trim() == "")
@@ -684,7 +759,7 @@ namespace TheNewInterface
 
 
         }
-
+       
         private void DeleteAllMeter(string Meter_update_info, double progressCount)
         {
 
@@ -708,13 +783,454 @@ namespace TheNewInterface
 
 
         }
+        #endregion
 
-    
         #region Tab Excel
         private void btn_Search_Click(object sender, RoutedEventArgs e)
         {
+            #region 查询中间库的数据
 
+            if (txt_MisZcbh.Text.Trim() == "")
+            {
+                MessageBox.Show("请输入资产编号！", "提示", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
+
+
+            #endregion
         }
+
+        public void showTheTable(string keyWord)
+        {
+            try
+            {
+                ViewMember.CreateInstance().IfRunTheItemChanged = 1;
+                operateData operate = new operateData();
+                ObservableCollection<MeterInfoItem> MeterList = new ObservableCollection<MeterInfoItem>();
+                string ZcbhWord = keyWord;
+                if (keyWord.Contains("ZP") || keyWord.Contains("ZF"))
+                {
+                    TableName = "VT_SB_JKZDJCJL";
+                }
+                #region
+
+                #endregion
+
+
+                List<DataTableMember> tempTableMember = new List<DataTableMember>();
+                string KeyWordType = "ZCBH";
+                List<string> lis_TimeHead = new List<string>();
+                List<string> lis_TimeEnd = new List<string>();
+                List<string> lis_ReZcbh = new List<string>();
+                int LineNum = 0;
+                operate.GetTheTime(TableName, KeyWordType, ZcbhWord, "=", out tempTableMember);
+
+                for (int meterNum = 0; meterNum < 1; meterNum++)
+                {
+                    string TimeHead = (Convert.ToDateTime(tempTableMember[meterNum].StrJdrq).AddMinutes(-1d)).ToString("yyyy/MM/dd HH:mm:ss");
+                    lis_TimeHead.Add(TimeHead);
+                    ViewMember.CreateInstance().ThisMeterWorkNum = tempTableMember[meterNum].StrGZDBH.ToString();
+                    string TimeEnd = (Convert.ToDateTime(tempTableMember[meterNum].StrJdrq).AddMinutes(1d)).ToString("yyyy/MM/dd HH:mm:ss");
+                    lis_TimeEnd.Add(TimeEnd);
+                    ViewMember.CreateInstance().CheckTime = tempTableMember[meterNum].StrJdrq;
+                    ViewMember.CreateInstance().Operater = tempTableMember[meterNum].StrJyy;
+
+                }
+                # region 获取基本信息
+                for (int TimeListNum = 0; TimeListNum < lis_TimeHead.Count; TimeListNum++)
+                {
+                    if (operate.ShowTheConditionTable(TableName, lis_TimeHead[TimeListNum], lis_TimeEnd[TimeListNum], ViewMember.CreateInstance().Operater, keyWord, out tempTableMember) == 0)
+                    {
+                        operate.ShowTheConditionTable(TableName, lis_TimeHead[TimeListNum], lis_TimeEnd[TimeListNum], ViewMember.CreateInstance().Operater, keyWord, out tempTableMember);
+
+                        int currentMeterNum;
+                        int currentIndex = 0;
+
+                        for (int i = 0; i < tempTableMember.Count; i++)
+                        {
+
+                            if (tempTableMember[i].StrJlbh == ZcbhWord)
+                            {
+                                currentMeterNum = Convert.ToInt16(tempTableMember[i].IntMeterNum);
+                                currentIndex = i;
+                                break;
+                            }
+                        }
+                        int FirstIndex = 0;
+                        int LastIndex = currentIndex;
+                        for (int i = currentIndex; i < tempTableMember.Count - 1; i++)
+                        {
+                            if (tempTableMember[i + 1].IntMeterNum < tempTableMember[i].IntMeterNum)
+                            {
+                                LastIndex = i;
+                                break;
+                            }
+                            else
+                            {
+                                LastIndex = tempTableMember.Count - 1;
+                            }
+                        }
+                        for (int i = currentIndex; i > 0; i--)
+                        {
+                            if (tempTableMember[i].IntMeterNum < tempTableMember[i - 1].IntMeterNum)
+                            {
+                                FirstIndex = i;
+                                break;
+                            }
+                        }
+
+
+                        #region 代码转中文
+                        for (int j = FirstIndex; j <= LastIndex; j++)
+                        {
+                            if (tempTableMember[j].StrJddw == "")
+                            {
+                                tempTableMember[j].StrJddw = "深圳供电局有限公司";
+                            }
+                            switch (tempTableMember[j].StrJyy)
+                            {
+                                case "8E0257BE35ED1489E0440018FE2DCF1D":
+                                    tempTableMember[j].StrJyy = "陈佩茹";
+                                    break;
+                                case "acb7d25b68a24e8fbee725b0149e8a96":
+                                    tempTableMember[j].StrJyy = "安琪儿";
+                                    break;
+                                case "7FD9789A0A2649D195CA49A441DE28EE":
+                                    tempTableMember[j].StrJyy = "陈曦彤";
+                                    break;
+                                case "8E0257BE31911489E0440018FE2DCF1D":
+                                    tempTableMember[j].StrJyy = "陈雯丽";
+                                    break;
+                                case "8E0257BE278F1489E0440018FE2DCF1D":
+                                    tempTableMember[j].StrJyy = "郭兴林";
+                                    break;
+                                case "yx_hexiaojun":
+                                    tempTableMember[j].StrJyy = "何晓军";
+                                    break;
+                                case "yx_jiangqinghong":
+                                    tempTableMember[j].StrJyy = "江庆洪";
+                                    break;
+                                case "yx_laishengsi":
+                                    tempTableMember[j].StrJyy = "赖盛斯";
+                                    break;
+                                case "yx_lijinxia":
+                                    tempTableMember[j].StrJyy = "李金霞";
+                                    break;
+                                case "yx_limi":
+                                    tempTableMember[j].StrJyy = "李密";
+                                    break;
+                                case "yx_lina":
+                                    tempTableMember[j].StrJyy = "李娜";
+                                    break;
+                                case "8E0257BE2F6B1489E0440018FE2DCF1D":
+                                    tempTableMember[j].StrJyy = "刘岚";
+                                    break;
+                                case "yx_wangshaosi":
+                                    tempTableMember[j].StrJyy = "王少思";
+                                    break;
+                                case "yx_wangzhenglin":
+                                    tempTableMember[j].StrJyy = "王正林";
+                                    break;
+                                case "9E79AE1983D84C0E83D3E0DC49977F38":
+                                    tempTableMember[j].StrJyy = "王子慧";
+                                    break;
+                                case "yx_weichunyan":
+                                    tempTableMember[j].StrJyy = "韦春艳";
+                                    break;
+                                case "09C368A980B041AEA98999BF9C6B80E0":
+                                    tempTableMember[j].StrJyy = "杨立瑾";
+                                    break;
+                                case "yx_yangxuechong":
+                                    tempTableMember[j].StrJyy = "杨薛冲";
+                                    break;
+                                case "yx_zhangjun":
+                                    tempTableMember[j].StrJyy = "张军";
+                                    break;
+                                case "227EA885C6BF4F46918308254012ED1E":
+                                    tempTableMember[j].StrJyy = "张小燕";
+                                    break;
+                                case "yx_zhangzhen":
+                                    tempTableMember[j].StrJyy = "张珍";
+                                    break;
+                                case "BC0D3C2FC3F94746A730FEC04A71B898":
+                                    tempTableMember[j].StrJyy = "朱玲";
+                                    break;
+                                case "8E0257BE2F091489E0440018FE2DCF1D":
+                                    tempTableMember[j].StrJyy = "朱新涛";
+                                    break;
+                                case "yx_qinhaishan":
+                                    tempTableMember[j].StrJyy = "覃海山";
+                                    break;
+                                default:
+                                    break;
+
+                            }
+                            switch (tempTableMember[j].StrHyy)
+                            {
+                                case "8E0257BE35ED1489E0440018FE2DCF1D":
+                                    tempTableMember[j].StrHyy = "陈佩茹";
+                                    break;
+                                case "acb7d25b68a24e8fbee725b0149e8a96":
+                                    tempTableMember[j].StrHyy = "安琪儿";
+                                    break;
+                                case "7FD9789A0A2649D195CA49A441DE28EE":
+                                    tempTableMember[j].StrHyy = "陈曦彤";
+                                    break;
+                                case "8E0257BE31911489E0440018FE2DCF1D":
+                                    tempTableMember[j].StrHyy = "陈雯丽";
+                                    break;
+                                case "8E0257BE278F1489E0440018FE2DCF1D":
+                                    tempTableMember[j].StrHyy = "郭兴林";
+                                    break;
+                                case "yx_hexiaojun":
+                                    tempTableMember[j].StrHyy = "何晓军";
+                                    break;
+                                case "yx_jiangqinghong":
+                                    tempTableMember[j].StrHyy = "江庆洪";
+                                    break;
+                                case "yx_laishengsi":
+                                    tempTableMember[j].StrHyy = "赖盛斯";
+                                    break;
+                                case "yx_lijinxia":
+                                    tempTableMember[j].StrHyy = "李金霞";
+                                    break;
+                                case "yx_limi":
+                                    tempTableMember[j].StrHyy = "李密";
+                                    break;
+                                case "yx_lina":
+                                    tempTableMember[j].StrHyy = "李娜";
+                                    break;
+                                case "8E0257BE2F6B1489E0440018FE2DCF1D":
+                                    tempTableMember[j].StrHyy = "刘岚";
+                                    break;
+                                case "yx_wangshaosi":
+                                    tempTableMember[j].StrHyy = "王少思";
+                                    break;
+                                case "yx_wangzhenglin":
+                                    tempTableMember[j].StrHyy = "王正林";
+                                    break;
+                                case "9E79AE1983D84C0E83D3E0DC49977F38":
+                                    tempTableMember[j].StrHyy = "王子慧";
+                                    break;
+                                case "yx_weichunyan":
+                                    tempTableMember[j].StrHyy = "韦春艳";
+                                    break;
+                                case "09C368A980B041AEA98999BF9C6B80E0":
+                                    tempTableMember[j].StrHyy = "杨立瑾";
+                                    break;
+                                case "yx_yangxuechong":
+                                    tempTableMember[j].StrHyy = "杨薛冲";
+                                    break;
+                                case "yx_zhangjun":
+                                    tempTableMember[j].StrHyy = "张军";
+                                    break;
+                                case "227EA885C6BF4F46918308254012ED1E":
+                                    tempTableMember[j].StrHyy = "张小燕";
+                                    break;
+                                case "yx_zhangzhen":
+                                    tempTableMember[j].StrHyy = "张珍";
+                                    break;
+                                case "BC0D3C2FC3F94746A730FEC04A71B898":
+                                    tempTableMember[j].StrHyy = "朱玲";
+                                    break;
+                                case "8E0257BE2F091489E0440018FE2DCF1D":
+                                    tempTableMember[j].StrHyy = "朱新涛";
+                                    break;
+                                case "yx_qinhaishan":
+                                    tempTableMember[j].StrHyy = "覃海山";
+                                    break;
+                                default:
+                                    break;
+
+                            }
+
+                        }
+                        #endregion
+
+                        for (int i = FirstIndex; i <= LastIndex; i++)
+                        {
+                            LineNum++;
+                            lis_ReZcbh.Add(tempTableMember[i].StrJlbh.ToString());
+                            MeterList.Add(new MeterInfoItem()
+                            {
+                                ID = LineNum,
+                                StrBZZZZCBH = tempTableMember[i].StrBZZZZCBH,
+                                StrJlbh = tempTableMember[i].StrJlbh,
+                                StrJdjl = tempTableMember[i].StrJdjl,
+                                StrGZDBH = tempTableMember[i].StrGZDBH,
+                                StrWD = tempTableMember[i].StrWD,
+                                StrSD = tempTableMember[i].StrSD,
+                                IntMeterNum = tempTableMember[i].IntMeterNum,
+                                StrJdrq = tempTableMember[i].StrJdrq,
+                                StrJyy = tempTableMember[i].StrJyy,
+                                StrJddw = tempTableMember[i].StrJddw,
+                                StrHyy = tempTableMember[i].StrHyy,
+                                StrTestType = tempTableMember[i].StrTestType,
+                                StrBlx = tempTableMember[i].StrBlx,
+                                StrBmc = tempTableMember[i].StrBmc,
+                                StrUb = tempTableMember[i].StrUb,
+                                StrIb = tempTableMember[i].StrIb,
+                                StrMeterLevel = tempTableMember[i].StrMeterLevel,
+                                StrManufacture = tempTableMember[i].StrManufacture,
+                                StrWcResult = tempTableMember[i].StrWcResult,
+                                StrShellSeal = tempTableMember[i].StrShellSeal,
+                                StrCodeSeal = tempTableMember[i].StrCodeSeal,
+                                StrYXRQ = (Convert.ToDateTime(tempTableMember[i].StrJdrq).AddYears(5)).ToString(),
+
+                            });
+                        }
+
+                    }
+                }
+                #endregion
+
+                #region Get One MetetInfo
+                for (int ReZcbh = 0; ReZcbh < lis_ReZcbh.Count; ReZcbh++)
+                {
+                    operate.ShowTheConditionTable(TableName, lis_ReZcbh[ReZcbh], ViewMember.CreateInstance().Operater, keyWord, out tempTableMember);
+                    for (int j = 0; j < tempTableMember.Count; j++)
+                    {
+                        LineNum++;
+                        MeterList.Add(new MeterInfoItem()
+                        {
+                            ID = LineNum,
+                            StrBZZZZCBH = tempTableMember[j].StrBZZZZCBH,
+                            StrJlbh = tempTableMember[j].StrJlbh,
+                            StrJdjl = tempTableMember[j].StrJdjl,
+                            StrGZDBH = tempTableMember[j].StrGZDBH,
+                            StrWD = tempTableMember[j].StrWD,
+                            StrSD = tempTableMember[j].StrSD,
+                            IntMeterNum = tempTableMember[j].IntMeterNum,
+                            StrJdrq = tempTableMember[j].StrJdrq,
+                            StrJyy = tempTableMember[j].StrJyy,
+                            StrJddw = tempTableMember[j].StrJddw,
+                            StrHyy = tempTableMember[j].StrHyy,
+                            StrTestType = tempTableMember[j].StrTestType,
+                            StrBlx = tempTableMember[j].StrBlx,
+                            StrBmc = tempTableMember[j].StrBmc,
+                            StrUb = tempTableMember[j].StrUb,
+                            StrIb = tempTableMember[j].StrIb,
+                            StrMeterLevel = tempTableMember[j].StrMeterLevel,
+                            StrManufacture = tempTableMember[j].StrManufacture,
+                            StrWcResult = tempTableMember[j].StrWcResult,
+                            StrShellSeal = tempTableMember[j].StrShellSeal,
+                            StrCodeSeal = tempTableMember[j].StrCodeSeal,
+                            StrYXRQ = (Convert.ToDateTime(tempTableMember[j].StrJdrq).AddYears(5)).ToString(),
+
+                        });
+
+                    }
+
+                }
+
+
+                #endregion
+
+
+                #region
+                for (int i = 0; i < MeterList.Count; i++)
+                {
+                    List<DataTableMember> temp = new List<DataTableMember>();
+                    operate.ShowTheLockTable(MeterList[i].StrJlbh, MeterList[i].StrGZDBH, out temp);
+
+                    if ((keyWord.Substring(0, 1) == "E" || keyWord.Substring(0, 1) == "F" || keyWord.Contains("ZP") || keyWord.Contains("ZF")))
+                    {
+                        if (temp.Count != 0)
+                        {
+                            MeterList[i].StrShellSeal = temp[0].StrFYZCBH;
+                            MeterList[i].StrCodeSeal = " ";
+
+                        }
+                        else
+                        {
+                            MeterList[i].StrShellSeal = " ";
+                            MeterList[i].StrCodeSeal = " ";
+                        }
+                    }
+                    else
+                    {
+                        if (temp.Count > 0)
+                        {
+                            if (temp[0].StrJFWZDM == "07")
+                            {
+                                MeterList[i].StrShellSeal = temp[1].StrFYZCBH;
+                                MeterList[i].StrCodeSeal = temp[0].StrFYZCBH;
+                            }
+                            else
+                            {
+                                MeterList[i].StrShellSeal = temp[0].StrFYZCBH;
+                                MeterList[i].StrCodeSeal = temp[1].StrFYZCBH;
+
+                            }
+                        }
+
+                    }
+
+                }
+                string blank = " ";
+                for (int j = 0; j < MeterList.Count; j++)
+                {
+                    if (MeterList[j].StrJlbh.Length == 24)
+                    {
+                        string A = MeterList[j].StrJlbh.Substring(0, 4);
+                        string B = MeterList[j].StrJlbh.Substring(4, 4);
+                        string C = MeterList[j].StrJlbh.Substring(8, 4);
+                        string D = MeterList[j].StrJlbh.Substring(12, 4);
+                        string E = MeterList[j].StrJlbh.Substring(16, 4);
+                        string F = MeterList[j].StrJlbh.Substring(20, 4);
+                        MeterList[j].StrJlbh = A + blank + B + blank + C + blank + D + blank + E + blank + F;
+                    }
+                }
+                for (int j = 0; j < MeterList.Count; j++)
+                {
+                    if (MeterList[j].StrShellSeal != null)
+                    {
+                        if (MeterList[j].StrShellSeal.Length == 24)
+                        {
+                            string A = MeterList[j].StrShellSeal.Substring(0, 4);
+                            string B = MeterList[j].StrShellSeal.Substring(4, 4);
+                            string C = MeterList[j].StrShellSeal.Substring(8, 4);
+                            string D = MeterList[j].StrShellSeal.Substring(12, 4);
+                            string E = MeterList[j].StrShellSeal.Substring(16, 4);
+                            string F = MeterList[j].StrShellSeal.Substring(20, 4);
+                            MeterList[j].StrShellSeal = A + blank + B + blank + C + blank + D + blank + E + blank + F;
+                        }
+                    }
+
+                }
+                for (int j = 0; j < MeterList.Count; j++)
+                {
+                    if (MeterList[j].StrCodeSeal != null)
+                    {
+                        if (MeterList[j].StrCodeSeal.Length == 24)
+                        {
+                            string A = MeterList[j].StrCodeSeal.Substring(0, 4);
+                            string B = MeterList[j].StrCodeSeal.Substring(4, 4);
+                            string C = MeterList[j].StrCodeSeal.Substring(8, 4);
+                            string D = MeterList[j].StrCodeSeal.Substring(12, 4);
+                            string E = MeterList[j].StrCodeSeal.Substring(16, 4);
+                            string F = MeterList[j].StrCodeSeal.Substring(20, 4);
+                            MeterList[j].StrCodeSeal = A + blank + B + blank + C + blank + D + blank + E + blank + F;
+                        }
+                    }
+
+                }
+                if (ViewMember.CreateInstance().MeterInfoList != null)
+                    ViewMember.CreateInstance().MeterInfoList.Clear();
+                ViewMember.CreateInstance().MeterInfoList = MeterList;
+
+                #endregion
+
+
+
+
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
+        }
+
 
         private void btn_OutPutExcel_Click(object sender, RoutedEventArgs e)
         {
@@ -729,94 +1245,11 @@ namespace TheNewInterface
             Message = function.OutPutAllInfoToExcel(txt_MisZcbh.Text.ToString().Trim());
             MessageBox.Show(Message);
 
-            // DataTable dtable = new DataTable();
-            //dtable= function.GetZcbhTableLocal("B16018871A", "select * from meter_info where avr_asset_no = 'B16018871A' ");
-            //dtable.Rows[0][0] = "12345679";
-
-            //for (int i = 0; i < dtable.Columns.Count; i++)
-            //{
-            //    dtable.Columns[i].ColumnName = "嫦娥"+i.ToString();
-            //}
-            //    //foreach (DataColumn c in dtable.Columns)
-            //    //{
-            //    //    // Console.WriteLine(c.ColumnName);
-            //    //    lis_Col.Items.Add(c.ColumnName);
-            //    //} 
-            //function.ExportEasy(dtable, @"C:\Users\screw\Desktop\12345\demo.xls");
-            //MessageBox.Show("ok");
+           
         }
         #endregion
 
-        private void cmb_Condition_Loaded(object sender, RoutedEventArgs e)
-        {
-            cmb_Condition.Items.Add("检定时间:");
-            cmb_Condition.Items.Add("资产编号:");
-
-            cmb_Condition.SelectedIndex = 0;
-
-
-        }
-
-        private void cmb_Condition_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-                
-         
-                switch(cmb_Condition.SelectedIndex)
-                {
-                    case 0:
-                        ReLoadCheckTime();
-                        break;
-                    case 1:
-                        cmb_CheckTime.Items.Clear();
-                        break;
-                    default:
-                        break;
-                }
-        }
-
-        private void btn_FindMeter_Click(object sender, RoutedEventArgs e)
-        {
-            if (cmb_Condition.SelectedIndex == 1)
-            {
-                if (cmb_CheckTime.Text == "")
-                {
-                    MessageBox.Show("请输入你要查询的资产编号！");
-                    return;
-                }
-                #region 软件类型判断
-                switch (csPublicMember.strSoftType)
-                {
-                    case "CL3000G":
-                    case "CL3000F":
-                    case "CL3000DV80":
-                        csPublicMember.strCondition = "chrjlbh";
-                        csPublicMember.strTableName = "meterinfo";
-                        break;
-                    case "CL3000S":
-                        csPublicMember.strCondition = "AVR_ASSET_NO";
-                        csPublicMember.strTableName = "METER_INFO";
-                        break;
-
-                }
-
-                #endregion
-                try
-                {
-                    
-                    string Sql = string.Format("Select  * from {0} where {1} ='{2}'", csPublicMember.strTableName, csPublicMember.strCondition, cmb_CheckTime.Text);
-                    List<MeterBaseInfoFactor> tempBaseInfo = new List<MeterBaseInfoFactor>();
-                    ObservableCollection<MeterBaseInfoFactor> baseInfo = new ObservableCollection<MeterBaseInfoFactor>();
-                    OperateData.PublicFunction csFunction = new OperateData.PublicFunction();
-                    baseInfo = csFunction.GetBaseInfo("", Sql, csPublicMember.strSoftType);
-
-                    ViewModel.AllMeterInfo.CreateInstance().MeterBaseInfo = baseInfo;
-
-                }
-                catch (Exception Ex)
-                {
-                }
-            }
-        }
+       
 
        
     }

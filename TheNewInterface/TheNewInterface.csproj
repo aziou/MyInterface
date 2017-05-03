@@ -71,6 +71,8 @@
       <DependentUpon>OracleConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\AllMeterInfo.cs" />
+    <Compile Include="ViewModel\MeterInfoItem.cs" />
+    <Compile Include="ViewModel\ViewMember.cs" />
     <Page Include="AddUser.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -103,10 +105,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Theme\DataGridStyle.xaml">
+    <Resource Include="Theme\DataGridStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

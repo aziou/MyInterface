@@ -25,3 +25,10 @@ E:\The_GSC_Update\OperateData\bin\Debug\DataCore.pdb
 E:\The_GSC_Update\OperateData\obj\Debug\ResolveAssemblyReference.cache
 E:\The_GSC_Update\OperateData\obj\Debug\OperateData.dll
 E:\The_GSC_Update\OperateData\obj\Debug\OperateData.pdb
+D:\AziouStudio\The_GSC_Update\MyInterface\OperateData\bin\Debug\OperateData.dll
+D:\AziouStudio\The_GSC_Update\MyInterface\OperateData\bin\Debug\OperateData.pdb
+D:\AziouStudio\The_GSC_Update\MyInterface\OperateData\bin\Debug\DataCore.dll
+D:\AziouStudio\The_GSC_Update\MyInterface\OperateData\bin\Debug\DataCore.pdb
+D:\AziouStudio\The_GSC_Update\MyInterface\OperateData\obj\Debug\OperateData.csprojResolveAssemblyReference.cache
+D:\AziouStudio\The_GSC_Update\MyInterface\OperateData\obj\Debug\OperateData.dll
+D:\AziouStudio\The_GSC_Update\MyInterface\OperateData\obj\Debug\OperateData.pdb

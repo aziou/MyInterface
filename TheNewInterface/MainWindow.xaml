@@ -26,7 +26,7 @@
                 </Grid.ColumnDefinitions>
 
                 <WrapPanel Grid.Column="1" VerticalAlignment="Center">
-                    <ComboBox Width="80" Height="25"  Name="cmb_Condition" VerticalContentAlignment="Center" Loaded="cmb_Condition_Loaded" SelectionChanged="cmb_Condition_SelectionChanged" />
+                    <ComboBox Width="80"  Height="25"  Name="cmb_Condition" VerticalContentAlignment="Center" Loaded="cmb_Condition_Loaded" SelectionChanged="cmb_Condition_SelectionChanged" IsEditable="True" />
                     <ComboBox Width="200" Height="25" Name="cmb_CheckTime" Loaded="cmb_CheckTime_Loaded" SelectionChanged="cmb_CheckTime_SelectionChanged" IsEditable="True"/>
                     <Button Name="btn_FindMeter" Width="80" Height="25" Content="查询" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="btn_FindMeter_Click"/>
                     <CheckBox Name="chk_ShowLess" Width="150" Height="25" Content="加载前20个检定日期" VerticalContentAlignment="Center" Margin="5,0,0,0" IsChecked="True" Click="chk_ShowLess_Click" />
@@ -59,7 +59,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="表位号" Width="0.5*" >
+                        <DataGridTemplateColumn Header="表位号" Width="0.7*" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Label Content="{Binding LNG_BENCH_POINT_NO}" ></Label>
@@ -136,19 +136,710 @@
             </Grid>
         </TabItem>
         <TabItem Header="Excel">
-            <StackPanel>
-                <WrapPanel HorizontalAlignment="Center">
-                    <Label Content="资产编号：" Width="80" Height="25" />
-                    <TextBox Name="txt_MisZcbh" Width="200" Height="25" />
-                    <Button Name="btn_Search" Width="80" Height="25" Content="查询" Click="btn_Search_Click"/>
-                    <Button Name="btn_OutPutExcel" Width="80" Height="25" Content="导出Excel" Click="btn_OutPutExcel_Click"/>
+            <StackPanel >
+                <Grid  >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="80"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="2.5*"/>
+                        <RowDefinition Height="10*"/>
+                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="1*"/>
 
-                </WrapPanel>
-                <ListBox Name="lis_Col">
+                    </Grid.RowDefinitions>
+                    
+                    <TabControl Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="2">
 
-                </ListBox>
+                        <TabItem Header="基本误差">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="25"/>
+                                </Grid.RowDefinitions>
+                                <DataGrid ItemsSource="{Binding WcItemList}" Name="DgBasicError" AutoGenerateColumns="False" CanUserAddRows="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTemplateColumn Header="行号">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding ID}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="功率方向">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrGLFXDM}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="功率因素">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrGLYSDM}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="负载类型">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrFZLXDM}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="负载电流">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrFZDLDM}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="相别">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrXBDM}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="负载类型">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrFZLXDM}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="分元">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrFYDM}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="误差值1">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrWC1}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="误差值2">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrWC2}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="误差值3">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrWC3}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="误差值4">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrWC4}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="误差值5">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrWC5}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="误差平均值">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrWCPJZ}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="误差修约值">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrWCXYZ}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="结论代码">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrJLDM}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="误差差值">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrWCCZ}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="误差差值修约">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrWCCZXYZ}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="地区编码">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrDQBM}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <WrapPanel Grid.Row="1">
+                                    <Label Content="共"/>
+                                    <Label Content="" Name="labInfoCount1"/>
+                                    <Label Content="条"/>
+                                </WrapPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="日记时误差">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="25"/>
+                                </Grid.RowDefinitions>
+                                <DataGrid ItemsSource="{Binding DayJSWCList}" Name="DgBasicError2" AutoGenerateColumns="False" CanUserAddRows="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTemplateColumn Header="行号">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding ID}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="测试值1">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrCSZ1}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="测试值2">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrCSZ2}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="测试值3">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrCSZ3}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="测试值4">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrCSZ4}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="测试值5">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrCSZ5}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="平均值">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrPJZ}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="地区编号">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrRJSDQBM}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <WrapPanel Grid.Row="1">
+                                    <Label Content="共"/>
+                                    <Label Content="" Name="labInfoCount2"/>
+                                    <Label Content="条"/>
+                                </WrapPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="需量误差">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="25"/>
+                                </Grid.RowDefinitions>
+                                <DataGrid ItemsSource="{Binding NeedRecordList}" Name="DgBasicError1" AutoGenerateColumns="False" CanUserAddRows="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTemplateColumn Header="行号">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding ID}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="负载电流">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrFZDLDM}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="标记最大需量">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrBZZDXL}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="实际需量">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrSJXL}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="误差值">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrWCZ}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="结论代码">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrXLJLDM}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="地区编码">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrXLDQBM}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+
+                                </DataGrid>
+                                <WrapPanel Grid.Row="1">
+                                    <Label Content="共"/>
+                                    <Label Content="" Name="labInfoCount3"/>
+                                    <Label Content="条"/>
+                                </WrapPanel>
+
+                            </Grid>
+
+                        </TabItem>
+                        <TabItem Header="时段投切">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="25"/>
+                                </Grid.RowDefinitions>
+                                <DataGrid ItemsSource="{Binding TimeTQList}" AutoGenerateColumns="False" CanUserAddRows="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTemplateColumn Header="行号">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding ID}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="时段">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrTime}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="标准投切时间">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrBZTQSJ}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="实际投切时间">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrSJTQSJ}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="投切误差">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrTQWC}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="地区编码">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrTQDQBM}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <WrapPanel Grid.Row="1">
+                                    <Label Content="共"/>
+                                    <Label Content="" Name="labInfoCount4"/>
+                                    <Label Content="条"/>
+                                </WrapPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="示数">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="25"/>
+                                </Grid.RowDefinitions>
+                                <DataGrid ItemsSource="{Binding DiaPlayList}" AutoGenerateColumns="False" CanUserAddRows="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTemplateColumn Header="行号">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding ID}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="示数类型">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrSSLXDM}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="表示数">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrBSS}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="抄表时间">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrCBSJ}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="地区编码">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrSSDQBM}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <WrapPanel Grid.Row="1">
+                                    <Label Content="共"/>
+                                    <Label Content="" Name="labInfoCount5"/>
+                                    <Label Content="条"/>
+                                </WrapPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="走字记录">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="25"/>
+                                </Grid.RowDefinitions>
+                                <DataGrid ItemsSource="{Binding RunWordList}" AutoGenerateColumns="False" CanUserAddRows="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTemplateColumn Header="行号">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding ID}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="示数类型代码">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrZZSSLXDM}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="标准器起示数">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrBZQQSS}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="标准器止示数">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrBZQZSS}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="起示数">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrQSS}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="止示数">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrZSS}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="走字误差">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrZZWC}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="地区编号">
+                                            <DataGridTemplateColumn.CellTemplate >
+                                                <DataTemplate >
+                                                    <Label Content="{Binding StrZZDQBM}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <WrapPanel Grid.Row="1">
+                                    <Label Content="共"/>
+                                    <Label Content="" Name="labInfoCount6"/>
+                                    <Label Content="条"/>
+                                </WrapPanel>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+                    <!--<StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"  Name="TitleInfo">
+            <Grid  Margin="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="有效日期:" />
+                <TextBox  Grid.Column="1" IsReadOnly="True" Text="{Binding StrYXRQ}" />
+                <Label Content="设备类别:" Grid.Column="2" />
+                <TextBox Text="{Binding StrBlx}" Grid.Column="3" IsReadOnly="True"/>
+                <Label Content="设备类型:" Grid.Column="4" />
+                <TextBox Text="{Binding StrBmc}" Grid.Column="5" IsReadOnly="True"/>
+                
+            </Grid>
+            <Grid Margin="2" Name="GridSeal">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="外壳封:" />
+                <TextBox Text="{Binding StrShellSeal}" Grid.Column="1" IsReadOnly="True" />
+                <Label Content="编程封:" Grid.Column="2" />
+                <TextBox Text="{Binding StrCodeSeal}" Grid.Column="3" IsReadOnly="True"/>
+                <Label Content="封印时间:" Grid.Column="4" />
+                <TextBox Text="{Binding StrJFSJ}" Grid.Column="5" IsReadOnly="True"/>
+
+            </Grid>
+            <Grid Margin="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="生产厂家:" />
+                <TextBox Text="{Binding StrManufacture}" Grid.Column="1" IsReadOnly="True" />
+                <Label Content="检定单位:" Grid.Column="2" />
+                <TextBox Text="{Binding StrJddw}" Grid.Column="3" IsReadOnly="True"/>
+                <Label Content="计划完成日:" Grid.Column="4" />
+                <TextBox Text="{Binding Strblx}" Grid.Column="5" IsReadOnly="True"/>
+
+            </Grid>
+           
+
+
+
+        </StackPanel>-->
+                    <StackPanel Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,15,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="7*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+                            <WrapPanel HorizontalAlignment="Center" Grid.Column="0" Grid.ColumnSpan="4">
+                                <Label Content="资产编号：" Width="80" Height="25" />
+                                <TextBox Name="txt_MisZcbh" Width="200" Height="25" />
+                                <Button Name="btn_Search" Width="80" Height="25" Content="查询" Click="btn_Search_Click" Margin="0,0,5,0"/>
+                                <Button Name="btn_OutPutExcel" Width="80" Height="25" Content="导出Excel" Click="btn_OutPutExcel_Click"/>
+                            </WrapPanel>
+                            <!--<Label Content="资产编号:" Grid.Column="0" HorizontalAlignment="Right"/>
+                            <Border Grid.Column="1" BorderBrush="Black" BorderThickness="2" CornerRadius="8" >
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="7*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Name="txtkeyWord"  BorderBrush="White" FontSize="15"   KeyUp="txtkeyWord_KeyUp"/>
+                                    <Button  Name="btnGoto" Content="查询" Grid.Column="1" BorderBrush="White" Background="White"
+                                 Click="btnGoto_Click_1" IsDefault="True"/>
+                                </Grid>
+                            </Border>-->
+
+
+                        </Grid>
+                    </StackPanel>
+
+
+                    <TabControl Grid.Row="3" Grid.Column="1" Grid.RowSpan="3" Grid.ColumnSpan="3" TabStripPlacement="Top" >
+                        <TabItem Header="基本信息表" Background="Cyan" FontSize="13">
+                            <DataGrid Grid.Row="3" ItemsSource="{Binding MeterInfoList}" 
+                           Grid.Column="1" Grid.ColumnSpan="3" x:Name="Grid_showItem" AutoGenerateColumns="False" CanUserAddRows="False" >
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Header="行号">
+                                        <DataGridTemplateColumn.CellTemplate >
+                                            <DataTemplate >
+                                                <Label Content="{Binding ID}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="表位号">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding IntMeterNum}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="资产编号">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding StrJlbh}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="检定结论">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding StrJdjl}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="温度">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding StrWD}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="湿度">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding StrSD}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <DataGridTemplateColumn Header="外壳封">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding StrShellSeal}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="编程封">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding StrCodeSeal}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="工作单编号">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding StrGZDBH}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="检定日期">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding StrJdrq}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="检定人员">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding StrJyy}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="检定单位">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding StrJddw}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="核验人员">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding StrHyy}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="电能计量设备资产编号">
+                                        <DataGridTemplateColumn.CellTemplate >
+                                            <DataTemplate >
+                                                <Label Content="{Binding StrBZZZZCBH}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </TabItem>
+                    </TabControl>
+                    <!--<StackPanel Grid.Row="0" Grid.RowSpan="3" >
+            <Button Name="btnSearch" Margin="0,10,0,10" Height="40"   
+                    Content="查询" Click="btnSearch_Click_1"/>
+            <Button Name="btnBasicError" Content="基本误差" Click="btnBasicError_Click_1"/>
+        </StackPanel >-->
+
+                </Grid>
             </StackPanel>
 
+           
         </TabItem>
     </TabControl>
 </Window>

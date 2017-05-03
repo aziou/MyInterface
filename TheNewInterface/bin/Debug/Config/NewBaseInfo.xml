@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="gb2312" standalone="yes"?>
 <NewUser>
   <CloumMIS>
-    <Item Name="txt_DataPath" Value="E:\Client\DataBase\ClouMeterData.mdb" />
+    <Item Name="txt_DataPath" Value="D:\Company\CLOU\湛江\20170426\DataBase\DataBase\ClouMeterData.mdb" />
     <Item Name="txt_equipment" Value="05523" />
     <Item Name="txt_Jyy" Value="C654E9458D7F4A8AA858D1E0D4FED922" />
     <Item Name="txt_Hyy" Value="8FA43578DB7670B0E0430A96B84570B0" />
@@ -12,7 +12,7 @@
     <Item Name="cmb_Seal03" Value="左耳封" />
     <Item Name="cmb_Seal02" Value="编程小门" />
     <Item Name="cmb_Seal01" Value="编程小门" />
-    <Item Name="AccessLink" Value="Provider=Microsoft.Jet.OleDb.4.0;Data Source=E:\Client\DataBase\ClouMeterData.mdb;Persist Security Info=False" />
+    <Item Name="AccessLink" Value="Provider=Microsoft.Jet.OleDb.4.0;Data Source=D:\Company\CLOU\湛江\20170426\DataBase\DataBase\ClouMeterData.mdb;Persist Security Info=False" />
     <Item Name="TheWorkNum" Value="03190010000036939982" />
     <Item Name="" Value="" />
     <Item Name="OracleLink" Value="Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=10.150.26.131)(PORT=1530)))(CONNECT_DATA=(SERVICE_NAME= yxscdb)));User Id=PMS_JL; Password=PMS_JL#123" />

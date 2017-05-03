@@ -35,3 +35,14 @@ E:\The_GSC_Update\SoftType_S\bin\Debug\OperateData.pdb
 E:\The_GSC_Update\SoftType_S\obj\Debug\ResolveAssemblyReference.cache
 E:\The_GSC_Update\SoftType_S\obj\Debug\SoftType_S.dll
 E:\The_GSC_Update\SoftType_S\obj\Debug\SoftType_S.pdb
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_S\bin\Debug\SoftType_S.dll
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_S\bin\Debug\SoftType_S.pdb
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_S\bin\Debug\DataCore.dll
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_S\bin\Debug\Mis_Interface_Driver.dll
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_S\bin\Debug\OperateData.dll
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_S\bin\Debug\DataCore.pdb
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_S\bin\Debug\Mis_Interface_Driver.pdb
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_S\bin\Debug\OperateData.pdb
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_S\obj\Debug\SoftType_S.csprojResolveAssemblyReference.cache
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_S\obj\Debug\SoftType_S.dll
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_S\obj\Debug\SoftType_S.pdb

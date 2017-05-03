@@ -26,3 +26,10 @@ E:\The_GSC_Update\Mis_Interface_Driver\bin\Debug\Driver_Interface.pdb
 E:\The_GSC_Update\Mis_Interface_Driver\obj\Debug\ResolveAssemblyReference.cache
 E:\The_GSC_Update\Mis_Interface_Driver\obj\Debug\Mis_Interface_Driver.dll
 E:\The_GSC_Update\Mis_Interface_Driver\obj\Debug\Mis_Interface_Driver.pdb
+D:\AziouStudio\The_GSC_Update\MyInterface\Mis_Interface_Driver\bin\Debug\Mis_Interface_Driver.dll
+D:\AziouStudio\The_GSC_Update\MyInterface\Mis_Interface_Driver\bin\Debug\Mis_Interface_Driver.pdb
+D:\AziouStudio\The_GSC_Update\MyInterface\Mis_Interface_Driver\bin\Debug\Driver_Interface.dll
+D:\AziouStudio\The_GSC_Update\MyInterface\Mis_Interface_Driver\bin\Debug\Driver_Interface.pdb
+D:\AziouStudio\The_GSC_Update\MyInterface\Mis_Interface_Driver\obj\Debug\Mis_Interface_Driver.csprojResolveAssemblyReference.cache
+D:\AziouStudio\The_GSC_Update\MyInterface\Mis_Interface_Driver\obj\Debug\Mis_Interface_Driver.dll
+D:\AziouStudio\The_GSC_Update\MyInterface\Mis_Interface_Driver\obj\Debug\Mis_Interface_Driver.pdb
