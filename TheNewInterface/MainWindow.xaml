@@ -26,15 +26,21 @@
                 </Grid.ColumnDefinitions>
 
                 <WrapPanel Grid.Column="1" VerticalAlignment="Center">
-                    <Label Width="80" Height="25"  Content="检定日期:" VerticalContentAlignment="Center"/>
-                    <ComboBox Width="200" Height="25" Name="cmb_CheckTime" Loaded="cmb_CheckTime_Loaded" SelectionChanged="cmb_CheckTime_SelectionChanged"/>
+                    <ComboBox Width="80" Height="25"  Name="cmb_Condition" VerticalContentAlignment="Center" Loaded="cmb_Condition_Loaded" SelectionChanged="cmb_Condition_SelectionChanged" />
+                    <ComboBox Width="200" Height="25" Name="cmb_CheckTime" Loaded="cmb_CheckTime_Loaded" SelectionChanged="cmb_CheckTime_SelectionChanged" IsEditable="True"/>
+                    <Button Name="btn_FindMeter" Width="80" Height="25" Content="查询" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="btn_FindMeter_Click"/>
                     <CheckBox Name="chk_ShowLess" Width="150" Height="25" Content="加载前20个检定日期" VerticalContentAlignment="Center" Margin="5,0,0,0" IsChecked="True" Click="chk_ShowLess_Click" />
+                
                 </WrapPanel>
-                <Button Grid.Column="2" Width="80" Height="25" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="基本信息配置" Name="Btn_Config" Click="Btn_Config_Click"/>
+                <StackPanel  Grid.Column="2" Grid.Row="0" Grid.RowSpan="2"  VerticalAlignment="Top">
+                    <Button Width="80" Height="25" VerticalContentAlignment="Center" Content="基本信息配置" Name="Btn_Config" Click="Btn_Config_Click" Margin="0,0,0,10"/>
+                    <Button Name="btn_MisConfig" Content="中间库配置" Width="80" Height="25" Click="btn_MisConfig_Click"/>
+
+                </StackPanel>                
                 <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">
                     <WrapPanel >
                         <Label Width="80" Height="25"  Content="工作单号:" VerticalContentAlignment="Center"/>
-                        <ComboBox Width="200" Height="25" Name="cmb_WorkNumList" Loaded="cmb_WorkNumList_Loaded"/>
+                        <ComboBox Width="200" Height="25" Name="cmb_WorkNumList" Loaded="cmb_WorkNumList_Loaded" IsEditable="True"/>
                         <CheckBox Width="150" Height="25" Content="获取终端检定工作单" VerticalContentAlignment="Center" Margin="5,0,0,0" Name="chk_Terminal" Click="chk_Terminal_Click"/>
                         <RadioButton Width="50" Height="25" Content="首检" IsChecked="True" GroupName="FirstCheck" VerticalContentAlignment="Center"/>
                         <RadioButton Width="65" Height="25" Content="非首检" GroupName="FirstCheck" VerticalContentAlignment="Center"/>
@@ -70,7 +76,7 @@
                         <DataGridTemplateColumn Header="资产编号" Width="2*" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Label Width="200" Content="{Binding AVR_ASSET_NO}" ></Label>
+                                    <TextBox Width="200" Text="{Binding AVR_ASSET_NO}" ></TextBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -116,13 +122,13 @@
                 </ListBox>
 
                 <!-- 右边 button-->
-                <Button Name="btn_MisConfig" Content="中间库配置" Grid.Column="2" Grid.Row="1" Width="80" Height="25" Click="btn_MisConfig_Click"/>
+              
                 <StackPanel Grid.RowSpan="2" Grid.Row="1" Grid.Column="2" VerticalAlignment="Bottom">
                     <Button Name="btn_update" Width="80" Height="25" Margin="0,0,0,10" Content="上传数据" Click="btn_update_Click"/>
-                    <Button Name="btn_download" Width="80" Height="25" Margin="0,0,0,10" Content="下载数据" Click="btn_download_Click"/>
+                    <Button Name="btn_download" Width="80" Height="25" Margin="0,0,0,10" Content="下载数据" Click="btn_download_Click" Visibility="Collapsed" />
                     <Button Name="btn_deldteMis" Width="80" Height="25" Margin="0,0,0,10" Content="删除中间库" Click="btn_deldteMis_Click"/>
                     <Button Name="btn_deldteMisAll" Width="80" Height="25" Margin="0,0,0,10"  Content="删除工作单" Click="btn_deldteMis_Click"/>
-                    <Button Name="btn_testFunction" Width="80" Height="25" Margin="0,0,0,10"  Content="方法测试"  Click="btn_testFunction_Click"/>
+                    <Button Name="btn_testFunction" Width="80" Height="25" Margin="0,0,0,10"  Content="方法测试"  Click="btn_testFunction_Click" Visibility="Hidden" />
                 </StackPanel>
                 <!-- 右边 button-->
                 <ProgressBar Grid.Column="1" Grid.Row="4" Margin="0 2" Height="8"  Value="{Binding ProgressValues,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Name="UpdateProgress" />

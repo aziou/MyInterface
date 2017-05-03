@@ -18,3 +18,10 @@ E:\LEES\The_GSC_Update\OperateData\bin\Debug\DataCore.pdb
 E:\LEES\The_GSC_Update\OperateData\obj\Debug\ResolveAssemblyReference.cache
 E:\LEES\The_GSC_Update\OperateData\obj\Debug\OperateData.dll
 E:\LEES\The_GSC_Update\OperateData\obj\Debug\OperateData.pdb
+E:\The_GSC_Update\OperateData\bin\Debug\OperateData.dll
+E:\The_GSC_Update\OperateData\bin\Debug\OperateData.pdb
+E:\The_GSC_Update\OperateData\bin\Debug\DataCore.dll
+E:\The_GSC_Update\OperateData\bin\Debug\DataCore.pdb
+E:\The_GSC_Update\OperateData\obj\Debug\ResolveAssemblyReference.cache
+E:\The_GSC_Update\OperateData\obj\Debug\OperateData.dll
+E:\The_GSC_Update\OperateData\obj\Debug\OperateData.pdb

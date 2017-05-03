@@ -37,3 +37,14 @@ E:\LEES\The_GSC_Update\OperateOracle\obj\Debug\OperateOracle.dll
 E:\LEES\The_GSC_Update\OperateOracle\obj\Debug\OperateOracle.pdb
 E:\LEES\The_GSC_Update\OperateOracle\bin\Debug\ICSharpCode.SharpZipLib.dll
 E:\LEES\The_GSC_Update\OperateOracle\bin\Debug\NPOI.dll
+E:\The_GSC_Update\OperateOracle\bin\Debug\OperateOracle.dll
+E:\The_GSC_Update\OperateOracle\bin\Debug\OperateOracle.pdb
+E:\The_GSC_Update\OperateOracle\bin\Debug\ICSharpCode.SharpZipLib.dll
+E:\The_GSC_Update\OperateOracle\bin\Debug\NPOI.dll
+E:\The_GSC_Update\OperateOracle\bin\Debug\OperateData.dll
+E:\The_GSC_Update\OperateOracle\bin\Debug\DataCore.dll
+E:\The_GSC_Update\OperateOracle\bin\Debug\OperateData.pdb
+E:\The_GSC_Update\OperateOracle\bin\Debug\DataCore.pdb
+E:\The_GSC_Update\OperateOracle\obj\Debug\ResolveAssemblyReference.cache
+E:\The_GSC_Update\OperateOracle\obj\Debug\OperateOracle.dll
+E:\The_GSC_Update\OperateOracle\obj\Debug\OperateOracle.pdb

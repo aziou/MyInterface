@@ -11,3 +11,8 @@ E:\LEES\The_GSC_Update\DataCore\bin\Debug\DataCore.pdb
 E:\LEES\The_GSC_Update\DataCore\obj\Debug\ResolveAssemblyReference.cache
 E:\LEES\The_GSC_Update\DataCore\obj\Debug\DataCore.dll
 E:\LEES\The_GSC_Update\DataCore\obj\Debug\DataCore.pdb
+E:\The_GSC_Update\DataCore\bin\Debug\DataCore.dll
+E:\The_GSC_Update\DataCore\bin\Debug\DataCore.pdb
+E:\The_GSC_Update\DataCore\obj\Debug\ResolveAssemblyReference.cache
+E:\The_GSC_Update\DataCore\obj\Debug\DataCore.dll
+E:\The_GSC_Update\DataCore\obj\Debug\DataCore.pdb

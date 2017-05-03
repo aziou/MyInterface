@@ -185,6 +185,7 @@ namespace SoftType_S
         {
             int excuteSuccess = 0;
             string ErrorResult;
+            str_pkId = PKid;
             List<string> SealList = new List<string>();
             List<string> mysql = new List<string>();
             try
@@ -799,6 +800,17 @@ namespace SoftType_S
 
             return strResults;
         }
+        private static string Get_METER_COMMUNICATION(string RESULT_ID,string meterId)
+        {
+            string strResults = "";
+            string strSQL = " SELECT AVR_VALUE FROM METER_COMMUNICATION where AVR_PROJECT_NO='" + RESULT_ID + "' and FK_LNG_METER_ID='" + meterId + "'";
+
+            OperateData.PublicFunction MyDb = new OperateData.PublicFunction();
+            strResults = MyDb.GetSingleData(strSQL, AccessLink);
+
+
+            return strResults;
+        }
         /// <summary>
         /// 日计量误差记录
         /// </summary>
@@ -1222,7 +1234,7 @@ namespace SoftType_S
 
                     strTypeCode = "0170" + iCirc.ToString().Trim();    //01701正向有功 /01702反向有功 /01703正向无功/01704反向无功
 
-                    strValue = Get_METER_COMMUNICATION(strTypeCode);
+                    strValue = Get_METER_COMMUNICATION(strTypeCode, PK_ID);
                     if (strValue.IndexOf("|") > 0)  //有误差值
                     {
                         char[] csplit = { '|' };//总|尖|峰|平|谷|

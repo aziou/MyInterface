@@ -11,3 +11,8 @@ E:\LEES\The_GSC_Update\Driver_Interface\bin\Debug\Driver_Interface.pdb
 E:\LEES\The_GSC_Update\Driver_Interface\obj\Debug\ResolveAssemblyReference.cache
 E:\LEES\The_GSC_Update\Driver_Interface\obj\Debug\Driver_Interface.dll
 E:\LEES\The_GSC_Update\Driver_Interface\obj\Debug\Driver_Interface.pdb
+E:\The_GSC_Update\Driver_Interface\bin\Debug\Driver_Interface.dll
+E:\The_GSC_Update\Driver_Interface\bin\Debug\Driver_Interface.pdb
+E:\The_GSC_Update\Driver_Interface\obj\Debug\ResolveAssemblyReference.cache
+E:\The_GSC_Update\Driver_Interface\obj\Debug\Driver_Interface.dll
+E:\The_GSC_Update\Driver_Interface\obj\Debug\Driver_Interface.pdb

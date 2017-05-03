@@ -19,3 +19,10 @@ E:\LEES\The_GSC_Update\Mis_Interface_Driver\bin\Debug\Driver_Interface.pdb
 E:\LEES\The_GSC_Update\Mis_Interface_Driver\obj\Debug\ResolveAssemblyReference.cache
 E:\LEES\The_GSC_Update\Mis_Interface_Driver\obj\Debug\Mis_Interface_Driver.dll
 E:\LEES\The_GSC_Update\Mis_Interface_Driver\obj\Debug\Mis_Interface_Driver.pdb
+E:\The_GSC_Update\Mis_Interface_Driver\bin\Debug\Mis_Interface_Driver.dll
+E:\The_GSC_Update\Mis_Interface_Driver\bin\Debug\Mis_Interface_Driver.pdb
+E:\The_GSC_Update\Mis_Interface_Driver\bin\Debug\Driver_Interface.dll
+E:\The_GSC_Update\Mis_Interface_Driver\bin\Debug\Driver_Interface.pdb
+E:\The_GSC_Update\Mis_Interface_Driver\obj\Debug\ResolveAssemblyReference.cache
+E:\The_GSC_Update\Mis_Interface_Driver\obj\Debug\Mis_Interface_Driver.dll
+E:\The_GSC_Update\Mis_Interface_Driver\obj\Debug\Mis_Interface_Driver.pdb

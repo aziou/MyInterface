@@ -24,3 +24,14 @@ E:\LEES\The_GSC_Update\SoftType_S\bin\Debug\OperateData.pdb
 E:\LEES\The_GSC_Update\SoftType_S\obj\Debug\ResolveAssemblyReference.cache
 E:\LEES\The_GSC_Update\SoftType_S\obj\Debug\SoftType_S.dll
 E:\LEES\The_GSC_Update\SoftType_S\obj\Debug\SoftType_S.pdb
+E:\The_GSC_Update\SoftType_S\bin\Debug\SoftType_S.dll
+E:\The_GSC_Update\SoftType_S\bin\Debug\SoftType_S.pdb
+E:\The_GSC_Update\SoftType_S\bin\Debug\DataCore.dll
+E:\The_GSC_Update\SoftType_S\bin\Debug\Mis_Interface_Driver.dll
+E:\The_GSC_Update\SoftType_S\bin\Debug\OperateData.dll
+E:\The_GSC_Update\SoftType_S\bin\Debug\DataCore.pdb
+E:\The_GSC_Update\SoftType_S\bin\Debug\Mis_Interface_Driver.pdb
+E:\The_GSC_Update\SoftType_S\bin\Debug\OperateData.pdb
+E:\The_GSC_Update\SoftType_S\obj\Debug\ResolveAssemblyReference.cache
+E:\The_GSC_Update\SoftType_S\obj\Debug\SoftType_S.dll
+E:\The_GSC_Update\SoftType_S\obj\Debug\SoftType_S.pdb

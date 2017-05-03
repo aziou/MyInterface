@@ -58,7 +58,7 @@ namespace TheNewInterface
             }
 
 
-            OperateData.FunctionXml.UpdateElement("NewUser/CloumMIS/Item", "Name", "TheWorkNum", "Value", "07522300987", BaseConfigPath);
+            //OperateData.FunctionXml.UpdateElement("NewUser/CloumMIS/Item", "Name", "TheWorkNum", "Value", "07522300987", BaseConfigPath);
 
             int MeterCount = ViewModel.AllMeterInfo.CreateInstance().MeterBaseInfo.Count;
             List<string> UpDateMeterId=new List<string> ();
@@ -466,30 +466,36 @@ namespace TheNewInterface
 
         private void chk_ShowLess_Click(object sender, RoutedEventArgs e)
         {
-            csPublicMember.showInfo_less = (bool)chk_ShowLess.IsChecked;
+            if (cmb_Condition.SelectedIndex == 0)
+            {
+                csPublicMember.showInfo_less = (bool)chk_ShowLess.IsChecked;
 
-            LoadCheckTime(csPublicMember.str_DataPath, csPublicMember.strCondition, csPublicMember.strTableName, csPublicMember.showInfo_less);
-        }
+                LoadCheckTime(csPublicMember.str_DataPath, csPublicMember.strCondition, csPublicMember.strTableName, csPublicMember.showInfo_less);
+   
+            }
+
+         }
 
         private void cmb_CheckTime_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            try
+            if (cmb_Condition.SelectedIndex == 0)
             {
-                string CheckTime = cmb_CheckTime.SelectedValue.ToString();
-                string Sql = string.Format("Select  * from {0} where {1} =#{2}#", csPublicMember.strTableName, csPublicMember.strCondition, CheckTime);
-                List<MeterBaseInfoFactor> tempBaseInfo = new List<MeterBaseInfoFactor>();
-                ObservableCollection<MeterBaseInfoFactor> baseInfo = new ObservableCollection<MeterBaseInfoFactor>();
-                OperateData.PublicFunction csFunction = new OperateData.PublicFunction();
-                baseInfo = csFunction.GetBaseInfo(CheckTime, Sql, csPublicMember.strSoftType);
+                try
+                {
+                    string CheckTime = cmb_CheckTime.SelectedValue.ToString();
+                    string Sql = string.Format("Select  * from {0} where {1} =#{2}#", csPublicMember.strTableName, csPublicMember.strCondition, CheckTime);
+                    List<MeterBaseInfoFactor> tempBaseInfo = new List<MeterBaseInfoFactor>();
+                    ObservableCollection<MeterBaseInfoFactor> baseInfo = new ObservableCollection<MeterBaseInfoFactor>();
+                    OperateData.PublicFunction csFunction = new OperateData.PublicFunction();
+                    baseInfo = csFunction.GetBaseInfo(CheckTime, Sql, csPublicMember.strSoftType);
 
-                ViewModel.AllMeterInfo.CreateInstance().MeterBaseInfo = baseInfo;
+                    ViewModel.AllMeterInfo.CreateInstance().MeterBaseInfo = baseInfo;
 
+                }
+                catch (Exception Ex)
+                {
+                }
             }
-            catch (Exception Ex)
-            {
-            }
-            
-         
         }
 
         private void chk_SelectAll_Click(object sender, RoutedEventArgs e)
@@ -740,6 +746,77 @@ namespace TheNewInterface
             //MessageBox.Show("ok");
         }
         #endregion
+
+        private void cmb_Condition_Loaded(object sender, RoutedEventArgs e)
+        {
+            cmb_Condition.Items.Add("检定时间:");
+            cmb_Condition.Items.Add("资产编号:");
+
+            cmb_Condition.SelectedIndex = 0;
+
+
+        }
+
+        private void cmb_Condition_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+                
+         
+                switch(cmb_Condition.SelectedIndex)
+                {
+                    case 0:
+                        ReLoadCheckTime();
+                        break;
+                    case 1:
+                        cmb_CheckTime.Items.Clear();
+                        break;
+                    default:
+                        break;
+                }
+        }
+
+        private void btn_FindMeter_Click(object sender, RoutedEventArgs e)
+        {
+            if (cmb_Condition.SelectedIndex == 1)
+            {
+                if (cmb_CheckTime.Text == "")
+                {
+                    MessageBox.Show("请输入你要查询的资产编号！");
+                    return;
+                }
+                #region 软件类型判断
+                switch (csPublicMember.strSoftType)
+                {
+                    case "CL3000G":
+                    case "CL3000F":
+                    case "CL3000DV80":
+                        csPublicMember.strCondition = "chrjlbh";
+                        csPublicMember.strTableName = "meterinfo";
+                        break;
+                    case "CL3000S":
+                        csPublicMember.strCondition = "AVR_ASSET_NO";
+                        csPublicMember.strTableName = "METER_INFO";
+                        break;
+
+                }
+
+                #endregion
+                try
+                {
+                    
+                    string Sql = string.Format("Select  * from {0} where {1} ='{2}'", csPublicMember.strTableName, csPublicMember.strCondition, cmb_CheckTime.Text);
+                    List<MeterBaseInfoFactor> tempBaseInfo = new List<MeterBaseInfoFactor>();
+                    ObservableCollection<MeterBaseInfoFactor> baseInfo = new ObservableCollection<MeterBaseInfoFactor>();
+                    OperateData.PublicFunction csFunction = new OperateData.PublicFunction();
+                    baseInfo = csFunction.GetBaseInfo("", Sql, csPublicMember.strSoftType);
+
+                    ViewModel.AllMeterInfo.CreateInstance().MeterBaseInfo = baseInfo;
+
+                }
+                catch (Exception Ex)
+                {
+                }
+            }
+        }
 
        
     }
