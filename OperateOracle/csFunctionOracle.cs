@@ -143,10 +143,18 @@ namespace OperateOracle
             DataTable dt = new DataTable ();
             using (OracleConnection conn = new OracleConnection(OracleLink))
             {
+                if (conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
                 OracleCommand cmd = new OracleCommand(Sql, conn);
-                OracleDataAdapter OracleDa = new OracleDataAdapter(Sql, conn);
-                OracleDa.Fill(dt);
+                OracleDataReader myReader = null;
+                myReader = cmd.ExecuteReader();
+                //OracleDataAdapter OracleDa = new OracleDataAdapter(Sql, conn);
+                //OracleDa.Fill(dt);
+                dt.Load(myReader);
                 dt.Dispose();
+                myReader.Close();
                 return dt;
             }
 
@@ -285,7 +293,8 @@ namespace OperateOracle
         private DataTable MisBaseTable(string METERzcbh)
         {
             DataTable dt = new DataTable();
-            string sql=string.Format("SELECT * FROM VT_SB_JKDNBJDJL WHERE ZCBH='{0}' AND DQBM='{1}'", METERzcbh, str_DQBM);
+            string sql = string.Format("SELECT * FROM VT_SB_JKDNBJDJL WHERE ZCBH='{0}' AND DQBM='{1}'", METERzcbh, str_DQBM);
+           // string sql = string.Format("SELECT * FROM VT_SB_JKDNBJDJL WHERE ZCBH='{0}'", METERzcbh);
             dt = GetZcbhTable(sql);
             try
             {
@@ -308,6 +317,7 @@ namespace OperateOracle
         {
             DataTable dt = new DataTable();
             string sql = string.Format("SELECT * FROM VT_SB_JKDNBJDWC WHERE ZCBH='{0}' AND DQBM='{1}'", METERzcbh, str_DQBM);
+            //string sql = string.Format("SELECT * FROM VT_SB_JKDNBJDWC WHERE ZCBH='{0}'", METERzcbh);
             dt = GetZcbhTable(sql);
             try
             {

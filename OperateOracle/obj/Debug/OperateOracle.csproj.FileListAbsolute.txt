@@ -59,3 +59,14 @@ D:\AziouStudio\The_GSC_Update\MyInterface\OperateOracle\bin\Debug\DataCore.pdb
 D:\AziouStudio\The_GSC_Update\MyInterface\OperateOracle\obj\Debug\OperateOracle.csprojResolveAssemblyReference.cache
 D:\AziouStudio\The_GSC_Update\MyInterface\OperateOracle\obj\Debug\OperateOracle.dll
 D:\AziouStudio\The_GSC_Update\MyInterface\OperateOracle\obj\Debug\OperateOracle.pdb
+E:\Code\MyInterface\OperateOracle\bin\Debug\OperateOracle.dll
+E:\Code\MyInterface\OperateOracle\bin\Debug\OperateOracle.pdb
+E:\Code\MyInterface\OperateOracle\bin\Debug\ICSharpCode.SharpZipLib.dll
+E:\Code\MyInterface\OperateOracle\bin\Debug\NPOI.dll
+E:\Code\MyInterface\OperateOracle\bin\Debug\OperateData.dll
+E:\Code\MyInterface\OperateOracle\bin\Debug\DataCore.dll
+E:\Code\MyInterface\OperateOracle\bin\Debug\OperateData.pdb
+E:\Code\MyInterface\OperateOracle\bin\Debug\DataCore.pdb
+E:\Code\MyInterface\OperateOracle\obj\Debug\ResolveAssemblyReference.cache
+E:\Code\MyInterface\OperateOracle\obj\Debug\OperateOracle.dll
+E:\Code\MyInterface\OperateOracle\obj\Debug\OperateOracle.pdb

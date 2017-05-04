@@ -18,6 +18,7 @@ using System.Diagnostics;
 using System.Windows.Threading;
 using TheNewInterface.ViewModel;
 using OperateOracle;
+using System.ComponentModel;
 namespace TheNewInterface
 {
     /// <summary>
@@ -29,9 +30,15 @@ namespace TheNewInterface
         {
             InitializeComponent();
             this.DataContext = TheNewInterface.ViewModel.AllMeterInfo.CreateInstance();
-           
+            Grid_showItem.DataContext = ViewModel.ViewMember.CreateInstance();
+            DgBasicError.DataContext = ViewModel.ViewMember.CreateInstance();
+            DgBasicError1.DataContext = ViewModel.ViewMember.CreateInstance();
+            DgBasicError2.DataContext = ViewModel.ViewMember.CreateInstance();
+            DgBasicError3.DataContext = ViewModel.ViewMember.CreateInstance();
+            DgBasicError4.DataContext = ViewModel.ViewMember.CreateInstance();
+            DgBasicError5.DataContext = ViewModel.ViewMember.CreateInstance();
         }
-        public string TableName;
+        public string TableName = "VT_SB_JKDNBJDJL";
         Thread UpdateThread;
         public readonly string BaseConfigPath = System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml";
         #region Tab 001
@@ -795,7 +802,7 @@ namespace TheNewInterface
                 MessageBox.Show("请输入资产编号！", "提示", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 return;
             }
-
+            showTheTable(txt_MisZcbh.Text.Trim());
 
             #endregion
         }
@@ -824,6 +831,12 @@ namespace TheNewInterface
                 List<string> lis_ReZcbh = new List<string>();
                 int LineNum = 0;
                 operate.GetTheTime(TableName, KeyWordType, ZcbhWord, "=", out tempTableMember);
+
+                if (tempTableMember.Count == 0)
+                {
+                    MessageBox.Show("无法找到该表的信息！", "提示", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    return;
+                }
 
                 for (int meterNum = 0; meterNum < 1; meterNum++)
                 {
@@ -885,7 +898,7 @@ namespace TheNewInterface
                         {
                             if (tempTableMember[j].StrJddw == "")
                             {
-                                tempTableMember[j].StrJddw = "深圳供电局有限公司";
+                                tempTableMember[j].StrJddw = "本局";
                             }
                             switch (tempTableMember[j].StrJyy)
                             {
@@ -1153,13 +1166,30 @@ namespace TheNewInterface
                         {
                             if (temp[0].StrJFWZDM == "07")
                             {
-                                MeterList[i].StrShellSeal = temp[1].StrFYZCBH;
-                                MeterList[i].StrCodeSeal = temp[0].StrFYZCBH;
+                                if (temp.Count == 1)
+                                {
+                                    MeterList[i].StrCodeSeal = temp[0].StrFYZCBH;
+                                }
+                                else
+                                {
+                                    MeterList[i].StrCodeSeal = temp[0].StrFYZCBH;
+                                    MeterList[i].StrShellSeal = temp[1].StrFYZCBH;
+                                }
+                                
+                                
                             }
                             else
                             {
-                                MeterList[i].StrShellSeal = temp[0].StrFYZCBH;
-                                MeterList[i].StrCodeSeal = temp[1].StrFYZCBH;
+                                if (temp.Count == 1)
+                                {
+                                    MeterList[i].StrCodeSeal = temp[0].StrFYZCBH;
+                                }
+                                else
+                                {
+                                    MeterList[i].StrCodeSeal = temp[0].StrFYZCBH;
+                                    MeterList[i].StrShellSeal = temp[1].StrFYZCBH;
+                                }
+                              
 
                             }
                         }
@@ -1231,23 +1261,544 @@ namespace TheNewInterface
             }
         }
 
-
+        #region BackGroudWorker
+        BackgroundWorker BgExcel;
+        public string MisMeter = "";
+        public bool Flag =false;
+        void BgExcel_DoWorker(object sender, DoWorkEventArgs e)
+        {
+            this.Dispatcher.Invoke(new Action(() =>
+                {
+                    Loading.Visibility = System.Windows.Visibility.Visible;
+                  
+                }
+                ));
+            while (!Flag)
+            {
+                System.Threading.Thread.Sleep(500);
+            }
+            
+        }
+        void BgExcel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Loading.Visibility = System.Windows.Visibility.Collapsed;
+            this.Dispatcher.Invoke(new Action(() =>
+            {
+                Flag = true;
+                MessageBox.Show("成功导出");
+            }
+                ));
+           
+        }
+        public void OutPutAllInfoToExcel(object temp)
+        {
+            MisInfo str_meterzcbh = temp as MisInfo;
+            OperateOracle.csFunctionOracle function = new OperateOracle.csFunctionOracle();
+            string Message = function.OutPutAllInfoToExcel(str_meterzcbh.MeterZCBH);
+            Flag = true;
+        }
+        #endregion
         private void btn_OutPutExcel_Click(object sender, RoutedEventArgs e)
         {
-            OperateOracle.csFunctionOracle function = new OperateOracle.csFunctionOracle();
+            
 
             if (txt_MisZcbh.Text == "" || txt_MisZcbh.Text == null)
             {
                 MessageBox.Show("资产编号为空，请输入", "提示");
                 return;
             }
-            string Message = "";
-            Message = function.OutPutAllInfoToExcel(txt_MisZcbh.Text.ToString().Trim());
-            MessageBox.Show(Message);
-
+          
+            MisMeter = txt_MisZcbh.Text.Trim();
+            Flag = false;
+            Thread PutExcel;
+            MisInfo misinfo = new MisInfo();
+            misinfo.MeterZCBH = MisMeter;
+            PutExcel = new Thread(new ParameterizedThreadStart(OutPutAllInfoToExcel));
+            PutExcel.IsBackground=true;
+            PutExcel.Start(misinfo);
+            BgExcel = new BackgroundWorker();
+            BgExcel.DoWork += new DoWorkEventHandler(BgExcel_DoWorker);
+            BgExcel.RunWorkerCompleted += new RunWorkerCompletedEventHandler(BgExcel_RunWorkerCompleted);
+            BgExcel.RunWorkerAsync();
+          
+           
+            //Message = ""; 
+            //MessageBox.Show(Message);
+            
+           // MessageBox.Show(Message);
            
         }
+
         #endregion
+
+        private void Grid_showItem_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            operateData operate = new operateData();
+
+
+
+            if (ViewMember.CreateInstance().IfRunTheItemChanged != 1)
+            {
+
+                int count = Grid_showItem.SelectedIndex;
+                string OnlyId_Meter = ViewMember.CreateInstance().MeterInfoList[count].StrJlbh;
+                ViewMember.CreateInstance().ThisMeterWorkNum = ViewMember.CreateInstance().MeterInfoList[count].StrGZDBH;
+                OnlyId_Meter = OnlyId_Meter.Replace(" ", "");
+                ViewMember.CreateInstance().MeterOnlyId = OnlyId_Meter;
+
+                #region 基本信息
+                List<DataTableMember> ErrorList = new List<DataTableMember>();
+                operate.ShowTheBasicErrorTable(ViewMember.CreateInstance().MeterOnlyId, ViewMember.CreateInstance().ThisMeterWorkNum, out ErrorList);
+                ObservableCollection<MeterInfoItem> MeterList = new ObservableCollection<MeterInfoItem>();
+                for (int i = 0; i < ErrorList.Count; i++)
+                {
+                    if (ErrorList[i].StrXBDM == "02")
+                    {
+                        ErrorList[i].StrXBDM = "三相";
+                    }
+                    switch (ErrorList[i].StrGLFXDM)
+                    {
+                        case "1":
+                            ErrorList[i].StrGLFXDM = "正向有功";
+                            break;
+                        case "2":
+                            ErrorList[i].StrGLFXDM = "正向无功";
+                            break;
+                        case "3":
+                            ErrorList[i].StrGLFXDM = "反向有功";
+                            break;
+                        case "4":
+                            ErrorList[i].StrGLFXDM = "反向无功";
+                            break;
+                        default:
+
+                            break;
+
+                    }
+                    switch (ErrorList[i].StrGLYSDM)
+                    {
+                        case "1":
+                            ErrorList[i].StrGLYSDM = "0.5(L)";
+                            break;
+                        case "2":
+                            ErrorList[i].StrGLYSDM = "1";
+                            break;
+                        case "3":
+                            ErrorList[i].StrGLYSDM = "0.8(c)";
+                            break;
+                        default:
+
+                            break;
+                    }
+                    switch (ErrorList[i].StrFZLXDM)
+                    {
+                        case "1":
+                            ErrorList[i].StrFZLXDM = "平衡负载";
+                            break;
+                        case "2":
+                            ErrorList[i].StrFZLXDM = "不平衡负载A相";
+                            break;
+                        case "3":
+                            ErrorList[i].StrFZLXDM = "不平衡负载B相";
+                            break;
+                        case "4":
+                            ErrorList[i].StrFZLXDM = "不平衡负载C相";
+                            break;
+                        default:
+
+                            break;
+
+                    }
+                    switch (ErrorList[i].StrFYDM)
+                    {
+                        case "01":
+                            ErrorList[i].StrFZLXDM = "合元";
+                            break;
+                        case "02":
+                            ErrorList[i].StrFZLXDM = "A相";
+                            break;
+                        case "03":
+                            ErrorList[i].StrFZLXDM = "B相";
+                            break;
+                        case "04":
+                            ErrorList[i].StrFZLXDM = "C相";
+                            break;
+                        default:
+
+                            break;
+
+                    }
+                    switch (ErrorList[i].StrFZDLDM)
+                    {
+                        case "01":
+                            ErrorList[i].StrFZDLDM = "0.05Ib";
+                            break;
+
+                        case "02":
+                            ErrorList[i].StrFZDLDM = "0.1Ib";
+                            break;
+
+                        case "05":
+                            ErrorList[i].StrFZDLDM = "Ib";
+                            break;
+
+                        case "06":
+                            ErrorList[i].StrFZDLDM = "Imax";
+                            break;
+
+                        case "07":
+                            ErrorList[i].StrFZDLDM = "0.5Imax";
+                            break;
+
+                        case "11":
+                            ErrorList[i].StrFZDLDM = "0.02Ib";
+                            break;
+
+                        case "12":
+                            ErrorList[i].StrFZDLDM = "0.01Ib";
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+                foreach (DataTableMember temp in ErrorList)
+                {
+                    MeterList.Add(new MeterInfoItem()
+                    {
+                        ID = temp.ID,
+                        StrGLFXDM = temp.StrGLFXDM,
+                        StrGLYSDM = temp.StrGLYSDM,
+                        StrFZDLDM = temp.StrFZDLDM,
+                        StrXBDM = temp.StrXBDM,
+                        StrFZLXDM = temp.StrFZLXDM,
+                        StrFYDM = temp.StrFYDM,
+                        StrWC1 = temp.StrWC1,
+                        StrWC2 = temp.StrWC2,
+                        StrWC3 = temp.StrWC3,
+                        StrWC4 = temp.StrWC4,
+                        StrWC5 = temp.StrWC5,
+                        StrWCPJZ = temp.StrWCPJZ,
+                        StrXYZ = temp.StrXYZ,
+                        StrJLDM = temp.StrJLDM,
+                        StrWCCZ = temp.StrWCCZ,
+                        StrWCCZXYZ = temp.StrWCCZXYZ,
+                        StrDQMB = temp.StrDQMB,
+
+                    });
+                }
+                #endregion
+                #region 日计时
+                List<DataTableMember> DayErrorList = new List<DataTableMember>();
+                operate.ShowTheDayCalcTable(ViewMember.CreateInstance().MeterOnlyId, ViewMember.CreateInstance().ThisMeterWorkNum, out DayErrorList);
+
+                ObservableCollection<MeterInfoItem> DayList = new ObservableCollection<MeterInfoItem>();
+                foreach (DataTableMember temp in DayErrorList)
+                {
+                    DayList.Add(new MeterInfoItem()
+                    {
+                        ID = temp.ID,
+                        StrCSZ1 = temp.StrCSZ1,
+                        StrCSZ2 = temp.StrCSZ2,
+                        StrCSZ3 = temp.StrCSZ3,
+                        StrCSZ4 = temp.StrCSZ4,
+                        StrCSZ5 = temp.StrCSZ5,
+                        StrPJZ = temp.StrPJZ,
+                        StrRJSDQBM = temp.StrRJSDQBM,
+
+
+                    });
+                }
+                #endregion
+                #region 需量记录表
+                List<DataTableMember> NeedRecordErrorList = new List<DataTableMember>();
+                operate.ShowTheNeedRecordTable(ViewMember.CreateInstance().MeterOnlyId, ViewMember.CreateInstance().ThisMeterWorkNum, out NeedRecordErrorList);
+
+                ObservableCollection<MeterInfoItem> NeedRecord_List = new ObservableCollection<MeterInfoItem>();
+                for (int j = 0; j < NeedRecordErrorList.Count; j++)
+                {
+                    switch (NeedRecordErrorList[j].StrFZDLDM)
+                    {
+                        case "01":
+                            NeedRecordErrorList[j].StrFZDLDM = "0.05Ib";
+                            break;
+
+                        case "02":
+                            NeedRecordErrorList[j].StrFZDLDM = "0.1Ib";
+                            break;
+
+                        case "05":
+                            NeedRecordErrorList[j].StrFZDLDM = "Ib";
+                            break;
+
+                        case "06":
+                            NeedRecordErrorList[j].StrFZDLDM = "Imax";
+                            break;
+
+                        case "07":
+                            NeedRecordErrorList[j].StrFZDLDM = "0.5Imax";
+                            break;
+
+                        case "11":
+                            NeedRecordErrorList[j].StrFZDLDM = "0.02Ib";
+                            break;
+
+                        case "12":
+                            NeedRecordErrorList[j].StrFZDLDM = "0.01Ib";
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                if (NeedRecordErrorList != null)
+                {
+                    foreach (DataTableMember temp in NeedRecordErrorList)
+                    {
+                        NeedRecord_List.Add(new MeterInfoItem()
+                        {
+                            ID = temp.ID,
+                            StrFZDLDM = temp.StrFZDLDM,
+                            StrBZZDXL = temp.StrBZZDXL,
+                            StrSJXL = temp.StrSJXL,
+                            StrWCZ = temp.StrWCZ,
+                            StrXLJLDM = temp.StrXLJLDM,
+                            StrXLDQBM = temp.StrXLDQBM,
+
+
+                        });
+                    }
+                }
+
+                #endregion
+                #region 时段投切
+                List<DataTableMember> TimeTQErrorList = new List<DataTableMember>();
+                operate.ShowTheTimeTQTable(ViewMember.CreateInstance().MeterOnlyId, ViewMember.CreateInstance().ThisMeterWorkNum, out TimeTQErrorList);
+
+                ObservableCollection<MeterInfoItem> TiemTQ_List = new ObservableCollection<MeterInfoItem>();
+                foreach (DataTableMember temp in TimeTQErrorList)
+                {
+                    TiemTQ_List.Add(new MeterInfoItem()
+                    {
+                        ID = temp.ID,
+                        StrTime = temp.StrTime,
+                        StrBZTQSJ = temp.StrBZTQSJ,
+                        StrSJTQSJ = temp.StrSJTQSJ,
+                        StrTQWC = temp.StrTQWC,
+                        StrTQDQBM = temp.StrTQDQBM,
+
+
+                    });
+                }
+                #endregion
+                #region 电能表示数
+                List<DataTableMember> DisPlayMeterList = new List<DataTableMember>();
+                operate.ShowTheDiaplayTable(ViewMember.CreateInstance().MeterOnlyId, ViewMember.CreateInstance().ThisMeterWorkNum, out DisPlayMeterList);
+
+                ObservableCollection<MeterInfoItem> DisPlayMeter_List = new ObservableCollection<MeterInfoItem>();
+                for (int s = 0; s < DisPlayMeterList.Count; s++)
+                {
+                    switch (DisPlayMeterList[s].StrSSLXDM)
+                    {
+                        case "121":
+                            DisPlayMeterList[s].StrSSLXDM = "正有功总";
+                            break;
+
+                        case "123":
+                            DisPlayMeterList[s].StrSSLXDM = "正有功峰";
+                            break;
+
+                        case "124":
+                            DisPlayMeterList[s].StrSSLXDM = "正有功平";
+                            break;
+
+                        case "125":
+                            DisPlayMeterList[s].StrSSLXDM = "正有功谷";
+                            break;
+
+                        case "131":
+                            DisPlayMeterList[s].StrSSLXDM = "正无功总";
+                            break;
+
+                        case "133":
+                            DisPlayMeterList[s].StrSSLXDM = "正无功峰";
+                            break;
+
+                        case "134":
+                            DisPlayMeterList[s].StrSSLXDM = "正无功谷";
+                            break;
+
+                        case "135":
+                            DisPlayMeterList[s].StrSSLXDM = "正无功平";
+                            break;
+
+                        case "221":
+                            DisPlayMeterList[s].StrSSLXDM = "反有功总";
+                            break;
+
+                        case "222":
+                            DisPlayMeterList[s].StrSSLXDM = "反有功峰";
+                            break;
+
+                        case "223":
+                            DisPlayMeterList[s].StrSSLXDM = "反有功平";
+                            break;
+
+                        case "224":
+                            DisPlayMeterList[s].StrSSLXDM = "反有功谷";
+                            break;
+
+                        case "231":
+                            DisPlayMeterList[s].StrSSLXDM = "反无功总";
+                            break;
+
+                        case "236":
+                            DisPlayMeterList[s].StrSSLXDM = "反无功峰";
+                            break;
+
+                        case "237":
+                            DisPlayMeterList[s].StrSSLXDM = "反无功谷";
+                            break;
+
+                        case "238":
+                            DisPlayMeterList[s].StrSSLXDM = "反无功平";
+                            break;
+                        default:
+                            break;
+
+                    }
+                }
+                foreach (DataTableMember temp in DisPlayMeterList)
+                {
+                    DisPlayMeter_List.Add(new MeterInfoItem()
+                    {
+                        ID = temp.ID,
+                        StrSSLXDM = temp.StrSSLXDM,
+                        StrBSS = temp.StrBSS,
+                        StrCBSJ = temp.StrCBSJ,
+                        StrSSDQBM = temp.StrSSDQBM,
+
+
+
+                    });
+                }
+                #endregion
+                #region 电能表走字结论
+                List<DataTableMember> RunWordList = new List<DataTableMember>();
+                operate.ShowTheRunWordTable(ViewMember.CreateInstance().MeterOnlyId, ViewMember.CreateInstance().ThisMeterWorkNum, out RunWordList);
+
+                ObservableCollection<MeterInfoItem> RunWord_List = new ObservableCollection<MeterInfoItem>();
+                for (int zz = 0; zz < RunWordList.Count; zz++)
+                {
+                    switch (RunWordList[zz].StrZZSSLXDM)
+                    {
+                        case "121":
+                            RunWordList[zz].StrZZSSLXDM = "正有功总";
+                            break;
+
+                        case "123":
+                            RunWordList[zz].StrZZSSLXDM = "正有功峰";
+                            break;
+
+                        case "124":
+                            RunWordList[zz].StrZZSSLXDM = "正有功平";
+                            break;
+
+                        case "125":
+                            RunWordList[zz].StrZZSSLXDM = "正有功谷";
+                            break;
+
+                        case "131":
+                            RunWordList[zz].StrZZSSLXDM = "正无功总";
+                            break;
+
+                        case "133":
+                            RunWordList[zz].StrZZSSLXDM = "正无功峰";
+                            break;
+
+                        case "134":
+                            RunWordList[zz].StrZZSSLXDM = "正无功谷";
+                            break;
+
+                        case "135":
+                            RunWordList[zz].StrZZSSLXDM = "正无功平";
+                            break;
+
+                        case "221":
+                            RunWordList[zz].StrZZSSLXDM = "反有功总";
+                            break;
+
+                        case "222":
+                            RunWordList[zz].StrZZSSLXDM = "反有功峰";
+                            break;
+
+                        case "223":
+                            RunWordList[zz].StrZZSSLXDM = "反有功平";
+                            break;
+
+                        case "224":
+                            RunWordList[zz].StrZZSSLXDM = "反有功谷";
+                            break;
+
+                        case "231":
+                            RunWordList[zz].StrZZSSLXDM = "反无功总";
+                            break;
+
+                        case "236":
+                            RunWordList[zz].StrZZSSLXDM = "反无功峰";
+                            break;
+
+                        case "237":
+                            RunWordList[zz].StrZZSSLXDM = "反无功谷";
+                            break;
+
+                        case "238":
+                            RunWordList[zz].StrZZSSLXDM = "反无功平";
+                            break;
+                        default:
+                            break;
+
+                    }
+
+
+                }
+                foreach (DataTableMember temp in RunWordList)
+                {
+                    RunWord_List.Add(new MeterInfoItem()
+                    {
+                        ID = temp.ID,
+                        StrZZSSLXDM = temp.StrZZSSLXDM,
+                        StrBZQQSS = temp.StrBZQQSS,
+                        StrBZQZSS = temp.StrBZQZSS,
+                        StrQSS = temp.StrQSS,
+                        StrZSS = temp.StrZSS,
+                        StrZZWC = temp.StrZZWC,
+                        StrZZDQBM = temp.StrZZDQBM,
+
+
+                    });
+                }
+                #endregion
+
+                ViewMember.CreateInstance().WcItemList = MeterList;
+                labInfoCount1.Content = MeterList.Count.ToString();
+                ViewMember.CreateInstance().DayJSWCList = DayList;
+                labInfoCount2.Content = DayList.Count.ToString();
+                ViewMember.CreateInstance().NeedRecordList = NeedRecord_List;
+                labInfoCount3.Content = NeedRecord_List.Count.ToString();
+                ViewMember.CreateInstance().TimeTQList = TiemTQ_List;
+                labInfoCount4.Content = TiemTQ_List.Count.ToString();
+                ViewMember.CreateInstance().DiaPlayList = DisPlayMeter_List;
+                labInfoCount5.Content = DisPlayMeter_List.Count.ToString();
+                ViewMember.CreateInstance().RunWordList = RunWord_List;
+                labInfoCount6.Content = RunWord_List.Count.ToString();
+
+
+
+
+            }
+            ViewMember.CreateInstance().IfRunTheItemChanged = 0;
+
+        }
 
        
 
@@ -1263,5 +1814,11 @@ namespace TheNewInterface
             set;
         }
 
+    }
+    public class MisInfo
+    {
+        private string meterZCBH;
+        public string MeterZCBH
+        { get; set; }
     }
 }

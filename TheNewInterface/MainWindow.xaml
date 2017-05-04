@@ -8,136 +8,151 @@
         <!--ProgressBar Style-->
      
     </Window.Resources>
-    <TabControl Name="Tab" >
-        <TabItem Header="Update"  IsSelected="True">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1.5*"/>
-                    <RowDefinition Height="8*"/>
-                    <RowDefinition Height="4*"/>
-                    <RowDefinition Height="1*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.5*"/>
-                    <ColumnDefinition Width="10*"/>
-                    <ColumnDefinition Width="1.5*"/>
-                    <ColumnDefinition Width="0.5*"/>
-                </Grid.ColumnDefinitions>
+    <Grid>
+        <!--<Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="8*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="1.5*"/>
+            <ColumnDefinition Width="0.5*"/>
+        </Grid.ColumnDefinitions>-->
 
-                <WrapPanel Grid.Column="1" VerticalAlignment="Center">
-                    <ComboBox Width="80"  Height="25"  Name="cmb_Condition" VerticalContentAlignment="Center" Loaded="cmb_Condition_Loaded" SelectionChanged="cmb_Condition_SelectionChanged" IsEditable="True" />
-                    <ComboBox Width="200" Height="25" Name="cmb_CheckTime" Loaded="cmb_CheckTime_Loaded" SelectionChanged="cmb_CheckTime_SelectionChanged" IsEditable="True"/>
-                    <Button Name="btn_FindMeter" Width="80" Height="25" Content="查询" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="btn_FindMeter_Click"/>
-                    <CheckBox Name="chk_ShowLess" Width="150" Height="25" Content="加载前20个检定日期" VerticalContentAlignment="Center" Margin="5,0,0,0" IsChecked="True" Click="chk_ShowLess_Click" />
-                
-                </WrapPanel>
-                <StackPanel  Grid.Column="2" Grid.Row="0" Grid.RowSpan="2"  VerticalAlignment="Top">
-                    <Button Width="80" Height="25" VerticalContentAlignment="Center" Content="基本信息配置" Name="Btn_Config" Click="Btn_Config_Click" Margin="0,0,0,10"/>
-                    <Button Name="btn_MisConfig" Content="中间库配置" Width="80" Height="25" Click="btn_MisConfig_Click"/>
+        <TabControl Name="Tab" >
+    
+                <TabItem Header="Update"  IsSelected="True">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1.5*"/>
+                        <RowDefinition Height="8*"/>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.5*"/>
+                        <ColumnDefinition Width="10*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                        <ColumnDefinition Width="0.5*"/>
+                    </Grid.ColumnDefinitions>
+                    <WrapPanel Grid.Column="1" VerticalAlignment="Center">
+                        <ComboBox Width="80"  Height="25"  Name="cmb_Condition" VerticalContentAlignment="Center" Loaded="cmb_Condition_Loaded" SelectionChanged="cmb_Condition_SelectionChanged" IsEditable="True" />
+                        <ComboBox Width="200" Height="25" Name="cmb_CheckTime" Loaded="cmb_CheckTime_Loaded" SelectionChanged="cmb_CheckTime_SelectionChanged" IsEditable="True"/>
+                        <Button Name="btn_FindMeter" Width="80" Height="25" Content="查询" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="btn_FindMeter_Click"/>
+                        <CheckBox Name="chk_ShowLess" Width="150" Height="25" Content="加载前20个检定日期" VerticalContentAlignment="Center" Margin="5,0,0,0" IsChecked="True" Click="chk_ShowLess_Click" />
 
-                </StackPanel>                
-                <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">
-                    <WrapPanel >
-                        <Label Width="80" Height="25"  Content="工作单号:" VerticalContentAlignment="Center"/>
-                        <ComboBox Width="200" Height="25" Name="cmb_WorkNumList" Loaded="cmb_WorkNumList_Loaded" IsEditable="True"/>
-                        <CheckBox Width="150" Height="25" Content="获取终端检定工作单" VerticalContentAlignment="Center" Margin="5,0,0,0" Name="chk_Terminal" Click="chk_Terminal_Click"/>
-                        <RadioButton Width="50" Height="25" Content="首检" IsChecked="True" GroupName="FirstCheck" VerticalContentAlignment="Center"/>
-                        <RadioButton Width="65" Height="25" Content="非首检" GroupName="FirstCheck" VerticalContentAlignment="Center"/>
                     </WrapPanel>
-                    <WrapPanel Margin="3,5,0,0">
-                        <CheckBox Content="全选" Height="25" Width="50" Name="chk_SelectAll" Click="chk_SelectAll_Click"/>
-                    </WrapPanel>
-                </StackPanel>
+                    <StackPanel  Grid.Column="2" Grid.Row="0" Grid.RowSpan="2"  VerticalAlignment="Top">
+                        <Button Width="80" Height="25" VerticalContentAlignment="Center" Content="基本信息配置" Name="Btn_Config" Click="Btn_Config_Click" Margin="0,0,0,10"/>
+                        <Button Name="btn_MisConfig" Content="中间库配置" Width="80" Height="25" Click="btn_MisConfig_Click"/>
 
-                <DataGrid Grid.Column="1" Grid.Row="2" ItemsSource="{Binding MeterBaseInfo}" Name="dg_Info" AutoGenerateColumns="False"  CanUserAddRows="False">
-                    <DataGrid.Columns>
-                        <DataGridTemplateColumn Header="选中" Width="0.5*" >
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate >
-                                    <CheckBox IsChecked="{Binding BolIfup,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></CheckBox>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="表位号" Width="0.7*" >
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label Content="{Binding LNG_BENCH_POINT_NO}" ></Label>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="ID" Width="2*" >
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label Content="{Binding PK_LNG_METER_ID}" ></Label>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="资产编号" Width="2*" >
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBox Width="200" Text="{Binding AVR_ASSET_NO}" ></TextBox>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="电压" Width="0.8*" >
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label    Content="{Binding AVR_UB}"></Label>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="电流" Width="0.8*" >
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label   Content="{Binding AVR_IB}"></Label>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="检验员" Width="*" >
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label   Content="{Binding AVR_TEST_PERSON}"></Label>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="检定结论" Width="*" >
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label   Content="{Binding AVR_TOTAL_CONCLUSION}"></Label>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="上传标识" Width="*" >
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label   Content="{Binding CHR_UPLOAD_FLAG}"></Label>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-                <ListBox Name="listBox_UpInfo" Grid.Column="1" Grid.Row="3">
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">
+                        <WrapPanel >
+                            <Label Width="80" Height="25"  Content="工作单号:" VerticalContentAlignment="Center"/>
+                            <ComboBox Width="200" Height="25" Name="cmb_WorkNumList" Loaded="cmb_WorkNumList_Loaded" IsEditable="True"/>
+                            <CheckBox Width="150" Height="25" Content="获取终端检定工作单" VerticalContentAlignment="Center" Margin="5,0,0,0" Name="chk_Terminal" Click="chk_Terminal_Click"/>
+                            <RadioButton Width="50" Height="25" Content="首检" IsChecked="True" GroupName="FirstCheck" VerticalContentAlignment="Center"/>
+                            <RadioButton Width="65" Height="25" Content="非首检" GroupName="FirstCheck" VerticalContentAlignment="Center"/>
+                        </WrapPanel>
+                        <WrapPanel Margin="3,5,0,0">
+                            <CheckBox Content="全选" Height="25" Width="50" Name="chk_SelectAll" Click="chk_SelectAll_Click"/>
+                        </WrapPanel>
+                    </StackPanel>
 
-                </ListBox>
+                    <DataGrid Grid.Column="1" Grid.Row="2" ItemsSource="{Binding MeterBaseInfo}" Name="dg_Info" AutoGenerateColumns="False"  CanUserAddRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="选中" Width="0.5*" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate >
+                                        <CheckBox IsChecked="{Binding BolIfup,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="表位号" Width="0.7*" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding LNG_BENCH_POINT_NO}" ></Label>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="ID" Width="2*" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding PK_LNG_METER_ID}" ></Label>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="资产编号" Width="2*" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Width="200" Text="{Binding AVR_ASSET_NO}" ></TextBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="电压" Width="0.8*" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label    Content="{Binding AVR_UB}"></Label>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="电流" Width="0.8*" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label   Content="{Binding AVR_IB}"></Label>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="检验员" Width="*" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label   Content="{Binding AVR_TEST_PERSON}"></Label>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="检定结论" Width="*" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label   Content="{Binding AVR_TOTAL_CONCLUSION}"></Label>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="上传标识" Width="*" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label   Content="{Binding CHR_UPLOAD_FLAG}"></Label>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <ListBox Name="listBox_UpInfo" Grid.Column="1" Grid.Row="3">
 
-                <!-- 右边 button-->
-              
-                <StackPanel Grid.RowSpan="2" Grid.Row="1" Grid.Column="2" VerticalAlignment="Bottom">
-                    <Button Name="btn_update" Width="80" Height="25" Margin="0,0,0,10" Content="上传数据" Click="btn_update_Click"/>
-                    <Button Name="btn_download" Width="80" Height="25" Margin="0,0,0,10" Content="下载数据" Click="btn_download_Click" Visibility="Collapsed" />
-                    <Button Name="btn_deldteMis" Width="80" Height="25" Margin="0,0,0,10" Content="删除中间库" Click="btn_deldteMis_Click"/>
-                    <Button Name="btn_deldteMisAll" Width="80" Height="25" Margin="0,0,0,10"  Content="删除工作单" Click="btn_deldteMis_Click"/>
-                    <Button Name="btn_testFunction" Width="80" Height="25" Margin="0,0,0,10"  Content="方法测试"  Click="btn_testFunction_Click" Visibility="Hidden" />
-                </StackPanel>
-                <!-- 右边 button-->
-                <ProgressBar Grid.Column="1" Grid.Row="4" Margin="0 2" Height="8"  Value="{Binding ProgressValues,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Name="UpdateProgress" />
+                    </ListBox>
 
-            </Grid>
-        </TabItem>
-        <TabItem Header="Excel">
-            <StackPanel >
-                <Grid  >
+                    <!-- 右边 button-->
+
+                    <StackPanel Grid.RowSpan="2" Grid.Row="1" Grid.Column="2" VerticalAlignment="Bottom">
+                        <Button Name="btn_update" Width="80" Height="25" Margin="0,0,0,10" Content="上传数据" Click="btn_update_Click"/>
+                        <Button Name="btn_download" Width="80" Height="25" Margin="0,0,0,10" Content="下载数据" Click="btn_download_Click" Visibility="Collapsed" />
+                        <Button Name="btn_deldteMis" Width="80" Height="25" Margin="0,0,0,10" Content="删除中间库" Click="btn_deldteMis_Click"/>
+                        <Button Name="btn_deldteMisAll" Width="80" Height="25" Margin="0,0,0,10"  Content="删除工作单" Click="btn_deldteMis_Click"/>
+                        <Button Name="btn_testFunction" Width="80" Height="25" Margin="0,0,0,10"  Content="方法测试"  Click="btn_testFunction_Click" Visibility="Hidden" />
+                    </StackPanel>
+                    <!-- 右边 button-->
+                    <ProgressBar Grid.Column="1" Grid.Row="4" Margin="0 2" Height="8"  Value="{Binding ProgressValues,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Name="UpdateProgress" />
+
+                </Grid>
+                </TabItem>
+            
+                <TabItem Header="Excel">
+          <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="80"/>
                         <ColumnDefinition Width="*"/>
@@ -154,8 +169,29 @@
                         <RowDefinition Height="1*"/>
 
                     </Grid.RowDefinitions>
-                    
-                    <TabControl Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="2">
+
+                    <Canvas Panel.ZIndex="2" Name="Loading" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" Height="120" Margin="600,500,500,500">
+                        <Ellipse Width="15" Height="15" Canvas.Left="55" Canvas.Top="31" Stretch="Fill" Fill="#FFD1D1F7" Opacity="1.0"/>
+                        <Ellipse Width="15" Height="15" Canvas.Left="38" Canvas.Top="39" Stretch="Fill" Fill="Blue" Opacity="0.8"/>
+                        <Ellipse Width="15" Height="15" Canvas.Left="36" Canvas.Top="58" Stretch="Fill" Fill="#FF0000FE" Opacity="0.7"/>
+                        <Ellipse Width="15" Height="15" Canvas.Left="52" Canvas.Top="67" Stretch="Fill" Fill="Blue" Opacity="0.6"/>
+                        <Ellipse Width="15" Height="15" Canvas.Left="68" Canvas.Top="61" Stretch="Fill" Fill="#FF2E2EFF" Opacity="0.5"/>
+                        <Ellipse Width="15" Height="15" Canvas.Left="69" Canvas.Top="42" Stretch="Fill" Fill="#FF6F6FFF" Opacity="0.4"/>
+                        <Canvas.RenderTransform>
+                            <RotateTransform x:Name="SpinnerRotate" Angle="0"/>
+                        </Canvas.RenderTransform>
+                        <Canvas.Triggers>
+                            <EventTrigger RoutedEvent="ContentControl.Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="SpinnerRotate" Storyboard.TargetProperty="(RotateTransform.Angle)" From="0" To="360" Duration="0:0:0.8" RepeatBehavior="Forever"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Canvas.Triggers>
+                    </Canvas>
+
+                        <TabControl Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="2">
 
                         <TabItem Header="基本误差">
                             <Grid>
@@ -455,7 +491,7 @@
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="25"/>
                                 </Grid.RowDefinitions>
-                                <DataGrid ItemsSource="{Binding TimeTQList}" AutoGenerateColumns="False" CanUserAddRows="False">
+                                <DataGrid ItemsSource="{Binding TimeTQList}" Name="DgBasicError3" AutoGenerateColumns="False" CanUserAddRows="False">
                                     <DataGrid.Columns>
                                         <DataGridTemplateColumn Header="行号">
                                             <DataGridTemplateColumn.CellTemplate >
@@ -514,7 +550,7 @@
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="25"/>
                                 </Grid.RowDefinitions>
-                                <DataGrid ItemsSource="{Binding DiaPlayList}" AutoGenerateColumns="False" CanUserAddRows="False">
+                                <DataGrid ItemsSource="{Binding DiaPlayList}" Name="DgBasicError4" AutoGenerateColumns="False" CanUserAddRows="False">
                                     <DataGrid.Columns>
                                         <DataGridTemplateColumn Header="行号">
                                             <DataGridTemplateColumn.CellTemplate >
@@ -566,7 +602,7 @@
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="25"/>
                                 </Grid.RowDefinitions>
-                                <DataGrid ItemsSource="{Binding RunWordList}" AutoGenerateColumns="False" CanUserAddRows="False">
+                                <DataGrid ItemsSource="{Binding RunWordList}" Name="DgBasicError5" AutoGenerateColumns="False" CanUserAddRows="False">
                                     <DataGrid.Columns>
                                         <DataGridTemplateColumn Header="行号">
                                             <DataGridTemplateColumn.CellTemplate >
@@ -634,63 +670,7 @@
                             </Grid>
                         </TabItem>
                     </TabControl>
-                    <!--<StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"  Name="TitleInfo">
-            <Grid  Margin="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="3*"/>
-                </Grid.ColumnDefinitions>
-                <Label Content="有效日期:" />
-                <TextBox  Grid.Column="1" IsReadOnly="True" Text="{Binding StrYXRQ}" />
-                <Label Content="设备类别:" Grid.Column="2" />
-                <TextBox Text="{Binding StrBlx}" Grid.Column="3" IsReadOnly="True"/>
-                <Label Content="设备类型:" Grid.Column="4" />
-                <TextBox Text="{Binding StrBmc}" Grid.Column="5" IsReadOnly="True"/>
-                
-            </Grid>
-            <Grid Margin="2" Name="GridSeal">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="3*"/>
-                </Grid.ColumnDefinitions>
-                <Label Content="外壳封:" />
-                <TextBox Text="{Binding StrShellSeal}" Grid.Column="1" IsReadOnly="True" />
-                <Label Content="编程封:" Grid.Column="2" />
-                <TextBox Text="{Binding StrCodeSeal}" Grid.Column="3" IsReadOnly="True"/>
-                <Label Content="封印时间:" Grid.Column="4" />
-                <TextBox Text="{Binding StrJFSJ}" Grid.Column="5" IsReadOnly="True"/>
-
-            </Grid>
-            <Grid Margin="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="3*"/>
-                </Grid.ColumnDefinitions>
-                <Label Content="生产厂家:" />
-                <TextBox Text="{Binding StrManufacture}" Grid.Column="1" IsReadOnly="True" />
-                <Label Content="检定单位:" Grid.Column="2" />
-                <TextBox Text="{Binding StrJddw}" Grid.Column="3" IsReadOnly="True"/>
-                <Label Content="计划完成日:" Grid.Column="4" />
-                <TextBox Text="{Binding Strblx}" Grid.Column="5" IsReadOnly="True"/>
-
-            </Grid>
            
-
-
-
-        </StackPanel>-->
                     <StackPanel Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,15,0,0">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -720,11 +700,9 @@
 
                         </Grid>
                     </StackPanel>
-
-
                     <TabControl Grid.Row="3" Grid.Column="1" Grid.RowSpan="3" Grid.ColumnSpan="3" TabStripPlacement="Top" >
                         <TabItem Header="基本信息表" Background="Cyan" FontSize="13">
-                            <DataGrid Grid.Row="3" ItemsSource="{Binding MeterInfoList}" 
+                            <DataGrid Grid.Row="3" ItemsSource="{Binding MeterInfoList}"  SelectedCellsChanged="Grid_showItem_SelectedCellsChanged"
                            Grid.Column="1" Grid.ColumnSpan="3" x:Name="Grid_showItem" AutoGenerateColumns="False" CanUserAddRows="False" >
                                 <DataGrid.Columns>
                                     <DataGridTemplateColumn Header="行号">
@@ -798,13 +776,13 @@
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
-                                    <DataGridTemplateColumn Header="检定人员">
+                                    <!--<DataGridTemplateColumn Header="检定人员">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Label Content="{Binding StrJyy}"/>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
+                                    </DataGridTemplateColumn>-->
                                     <DataGridTemplateColumn Header="检定单位">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
@@ -812,13 +790,13 @@
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
-                                    <DataGridTemplateColumn Header="核验人员">
+                                    <!--<DataGridTemplateColumn Header="核验人员">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Label Content="{Binding StrHyy}"/>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
+                                    </DataGridTemplateColumn>-->
                                     <DataGridTemplateColumn Header="电能计量设备资产编号">
                                         <DataGridTemplateColumn.CellTemplate >
                                             <DataTemplate >
@@ -837,9 +815,7 @@
         </StackPanel >-->
 
                 </Grid>
-            </StackPanel>
-
-           
         </TabItem>
-    </TabControl>
+        </TabControl>
+    </Grid>
 </Window>

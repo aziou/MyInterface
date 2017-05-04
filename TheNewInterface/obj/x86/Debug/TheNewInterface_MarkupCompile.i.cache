@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-D:\AziouStudio\The_GSC_Update\MyInterface\TheNewInterface\obj\x86\Debug\
+E:\Code\MyInterface\TheNewInterface\obj\x86\Debug\
 TheNewInterface
 none
 false
 DEBUG;TRACE
-D:\AziouStudio\The_GSC_Update\MyInterface\TheNewInterface\App.xaml
+E:\Code\MyInterface\TheNewInterface\App.xaml
 5-1757440424
 
-15187138925
-191413628371
+1516954702
+19610121932
 AddUser.xaml;BasePage.xaml;DownLoadPage.xaml;MainWindow.xaml;OracleConfig.xaml;
 
 False
