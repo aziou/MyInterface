@@ -16,6 +16,7 @@ namespace OperateData
         public string Sql_word_2 = ";Persist Security Info=False";
         public readonly string BaseConfigPath = System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml";
         public readonly string datapath = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "AccessLink", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
+        public readonly string datapath_tmp = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "AccessLink", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
         public readonly string OracleLink = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "OracleLink", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
        
         /// <summary>
@@ -32,6 +33,36 @@ namespace OperateData
                 cmd.ExecuteNonQuery();
             }
         }
+        /// <summary>
+        /// 执行access  _SQL
+        /// </summary>
+        /// <param name="SQL"></param>
+        public bool ExcuteAccess(List<string> SQL_list)
+        {
+            try
+            {
+                string Path = "";
+                Path = datapath_tmp.Substring(0, datapath_tmp.LastIndexOf(@"\")) + @"\ClouMeterDataTmp.mdb";
+                using (OleDbConnection conn = new OleDbConnection(Sql_word_1 + Path + Sql_word_2))
+                {
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+                    foreach (string temp in SQL_list)
+                    {
+                        OleDbCommand cmd = new OleDbCommand(temp, conn);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                }
+                return true;
+            }
+            catch (Exception Exlist)
+            {
+                return false;
+            }
+     
+        }
+
 
         /// <summary>
         /// 执行access  _SQL

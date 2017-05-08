@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="gb2312" standalone="yes"?>
 <NewUser>
   <CloumMIS>
-    <Item Name="txt_DataPath" Value="E:\Client\DataBase\ClouMeterData.mdb" />
+    <Item Name="txt_DataPath" Value="F:\lizhaoxun20170508\CL3000S-H-NW\Resource\Client\DataBase\ClouMeterData.mdb" />
     <Item Name="txt_equipment" Value="05523" />
     <Item Name="txt_Jyy" Value="C654E9458D7F4A8AA858D1E0D4FED922" />
     <Item Name="txt_Hyy" Value="8FA43578DB7670B0E0430A96B84570B0" />
     <Item Name="cmb_SoftType" Value="CL3000S" />
-    <Item Name="cmb_Company" Value="东莞" />
+    <Item Name="cmb_Company" Value="湛江" />
     <Item Name="cmb_Jyy" Value="韩慧珊" />
     <Item Name="cmb_Hyy" Value="陈金怡" />
     <Item Name="cmb_Seal03" Value="左耳封" />
     <Item Name="cmb_Seal02" Value="编程小门" />
     <Item Name="cmb_Seal01" Value="编程小门" />
-    <Item Name="AccessLink" Value="Provider=Microsoft.Jet.OleDb.4.0;Data Source=E:\Client\DataBase\ClouMeterData.mdb;Persist Security Info=False" />
+    <Item Name="AccessLink" Value="Provider=Microsoft.Jet.OleDb.4.0;Data Source=F:\lizhaoxun20170508\CL3000S-H-NW\Resource\Client\DataBase\ClouMeterData.mdb;Persist Security Info=False" />
     <Item Name="TheWorkNum" Value="03190010000036939982" />
     <Item Name="" Value="" />
     <Item Name="OracleLink" Value="Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=10.150.26.131)(PORT=1530)))(CONNECT_DATA=(SERVICE_NAME= yxscdb)));User Id=PMS_JL; Password=PMS_JL#123" />
@@ -21,10 +21,11 @@
     <Item Name="txt_IPADDRESS" Value="10.150.26.131" />
     <Item Name="txt_PORT" Value="1530" />
     <Item Name="txt_PASSWORD" Value="PMS_JL#123" />
-    <Item Name="txt_CompanyNum" Value="031900" />
-    <Item Name="WorkNumLoad" Value="select GZDBH from {0} where wcbz='0' and rymc ='韩慧珊' and DQBM='031900'order by GZDBH desc " />
+    <Item Name="txt_CompanyNum" Value="030800" />
+    <Item Name="WorkNumLoad" Value="select GZDBH from {0} where wcbz='0' and rymc ='韩慧珊' and DQBM='030800'order by GZDBH desc " />
     <Item Name="txt_Report" Value="C:\Users\chenjinyi\Desktop\证书" />
     <Item Name="CompanyNum" Value="" />
+    <Item Name="txt_MeterNum" Value="12" />
   </CloumMIS>
   <User>
     <Item UserName="陈金怡" UserNumber="8FA43578DB7670B0E0430A96B84570B0" />

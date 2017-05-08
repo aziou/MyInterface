@@ -1,7 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TheNewInterface.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="TheNewInterface_WebReference_CXDNBXXServerService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://10.150.23.35:7010/PMS_WS/services/I_DNJLSBSNJD_CXDNBXX</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

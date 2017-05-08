@@ -140,7 +140,7 @@
 
                     <StackPanel Grid.RowSpan="2" Grid.Row="1" Grid.Column="2" VerticalAlignment="Bottom">
                         <Button Name="btn_update" Width="80" Height="25" Margin="0,0,0,10" Content="上传数据" Click="btn_update_Click"/>
-                        <Button Name="btn_download" Width="80" Height="25" Margin="0,0,0,10" Content="下载数据" Click="btn_download_Click" Visibility="Collapsed" />
+                        <Button Name="btn_download" Width="80" Height="25" Margin="0,0,0,10" Content="下载数据" Click="btn_download_Click" Visibility="Visible" />
                         <Button Name="btn_deldteMis" Width="80" Height="25" Margin="0,0,0,10" Content="删除中间库" Click="btn_deldteMis_Click"/>
                         <Button Name="btn_deldteMisAll" Width="80" Height="25" Margin="0,0,0,10"  Content="删除工作单" Click="btn_deldteMis_Click"/>
                         <Button Name="btn_testFunction" Width="80" Height="25" Margin="0,0,0,10"  Content="方法测试"  Click="btn_testFunction_Click" Visibility="Hidden" />

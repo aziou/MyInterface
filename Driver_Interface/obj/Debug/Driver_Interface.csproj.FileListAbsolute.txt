@@ -20,3 +20,7 @@ D:\AziouStudio\The_GSC_Update\MyInterface\Driver_Interface\bin\Debug\Driver_Inte
 D:\AziouStudio\The_GSC_Update\MyInterface\Driver_Interface\bin\Debug\Driver_Interface.pdb
 D:\AziouStudio\The_GSC_Update\MyInterface\Driver_Interface\obj\Debug\Driver_Interface.dll
 D:\AziouStudio\The_GSC_Update\MyInterface\Driver_Interface\obj\Debug\Driver_Interface.pdb
+F:\lizhaoxun20170508\MyInterface\Driver_Interface\bin\Debug\Driver_Interface.dll
+F:\lizhaoxun20170508\MyInterface\Driver_Interface\bin\Debug\Driver_Interface.pdb
+F:\lizhaoxun20170508\MyInterface\Driver_Interface\obj\Debug\Driver_Interface.dll
+F:\lizhaoxun20170508\MyInterface\Driver_Interface\obj\Debug\Driver_Interface.pdb

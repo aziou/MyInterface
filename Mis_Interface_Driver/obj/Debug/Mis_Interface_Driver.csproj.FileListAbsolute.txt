@@ -33,3 +33,10 @@ D:\AziouStudio\The_GSC_Update\MyInterface\Mis_Interface_Driver\bin\Debug\Driver_
 D:\AziouStudio\The_GSC_Update\MyInterface\Mis_Interface_Driver\obj\Debug\Mis_Interface_Driver.csprojResolveAssemblyReference.cache
 D:\AziouStudio\The_GSC_Update\MyInterface\Mis_Interface_Driver\obj\Debug\Mis_Interface_Driver.dll
 D:\AziouStudio\The_GSC_Update\MyInterface\Mis_Interface_Driver\obj\Debug\Mis_Interface_Driver.pdb
+F:\lizhaoxun20170508\MyInterface\Mis_Interface_Driver\bin\Debug\Mis_Interface_Driver.dll
+F:\lizhaoxun20170508\MyInterface\Mis_Interface_Driver\bin\Debug\Mis_Interface_Driver.pdb
+F:\lizhaoxun20170508\MyInterface\Mis_Interface_Driver\bin\Debug\Driver_Interface.dll
+F:\lizhaoxun20170508\MyInterface\Mis_Interface_Driver\bin\Debug\Driver_Interface.pdb
+F:\lizhaoxun20170508\MyInterface\Mis_Interface_Driver\obj\Debug\Mis_Interface_Driver.csprojResolveAssemblyReference.cache
+F:\lizhaoxun20170508\MyInterface\Mis_Interface_Driver\obj\Debug\Mis_Interface_Driver.dll
+F:\lizhaoxun20170508\MyInterface\Mis_Interface_Driver\obj\Debug\Mis_Interface_Driver.pdb

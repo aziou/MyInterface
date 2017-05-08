@@ -20,3 +20,7 @@ D:\AziouStudio\The_GSC_Update\MyInterface\DataCore\bin\Debug\DataCore.dll
 D:\AziouStudio\The_GSC_Update\MyInterface\DataCore\bin\Debug\DataCore.pdb
 D:\AziouStudio\The_GSC_Update\MyInterface\DataCore\obj\Debug\DataCore.dll
 D:\AziouStudio\The_GSC_Update\MyInterface\DataCore\obj\Debug\DataCore.pdb
+F:\lizhaoxun20170508\MyInterface\DataCore\bin\Debug\DataCore.dll
+F:\lizhaoxun20170508\MyInterface\DataCore\bin\Debug\DataCore.pdb
+F:\lizhaoxun20170508\MyInterface\DataCore\obj\Debug\DataCore.dll
+F:\lizhaoxun20170508\MyInterface\DataCore\obj\Debug\DataCore.pdb
