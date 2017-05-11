@@ -39,3 +39,10 @@ F:\lizhaoxun20170508\MyInterface\OperateData\bin\Debug\DataCore.pdb
 F:\lizhaoxun20170508\MyInterface\OperateData\obj\Debug\OperateData.csprojResolveAssemblyReference.cache
 F:\lizhaoxun20170508\MyInterface\OperateData\obj\Debug\OperateData.dll
 F:\lizhaoxun20170508\MyInterface\OperateData\obj\Debug\OperateData.pdb
+F:\lizhaoxun20170508\新建文件夹\MyInterface\OperateData\bin\Debug\OperateData.dll
+F:\lizhaoxun20170508\新建文件夹\MyInterface\OperateData\bin\Debug\OperateData.pdb
+F:\lizhaoxun20170508\新建文件夹\MyInterface\OperateData\bin\Debug\DataCore.dll
+F:\lizhaoxun20170508\新建文件夹\MyInterface\OperateData\bin\Debug\DataCore.pdb
+F:\lizhaoxun20170508\新建文件夹\MyInterface\OperateData\obj\Debug\OperateData.csprojResolveAssemblyReference.cache
+F:\lizhaoxun20170508\新建文件夹\MyInterface\OperateData\obj\Debug\OperateData.dll
+F:\lizhaoxun20170508\新建文件夹\MyInterface\OperateData\obj\Debug\OperateData.pdb

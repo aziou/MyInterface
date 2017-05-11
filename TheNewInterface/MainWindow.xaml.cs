@@ -44,16 +44,23 @@ namespace TheNewInterface
         #region Tab 001
         private void Btn_Config_Click(object sender, RoutedEventArgs e)
         {
+            string CurPath = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_DataPath", "Value", "", BaseConfigPath), NowPath = "";
             BasePage basepage = new BasePage();
             basepage.ShowDialog();
+            NowPath = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_DataPath", "Value", "", BaseConfigPath);
+            if(NowPath!=CurPath)
             ReLoadCheckTime();
         }
 
         private void btn_update_Click(object sender, RoutedEventArgs e)
         {
+            btn_update.IsEnabled = false;
+            if (OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "cmb_Company", "Value", "", BaseConfigPath) == "湛江")
+            PrintTheWZ();
             if (cmb_WorkNumList.Text.Trim() == "")
             {
                 MessageBox.Show("请选择工单号！");
+                btn_update.IsEnabled = true;
                 return;
             }
             //OperateData.FunctionXml.UpdateElement("NewUser/CloumMIS/Item", "Name", "TheWorkNum", "Value", cmb_WorkNumList.Text.ToString(), BaseConfigPath);
@@ -64,12 +71,13 @@ namespace TheNewInterface
             }
             else
             {
+                btn_update.IsEnabled = true;
                 return;
             }
 
-
+            OperateData.FunctionXml.UpdateElement("NewUser/CloumMIS/Item", "Name", "CheckTimeFlag", "Value", cmb_CheckTime.Text, BaseConfigPath);
             //OperateData.FunctionXml.UpdateElement("NewUser/CloumMIS/Item", "Name", "TheWorkNum", "Value", "07522300987", BaseConfigPath);
-
+           
             int MeterCount = ViewModel.AllMeterInfo.CreateInstance().MeterBaseInfo.Count;
             List<string> UpDateMeterId=new List<string> ();
             for (int i = 0; i < MeterCount; i++)
@@ -82,10 +90,12 @@ namespace TheNewInterface
             if (UpDateMeterId.Count == 0)
             {
                 MessageBox.Show("你没有选择要上传的表", "提示", MessageBoxButton.YesNo, MessageBoxImage.Error);
+                btn_update.IsEnabled = true;
                 return;
             }
             this.UpdateProgress.Maximum = UpDateMeterId.Count;
             listBox_UpInfo.Items.Clear();
+            
             UpDateInfomation upinfo = new UpDateInfomation();
             upinfo.Lis_PkId = UpDateMeterId;
             SoftType_G.csFunction s_function = new SoftType_G.csFunction();
@@ -102,8 +112,12 @@ namespace TheNewInterface
         {
            
             double i = 0;
-            int sleepTime = 100; ;
+            int sleepTime = 100;
+            string ErrorWord = "";
+            int ErrorMeterNum = 0;
+
             double t;
+            List<string> MeterUp_UpId = new List<string>();
 
             List<string> MeterUp_info = new List<string>();
             List<string> Seal_info = new List<string>();
@@ -122,7 +136,7 @@ namespace TheNewInterface
 
             }
            // SoftType_G.csFunction cs_G_Function = new SoftType_G.csFunction();
-    
+            ShowWord(DateTime.Now.ToString(), "开始执行");
             foreach (MeterBaseInfoFactor temp in ViewModel.AllMeterInfo.CreateInstance().MeterBaseInfo)
             {
                 if (temp.BolIfup == true)
@@ -130,9 +144,12 @@ namespace TheNewInterface
                     t = i + 1;
                     i = t < countItem ? t : countItem;
                     MeterUp_info.Clear();
+                    Stopwatch watch = new Stopwatch();
+                    watch.Start();
+
 
                     MeterUp_info.Add("第" + temp.LNG_BENCH_POINT_NO.ToString() + "表位" + cs_Function.UpadataBaseInfo(temp.PK_LNG_METER_ID, out Seal_info));
-
+                    
                     #region Add SEAL
                     foreach (string temp_id in Seal_info)
                     {
@@ -144,8 +161,9 @@ namespace TheNewInterface
 
                     MeterUp_info.Add(cs_Function.UpdataJKRJSWCInfo(temp.PK_LNG_METER_ID));
 
-                    MeterUp_info.Add(cs_Function.UpdataJKXLWCJLInfo(temp.PK_LNG_METER_ID, out Demand_info));
 
+                    MeterUp_info.Add(cs_Function.UpdataJKXLWCJLInfo(temp.PK_LNG_METER_ID, out Demand_info));
+                    
                     #region Add demand
                     foreach (string temp_id in Demand_info)
                     {
@@ -155,12 +173,18 @@ namespace TheNewInterface
 
                     MeterUp_info.Add(cs_Function.UpdataSDTQWCJLInfo(temp.PK_LNG_METER_ID));
 
+
                     MeterUp_info.Add(cs_Function.UpdataDNBSSJLInfo(temp.PK_LNG_METER_ID));
+                    
 
+                   
+                    //ShowWord(watch.ElapsedMilliseconds.ToString(), "上传第"+i.ToString()+"表：");
+                    ViewModel.AllMeterInfo.CreateInstance().MeterBaseInfo[Convert.ToInt16(temp.LNG_BENCH_POINT_NO)-1].CHR_UPLOAD_FLAG = "已上传";
                     MeterUp_info.Add(cs_Function.UpdataDNBZZJLInfo(temp.PK_LNG_METER_ID));
-
+                    MeterUp_UpId.Add(temp.PK_LNG_METER_ID);
                     foreach (string temp_id in MeterUp_info)
                     {
+                        if (temp_id.IndexOf("失败") > 0) ErrorMeterNum = ErrorMeterNum + 1;
                         listBox_UpInfo.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action<string, double>(UpDateMeter), temp_id, i);
                         Thread.Sleep(sleepTime);
                     }
@@ -170,8 +194,9 @@ namespace TheNewInterface
                 
                 
             }
-          
-            MessageBox.Show("成功上传 :" + countItem + "个表");
+            ShowWord(DateTime.Now.ToString(), "执行完毕");
+            MessageBox.Show("成功上传 :" + (Convert.ToInt16( countItem)-ErrorMeterNum).ToString() + "个表");
+            
             try
             {
                 UpdateThread.Abort();
@@ -180,13 +205,14 @@ namespace TheNewInterface
             { }
             finally
             {
+
                 if (listBox_UpInfo.Items.Count != 0)
                 {
                     this.listBox_UpInfo.Dispatcher.Invoke(new Action(() =>
                     {
-
+                        SetMeterUpdateFlag(MeterUp_UpId, cmb_CheckTime.Text.ToString(), 1);
                         this.listBox_UpInfo.UpdateLayout();
-
+                        btn_update.IsEnabled = true;
                         this.listBox_UpInfo.ScrollIntoView(listBox_UpInfo.Items[listBox_UpInfo.Items.Count - 1]);
                     }));
                 }
@@ -221,7 +247,49 @@ namespace TheNewInterface
 
         } 
         #endregion
-        
+        #region  SetMeterUpdateFlag
+
+        private void SetMeterUpdateFlag(List<string> MeterId, string CheckTime, int D_or_U)
+        {
+            string ColUpdate = "", ColZCBH = "", ColChecktime = "";
+            switch (csPublicMember.strSoftType)
+            {
+                case "CL3000G":
+                case "CL3000F":
+                case "CL3000DV80":
+                    ColUpdate = "chrSetNetState";
+                    ColZCBH = "intMyId";
+                    ColChecktime = "datJdrq";
+                    break;
+                case "CL3000S":
+                    ColUpdate = "CHR_UPLOAD_FLAG";
+                    ColZCBH = "PK_LNG_METER_ID";
+                    ColChecktime = "DTM_TEST_DATE";
+                    break;
+
+            }
+            List<string> SQL = new List<string>();
+            if (csPublicMember.strSoftType == "CL3000S")
+            {
+                foreach (string temp in MeterId)
+                {
+                    SQL.Add(string.Format("update {0} set {1} ='{2}' where {3}='{4}' and {5} =#{6}#", csPublicMember.strTableName, ColUpdate, D_or_U.ToString(), ColZCBH, temp, ColChecktime, CheckTime));
+                }
+            }
+            else
+            {
+                foreach (string temp in MeterId)
+                {
+                    SQL.Add(string.Format("update {0} set {1} ='{2}' where {3}={4} and {5} =#{6}#", csPublicMember.strTableName, ColUpdate, D_or_U.ToString(), ColZCBH, temp, ColChecktime, CheckTime));
+                }
+            }
+            OperateData.PublicFunction csPublic = new OperateData.PublicFunction();
+
+            csPublic.ExcuteAccess(SQL,"");
+
+           
+        }
+        #endregion 
         private void btn_download_Click(object sender, RoutedEventArgs e)
         {
             DownLoadPage downloadpage = new DownLoadPage();
@@ -245,10 +313,9 @@ namespace TheNewInterface
             {
                 return;
             }
-
-
+            
           //  OperateData.FunctionXml.UpdateElement("NewUser/CloumMIS/Item", "Name", "TheWorkNum", "Value", "07522300987", BaseConfigPath);
-
+           
             int MeterCount = ViewModel.AllMeterInfo.CreateInstance().MeterBaseInfo.Count;
             List<string> UpDateMeterId = new List<string>();
             for (int i = 0; i < MeterCount; i++)
@@ -261,13 +328,14 @@ namespace TheNewInterface
             if (UpDateMeterId.Count == 0)
             {
                 MessageBox.Show("你没有选择要删除的表", "提示", MessageBoxButton.YesNo, MessageBoxImage.Error);
+                btn_update.IsEnabled = true;
                 return;
             }
             this.UpdateProgress.Maximum = UpDateMeterId.Count;
             listBox_UpInfo.Items.Clear();
             UpDateInfomation upinfo = new UpDateInfomation();
             upinfo.Lis_PkId = UpDateMeterId;
-           
+
             UpdateThread = new Thread(new ParameterizedThreadStart(DeleteToOracle));
             UpdateThread.Start(upinfo);
         }
@@ -275,6 +343,11 @@ namespace TheNewInterface
         {
             UpDateInfomation Lis_Id = o as UpDateInfomation;
             DeleteInfoThread(Lis_Id.Lis_PkId.Count, Lis_Id.Lis_PkId);
+        }
+
+        public void DeleteToALLOracle(object o)
+        {
+            DeleteInfoThread();
         }
         public void DeleteInfoThread(double countItem, List<string> lis_UP_ID)
         {
@@ -284,6 +357,7 @@ namespace TheNewInterface
             double t;
 
             List<string> MeterUp_info = new List<string>();
+            List<string> MeterUp_Up = new List<string>();
             List<string> Seal_info = new List<string>();
             List<string> Demand_info = new List<string>();
             Mis_Interface_Driver.MisDriver cs_Function = null;
@@ -309,11 +383,12 @@ namespace TheNewInterface
                     i = t < countItem ? t : countItem;
                     MeterUp_info.Clear();
 
-                    
+                    ViewModel.AllMeterInfo.CreateInstance().MeterBaseInfo[Convert.ToInt16(temp.LNG_BENCH_POINT_NO)-1].CHR_UPLOAD_FLAG = "未上传";
                     MeterUp_info.Add(cs_Function.DeleteMis(temp.AVR_ASSET_NO.Trim()));
-
+                    MeterUp_Up.Add(temp.PK_LNG_METER_ID);
                     foreach (string temp_id in MeterUp_info)
                     {
+
                         listBox_UpInfo.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action<string, double>(UpDateMeter), temp_id, i);
                         Thread.Sleep(sleepTime);
                     }
@@ -337,7 +412,77 @@ namespace TheNewInterface
                 {
                     this.listBox_UpInfo.Dispatcher.Invoke(new Action(() =>
                     {
+                        SetMeterUpdateFlag(MeterUp_Up, cmb_CheckTime.Text.ToString(),0);
+                        this.listBox_UpInfo.UpdateLayout();
+                        
+                        this.listBox_UpInfo.ScrollIntoView(listBox_UpInfo.Items[listBox_UpInfo.Items.Count - 1]);
+                    }));
+                }
 
+
+            }
+
+
+        }
+        public void DeleteInfoThread()
+        {
+
+            double i = 0;
+            int sleepTime = 150; ;
+            double t;
+
+            List<string> MeterUp_info = new List<string>();
+            List<string> MeterUp_Up = new List<string>();
+            List<string> Seal_info = new List<string>();
+            List<string> Demand_info = new List<string>();
+            Mis_Interface_Driver.MisDriver cs_Function = null;
+            switch (csPublicMember.strSoftType)
+            {
+                case "CL3000G":
+                case "CL3000F":
+                case "CL3000DV80":
+                    cs_Function = new SoftType_G.csFunction();
+                    break;
+                case "CL3000S":
+                    cs_Function = new SoftType_S.csFunction();
+                    break;
+
+            }
+            // SoftType_G.csFunction cs_G_Function = new SoftType_G.csFunction();
+
+            MeterUp_info.Add(cs_Function.DeleteAllMis());
+            foreach (string temp_id in MeterUp_info)
+            {
+
+                listBox_UpInfo.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action<string, double>(UpDateMeter), temp_id, i);
+                Thread.Sleep(sleepTime);
+            }
+            foreach (MeterBaseInfoFactor temp in ViewModel.AllMeterInfo.CreateInstance().MeterBaseInfo)
+            {
+                
+                    t = i + 1;
+                   
+                    MeterUp_info.Clear();
+
+                    ViewModel.AllMeterInfo.CreateInstance().MeterBaseInfo[Convert.ToInt16(temp.LNG_BENCH_POINT_NO) - 1].CHR_UPLOAD_FLAG = "未上传";
+                    
+                    MeterUp_Up.Add(temp.PK_LNG_METER_ID);
+                    
+            }
+          
+            try
+            {
+                UpdateThread.Abort();
+            }
+            catch (Exception e)
+            { }
+            finally
+            {
+                if (listBox_UpInfo.Items.Count != 0)
+                {
+                    this.listBox_UpInfo.Dispatcher.Invoke(new Action(() =>
+                    {
+                        SetMeterUpdateFlag(MeterUp_Up, cmb_CheckTime.Text.ToString(), 0);
                         this.listBox_UpInfo.UpdateLayout();
 
                         this.listBox_UpInfo.ScrollIntoView(listBox_UpInfo.Items[listBox_UpInfo.Items.Count - 1]);
@@ -380,30 +525,35 @@ namespace TheNewInterface
 
         private void cmb_CheckTime_Loaded(object sender, RoutedEventArgs e)
         {
-            cmb_CheckTime.Items.Clear();
-            string strSection = "NewUser/CloumMIS/Item";
-            string datapath = OperateData.FunctionXml.ReadElement(strSection, "Name", "txt_DataPath", "Value", "", BaseConfigPath);
-            csPublicMember.str_DataPath = datapath;
-            csPublicMember.strSoftType = OperateData.FunctionXml.ReadElement(strSection, "Name", "cmb_SoftType", "Value", "", BaseConfigPath);
-            csPublicMember.showInfo_less =(bool)chk_ShowLess.IsChecked;
-            #region 软件类型判断
-            switch (csPublicMember.strSoftType)
-            { 
-                case "CL3000G":
-                case "CL3000F":
-                case "CL3000DV80":
-                   csPublicMember.strCondition  = "datJdrq";
-                   csPublicMember.strTableName = "meterinfo";
-                    break;
-                case "CL3000S":
-                    csPublicMember.strCondition = "DTM_TEST_DATE";
-                    csPublicMember.strTableName = "METER_INFO";
-                    break;
+            //cmb_CheckTime.Items.Clear();
+            //string strSection = "NewUser/CloumMIS/Item";
+            //string datapath = OperateData.FunctionXml.ReadElement(strSection, "Name", "txt_DataPath", "Value", "", BaseConfigPath);
+            //csPublicMember.str_DataPath = datapath;
+            //csPublicMember.strSoftType = OperateData.FunctionXml.ReadElement(strSection, "Name", "cmb_SoftType", "Value", "", BaseConfigPath);
+            //csPublicMember.showInfo_less =(bool)chk_ShowLess.IsChecked;
+            //#region 软件类型判断
+            //switch (csPublicMember.strSoftType)
+            //{ 
+            //    case "CL3000G":
+            //    case "CL3000F":
+            //    case "CL3000DV80":
+            //       csPublicMember.strCondition  = "datJdrq";
+            //       csPublicMember.strTableName = "meterinfo";
+            //        break;
+            //    case "CL3000S":
+            //        csPublicMember.strCondition = "DTM_TEST_DATE";
+            //        csPublicMember.strTableName = "METER_INFO";
+            //        break;
 
-            }
+            //}
 
-            #endregion
-            LoadCheckTime(csPublicMember.str_DataPath, csPublicMember.strCondition, csPublicMember.strTableName, csPublicMember.showInfo_less);
+            //#endregion
+            //Stopwatch watch = new Stopwatch();
+            //watch.Start();
+            //LoadCheckTime(csPublicMember.str_DataPath, csPublicMember.strCondition, csPublicMember.strTableName, csPublicMember.showInfo_less);
+            //watch.Stop();
+            //ShowWord(watch.ElapsedMilliseconds.ToString(),"加载检定时间：");
+          
         }
         private void ReLoadCheckTime()
         {
@@ -430,8 +580,11 @@ namespace TheNewInterface
             }
 
             #endregion
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
             LoadCheckTime(csPublicMember.str_DataPath, csPublicMember.strCondition, csPublicMember.strTableName, csPublicMember.showInfo_less);
-   
+            watch.Stop();
+            ShowWord(watch.ElapsedMilliseconds.ToString(), "重新加载检定时间：");
         }
         /// <summary>
         /// 加载检定日期
@@ -442,16 +595,41 @@ namespace TheNewInterface
         private void LoadCheckTime(string dataPath, string Condition, string TableName,bool IsLess)
         {
             List<string> TimeList = new List<string>();
+            
             OperateData.PublicFunction PbFunction = new OperateData.PublicFunction();
             string Less_SQL = IsLess == true ? " DISTINCT TOP 20" : " DISTINCT";
+            string Sql = "";
+            #region 厂家选择
+            switch (OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "Cmb_Facory", "Value", "", BaseConfigPath))
+            { 
+                case "科陆电子":
+                    Sql = string.Format("select  {3} {0} from {1} order by {2} desc", Condition, TableName, Condition, Less_SQL);
+                    break;
+                case "格宁":
+                    Sql = string.Format("select  {3} {0} from {1} order by {2} desc", "TESTDATE", "ResultData", "TESTDATE", Less_SQL);
+                    Condition = "TESTDATE";
+                    break;
+                case "涵普":
+                    Sql = string.Format("SELECT {0} FinishTime FROM [Meters].[dbo].[PM_Meters] order by FinishTime desc", Less_SQL);
+                    break;
+            }
+
+            #endregion
             if (dataPath.Trim() == "")
             {
                 return;
             }
             else
             {
-                string Sql = string.Format("select  {3} {0} from {1} order by {2} desc", Condition, TableName, Condition,Less_SQL);
-                TimeList = PbFunction.ExcuteAccess(Sql, Condition);
+                if (OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "Cmb_Facory", "Value", "", BaseConfigPath) == "涵普")
+                {
+                    TimeList = PbFunction.ExcuteSqlServer(Sql, "FinishTime");
+                }
+                else
+                {
+                    TimeList = PbFunction.ExcuteAccess(Sql, Condition);
+                }
+                
             }
             try
             {
@@ -461,6 +639,7 @@ namespace TheNewInterface
                     MessageBox.Show("请配置数据库的正确路径（或当前数据库没有数据）！", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
                     BasePage basepage = new BasePage();
                     basepage.ShowDialog();
+                    if (OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "Cmb_Facory", "Value", "", BaseConfigPath) == "涵普") return;
                     ReLoadCheckTime();
                 }
                 foreach (string temp in TimeList)
@@ -490,15 +669,36 @@ namespace TheNewInterface
         {
             if (cmb_Condition.SelectedIndex == 0)
             {
+                string CheckTime = cmb_CheckTime.SelectedValue.ToString();
+                string Sql = string.Format("Select  * from {0} where {1} =#{2}#", csPublicMember.strTableName, csPublicMember.strCondition, CheckTime);
+                
+                  
+                #region 厂家选择
+                switch (OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "Cmb_Facory", "Value", "", BaseConfigPath))
+                {
+                    case "科陆电子":
+                          Sql = string.Format("Select  * from {0} where {1} =#{2}#", csPublicMember.strTableName, csPublicMember.strCondition, CheckTime);
+                    break;
+                    case "格宁":
+                    Sql = string.Format("select * from {0} where {1} = '{2}' ", "ResultData", "TESTDATE", CheckTime);
+                        
+                        break;
+                    case "涵普":
+                        Sql = string.Format("SELECT *  FROM [Meters].[dbo].[PM_Meters] WHERE FinishTime='{0}' ", CheckTime);
+                        break;
+                }
+
+                #endregion
                 try
                 {
-                    string CheckTime = cmb_CheckTime.SelectedValue.ToString();
-                    string Sql = string.Format("Select  * from {0} where {1} =#{2}#", csPublicMember.strTableName, csPublicMember.strCondition, CheckTime);
                     List<MeterBaseInfoFactor> tempBaseInfo = new List<MeterBaseInfoFactor>();
                     ObservableCollection<MeterBaseInfoFactor> baseInfo = new ObservableCollection<MeterBaseInfoFactor>();
                     OperateData.PublicFunction csFunction = new OperateData.PublicFunction();
-                    baseInfo = csFunction.GetBaseInfo(CheckTime, Sql, csPublicMember.strSoftType);
-
+                    Stopwatch watch = new Stopwatch();
+                    watch.Start();
+                    baseInfo = csFunction.GetBaseInfo( Sql, csPublicMember.strSoftType);
+                    watch.Stop();
+                    ShowWord(watch.ElapsedMilliseconds.ToString(), "加载检定数据时间：");
                     ViewModel.AllMeterInfo.CreateInstance().MeterBaseInfo = baseInfo;
 
                 }
@@ -552,11 +752,96 @@ namespace TheNewInterface
             }
             loadMisWorkNum();
         }
-
+        List<T> FindVisualChild<T>(DependencyObject obj) where T : DependencyObject
+        {
+            try
+            {
+                List<T> TList = new List<T> { };
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+                {
+                    DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+                    if (child != null && child is T)
+                    {
+                        TList.Add((T)child);
+                    }
+                    else
+                    {
+                        List<T> childOfChildren = FindVisualChild<T>(child);
+                        if (childOfChildren != null)
+                        {
+                            TList.AddRange(childOfChildren);
+                        }
+                    }
+                }
+                return TList;
+            }
+            catch (Exception ee)
+            {
+                MessageBox.Show(ee.Message);
+                return null;
+            }
+        }
         private void btn_testFunction_Click(object sender, RoutedEventArgs e)
         {
             //listBox_UpInfo.UpdateLayout();
-            listBox_UpInfo.ScrollIntoView(listBox_UpInfo.Items[listBox_UpInfo.Items.Count - 1]);
+            //List<TextBox> txtList = FindVisualChild<TextBox>(this.dg_Info);
+            //foreach (TextBox temp in txtList)
+            //{
+            //    temp.IsReadOnly = temp.IsReadOnly?false:true;
+            //}
+            SoftType_S.csFunction function = new SoftType_S.csFunction();
+            List<string> ColName = new List<string>();
+            ColName.Add("资产编号");
+            ColName.Add("设备类别");
+            ColName.Add("设备类型");
+            ColName.Add("设备型号");
+            ColName.Add("生产厂家");
+            ColName.Add("起码");
+            ColName.Add("检定日期");
+            ColName.Add("检定结论");
+            ColName.Add("区县局领料人");
+            ColName.Add("区县局领料时间");
+            ColName.Add("使用单位");
+            ColName.Add("是否已使用");
+            ObservableCollection<Clou_Report.Model.MemberForZJ> ZJMember = new ObservableCollection<Clou_Report.Model.MemberForZJ>();
+            ZJMember=function.SetMemberForZj(cmb_CheckTime.Text,true);
+            Clou_Report.Report_Excel ExcelforZj = new Clou_Report.Report_Excel();
+            ExcelforZj.OutputExcelForZj(ZJMember, ColName);
+            MessageBox.Show("导出物资成功","提示",MessageBoxButton.OK,MessageBoxImage.Exclamation);
+         
+        }
+        /// <summary>
+        /// 导出物资信息
+        /// </summary>
+        private void PrintTheWZ()
+        {
+            try
+            {
+                SoftType_S.csFunction function = new SoftType_S.csFunction();
+                List<string> ColName = new List<string>();
+                ColName.Add("资产编号");
+                ColName.Add("设备类别");
+                ColName.Add("设备类型");
+                ColName.Add("设备型号");
+                ColName.Add("生产厂家");
+                ColName.Add("起码");
+                ColName.Add("检定日期");
+                ColName.Add("检定结论");
+                ColName.Add("区县局领料人");
+                ColName.Add("区县局领料时间");
+                ColName.Add("使用单位");
+                ColName.Add("是否已使用");
+                ObservableCollection<Clou_Report.Model.MemberForZJ> ZJMember = new ObservableCollection<Clou_Report.Model.MemberForZJ>();
+                ZJMember = function.SetMemberForZj(cmb_CheckTime.Text, true);
+                Clou_Report.Report_Excel ExcelforZj = new Clou_Report.Report_Excel();
+                ExcelforZj.OutputExcelForZj(ZJMember, ColName);
+               //MessageBox.Show("导出物资成功", "提示", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+            catch(Exception WZEX)
+            { 
+            
+            }
+            
         }
 
         private void cmb_WorkNumList_Loaded(object sender, RoutedEventArgs e)
@@ -717,28 +1002,19 @@ namespace TheNewInterface
 
             }
             // SoftType_G.csFunction cs_G_Function = new SoftType_G.csFunction();
+            MeterUp_info.Add(cs_Function.DeleteAllMis());
 
+            foreach (string temp_id in MeterUp_info)
+            {
+                listBox_UpInfo.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action<string, double>(UpDateMeter), temp_id, 1);
+                Thread.Sleep(sleepTime);
+            }
             foreach (MeterBaseInfoFactor temp in ViewModel.AllMeterInfo.CreateInstance().MeterBaseInfo)
             {
-                if (temp.BolIfup == true)
-                {
+                
                     t = i + 1;
-                   
+                    ViewModel.AllMeterInfo.CreateInstance().MeterBaseInfo[Convert.ToInt16(temp.LNG_BENCH_POINT_NO) - 1].CHR_UPLOAD_FLAG = "未上传";
                     MeterUp_info.Clear();
-
-
-                    MeterUp_info.Add(cs_Function.DeleteAllMis());
-
-                    foreach (string temp_id in MeterUp_info)
-                    {
-                        listBox_UpInfo.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action<string, double>(UpDateMeter), temp_id, i);
-                        Thread.Sleep(sleepTime);
-                    }
-
-                }
-
-
-
             }
 
             MessageBox.Show("成功删除整张工作单");
@@ -1800,8 +2076,97 @@ namespace TheNewInterface
 
         }
 
-       
+        private void btn_ExcelSeal_Click(object sender, RoutedEventArgs e)
+        {
+            Thread PutExcel;
+            List<string> ZCBH_list = new List<string>();
+            List<string> Seal01_list = new List<string>();
+            List<string> Seal02_list = new List<string>();
+            List<string> Seal03_list = new List<string>();
 
+            Clou_Report.LocalBaseInfo localBaseInfo = new Clou_Report.LocalBaseInfo();
+            Clou_Report.Report_Excel report_Excel = new Clou_Report.Report_Excel();
+            foreach (MeterBaseInfoFactor temp in ViewModel.AllMeterInfo.CreateInstance().MeterBaseInfo)
+            {
+                ZCBH_list.Add(temp.AVR_ASSET_NO.Trim());
+                Seal01_list.Add(temp.AVR_SEAL_1.Trim());
+                Seal02_list.Add(temp.AVR_SEAL_2.Trim());
+                Seal03_list.Add(temp.AVR_SEAL_3.Trim());
+            }
+            localBaseInfo.List_MeterZcbh = ZCBH_list;
+            localBaseInfo.List_Seal001 = Seal01_list;
+            localBaseInfo.List_Seal002 = Seal02_list;
+            localBaseInfo.List_Seal003 = Seal03_list;
+            localBaseInfo.MeterCheck = cmb_CheckTime.Text.ToString();
+            Flag = false;
+            PutExcel = new Thread(new ParameterizedThreadStart(OutSeal));
+            PutExcel.IsBackground = true;
+            PutExcel.Start(localBaseInfo);
+            BgExcel = new BackgroundWorker();
+            BgExcel.DoWork += new DoWorkEventHandler(BgExcel_DoWorker);
+            BgExcel.RunWorkerCompleted += new RunWorkerCompletedEventHandler(BgExcel_RunWorkerCompleted);
+            BgExcel.RunWorkerAsync();
+        }
+        public void OutSeal(object temp)
+        {
+            Clou_Report.Report_Excel report_Excel = new Clou_Report.Report_Excel();
+            Clou_Report.LocalBaseInfo LocalTemp = temp as Clou_Report.LocalBaseInfo;
+            report_Excel.OutputExcel(LocalTemp.List_MeterZcbh, LocalTemp.List_Seal001, LocalTemp.List_Seal002, LocalTemp.List_Seal003,LocalTemp.MeterCheck);
+        
+            Flag = true;
+        }
+
+        private void btn_deldteMisAll_Click(object sender, RoutedEventArgs e)
+        {
+            if (cmb_WorkNumList.Text.Trim() == "")
+            {
+                MessageBox.Show("请选择工单号！");
+                return;
+            }
+            //OperateData.FunctionXml.UpdateElement("NewUser/CloumMIS/Item", "Name", "TheWorkNum", "Value", cmb_WorkNumList.Text.ToString(), BaseConfigPath);
+            if (MessageBox.Show("请确定你要删除的工作单为：" + cmb_WorkNumList.Text, "提示", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
+            {
+                OperateData.FunctionXml.UpdateElement("NewUser/CloumMIS/Item", "Name", "TheWorkNum", "Value", cmb_WorkNumList.Text, BaseConfigPath);
+
+            }
+            else
+            {
+                return;
+            }
+
+
+            //  OperateData.FunctionXml.UpdateElement("NewUser/CloumMIS/Item", "Name", "TheWorkNum", "Value", "07522300987", BaseConfigPath);
+
+
+            this.UpdateProgress.Maximum = 1;
+            listBox_UpInfo.Items.Clear();
+            UpDateInfomation upinfo = new UpDateInfomation();
+            UpdateThread = new Thread(new ParameterizedThreadStart(DeleteAllToOracle));
+            UpdateThread.Start(upinfo);
+        }
+
+        private void ShowWord(string Time,string RunItem)
+        {
+            //this.listBox_UpInfo.Dispatcher.Invoke(new Action(() =>
+            //{
+            //   // this.listBox_UpInfo.Items.Clear();
+            //    this.listBox_UpInfo.Items.Add(RunItem+Time + "毫秒");
+            //    this.listBox_UpInfo.UpdateLayout();
+
+                
+            //}));
+        }
+        private void ShowWord( string RunItem)
+        {
+            this.listBox_UpInfo.Dispatcher.Invoke(new Action(() =>
+            {
+                // this.listBox_UpInfo.Items.Clear();
+                this.listBox_UpInfo.Items.Add(RunItem);
+                this.listBox_UpInfo.UpdateLayout();
+
+
+            }));
+        }
        
     }
 
@@ -1815,6 +2180,7 @@ namespace TheNewInterface
         }
 
     }
+    
     public class MisInfo
     {
         private string meterZCBH;

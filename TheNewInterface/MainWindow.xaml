@@ -1,7 +1,7 @@
 ﻿<Window x:Class="TheNewInterface.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="上传接口2.0.0" 
+        Title="上传接口2.0.1" 
         MinHeight="800" MaxHeight="800"
         MinWidth="1200" MaxWidth="1200">
     <Window.Resources>
@@ -126,7 +126,7 @@
                             <DataGridTemplateColumn Header="上传标识" Width="*" >
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Label   Content="{Binding CHR_UPLOAD_FLAG}"></Label>
+                                        <Label   Content="{Binding CHR_UPLOAD_FLAG,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></Label>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -142,8 +142,9 @@
                         <Button Name="btn_update" Width="80" Height="25" Margin="0,0,0,10" Content="上传数据" Click="btn_update_Click"/>
                         <Button Name="btn_download" Width="80" Height="25" Margin="0,0,0,10" Content="下载数据" Click="btn_download_Click" Visibility="Visible" />
                         <Button Name="btn_deldteMis" Width="80" Height="25" Margin="0,0,0,10" Content="删除中间库" Click="btn_deldteMis_Click"/>
-                        <Button Name="btn_deldteMisAll" Width="80" Height="25" Margin="0,0,0,10"  Content="删除工作单" Click="btn_deldteMis_Click"/>
-                        <Button Name="btn_testFunction" Width="80" Height="25" Margin="0,0,0,10"  Content="方法测试"  Click="btn_testFunction_Click" Visibility="Hidden" />
+                        <Button Name="btn_deldteMisAll" Width="80" Height="25" Margin="0,0,0,10"  Content="删除工作单" Click="btn_deldteMisAll_Click"/>
+                        <Button Name="btn_ExcelSeal" Width="80" Height="25" Margin="0,0,0,10"  Content="导出铅封信息" Click="btn_ExcelSeal_Click"/>
+                        <Button Name="btn_testFunction" Width="80" Height="25" Margin="0,0,0,10"  Content="导出物资"  Click="btn_testFunction_Click" Visibility="Visible" />
                     </StackPanel>
                     <!-- 右边 button-->
                     <ProgressBar Grid.Column="1" Grid.Row="4" Margin="0 2" Height="8"  Value="{Binding ProgressValues,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Name="UpdateProgress" />

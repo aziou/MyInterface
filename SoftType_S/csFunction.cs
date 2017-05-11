@@ -6,6 +6,8 @@ using System.Collections.ObjectModel;
 using System.Data.OleDb;
 using DataCore;
 using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
 namespace SoftType_S
 {
     public class csFunction : Mis_Interface_Driver.MisDriver
@@ -102,7 +104,7 @@ namespace SoftType_S
             {
 
 
-                DeletedAllMidDataBaeInfo( out SealList);
+                DeletedAllMidDataBaeInfo(out SealList);
 
 
                 excuteSuccess = OperateData.PublicFunction.ExcuteToOracle(SealList, out ErrorResult);
@@ -186,21 +188,28 @@ namespace SoftType_S
             int excuteSuccess = 0;
             string ErrorResult;
             str_pkId = PKid;
+            string Runtime = "";
             List<string> SealList = new List<string>();
             List<string> mysql = new List<string>();
             try
             {
 
-
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
                 mysql = Get_VT_SB_JKDNBJDJL(PKid, out SealList);
+                watch.Stop();
+                Runtime = watch.ElapsedMilliseconds.ToString() + "ms";
 
-
+                watch = new Stopwatch();
+                watch.Start();
                 excuteSuccess = OperateData.PublicFunction.ExcuteToOracle(mysql, out ErrorResult);
+                watch.Stop();
+                Runtime =Runtime+"执行："+ watch.ElapsedMilliseconds.ToString() + "ms";
 
                 if (excuteSuccess == 0)
                 {
                     Col_For_Seal = SealList;
-                    return MeterZCBH + "基本信息上传到中间库成功！";
+                    return MeterZCBH + "基本信息上传到中间库成功！" ;
                 }
                 else
                 {
@@ -224,15 +233,28 @@ namespace SoftType_S
 
             int excuteSuccess;
             string ErrorReason;
+            string Runtime = "";
             List<string> mysql = new List<string>();
             try
             {
-
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
                 mysql = Get_VT_SB_JKDNBJDWC(OnlyIdNum);
+                watch.Stop();
+                Runtime = watch.ElapsedMilliseconds.ToString() + "ms";
 
-
-
+                watch = new Stopwatch();
+                watch.Start();
                 excuteSuccess = OperateData.PublicFunction.ExcuteToOracle(mysql, out ErrorReason);
+                watch.Stop();
+                Runtime = Runtime + "执行：" + watch.ElapsedMilliseconds.ToString() + "ms";
+
+
+              
+
+
+
+               
                 if (excuteSuccess == 0)
                 {
                     if (mysql.Count == 0)
@@ -496,12 +518,25 @@ namespace SoftType_S
         {
             List<string> lis_Sql = new List<string>();
             List<string> lis_seal = new List<string>();
-            string strFZLXDM = "";
-            string strSQL = "SELECT * FROM METER_INFO where PK_LNG_METER_ID='" + PK_ID + "'";
+            string strFZLXDM = "", Runtime="";
+            string str_CheckTime = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "CheckTimeFlag", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
+
+            string str_CheckName = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "cmb_Jyy", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
+            string strSQL = "SELECT * FROM METER_INFO where PK_LNG_METER_ID='" + PK_ID + "' and DTM_TEST_DATE=#" + str_CheckTime + "# and AVR_TEST_PERSON = '" + str_CheckName + "'";
             OleDbConnection AccessConntion = new OleDbConnection(AccessLink);
             AccessConntion.Open();
             OleDbCommand ccmd = new OleDbCommand(strSQL, AccessConntion);
+
+
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
             OleDbDataReader OldRead = ccmd.ExecuteReader();
+            watch.Stop();
+            Runtime = watch.ElapsedMilliseconds.ToString() + "ms";
+
+            watch = new Stopwatch();
+            watch.Start();
+
             OldRead.Read();
             string strOracleSQL = "insert into VT_SB_JKDNBJDJL (";
             string strOracleSQL_Name = "";
@@ -703,7 +738,7 @@ namespace SoftType_S
                 strOracleSQL_Value = strOracleSQL_Value + "',to_date('" + strValue + "','yyyy-mm-dd hh24:mi:ss')";
 
                 strOracleSQL_Name = strOracleSQL_Name + "HYRQ";  //核验日期
-                strValue = OldRead["DTM_VALID_DATE"].ToString().Trim();
+                strValue = Convert.ToDateTime(OldRead["DTM_TEST_DATE"]).ToShortDateString().Trim() + " " + DateTime.Now.ToLongTimeString().Trim();
                 strOracleSQL_Value = strOracleSQL_Value + ",to_date('" + strValue + "','yyyy-mm-dd hh24:mi:ss')";
 
                 #endregion
@@ -758,7 +793,9 @@ namespace SoftType_S
                         strOracleSQL_Value = strOracleSQL_Value + "','" + str_DQBM;
 
                         strOracleSQL_Name = strOracleSQL_Name + "JFSJ";//时间
+                        //strValue = Convert.ToDateTime(OldRead["DTM_TEST_DATE"]).ToShortDateString().Trim() + " " + DateTime.Now.ToLongTimeString().Trim();
                         strValue = OldRead["DTM_TEST_DATE"].ToString().Trim();
+               
                         strOracleSQL_Value = strOracleSQL_Value + "',to_date('" + strValue + "','yyyy-mm-dd hh24:mi:ss')";
 
                         strOracleSQL = strOracleSQL + strOracleSQL_Name + ")  Values (" + strOracleSQL_Value + ")";
@@ -772,7 +809,8 @@ namespace SoftType_S
 
                 AccessConntion.Close();
                 OldRead.Close();
-                
+                watch.Stop();
+                Runtime = Runtime + "执行：" + watch.ElapsedMilliseconds.ToString() + "ms";
             }
             catch (Exception Error)
             {
@@ -796,6 +834,18 @@ namespace SoftType_S
 
             OperateData.PublicFunction MyDb = new OperateData.PublicFunction();
             strResults = MyDb.GetSingleData(strSQL, AccessLink);
+
+
+            return strResults;
+        }
+        private static string Get_METER_COMMUNICATION_HanPu(string RESULT_ID, string meterId)
+        {
+            string strResults = "";
+            string strSQL = " SELECT DialEnd FROM [Meters].[dbo].[PM_Constant] where TestID='" + meterId + "'";
+            string ServerName = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_SqlServerName", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
+            string Con = string.Format("Server={0};Database=Meters;Trusted_Connection=SSPI", ServerName);
+            OperateData.PublicFunction MyDb = new OperateData.PublicFunction();
+            strResults = MyDb.GetSingleData_SqlServer(strSQL, Con);
 
 
             return strResults;
@@ -890,7 +940,7 @@ namespace SoftType_S
 
                     listSQL.Add(strOracleSQL);
                 }
-
+               
             }
             catch { }
 
@@ -910,7 +960,7 @@ namespace SoftType_S
             string strOracleSQL_Value = "";
             string strOracleSQL = "insert into VT_SB_JKDNBJDWC (";
 
-            string Error_avr = "", Error_limit = "";
+            string Error_avr = "", Error_limit = "", Runtime="";
             string ErrorResult = "Y";
             #region 去除重复信息
             List<string> proCol = new List<string>();
@@ -925,7 +975,20 @@ namespace SoftType_S
                 OleDbCommand ccmd = new OleDbCommand(strSQL, AccessConntion);
 
 
+              
+
+
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
                 OleDbDataReader red = ccmd.ExecuteReader();
+                watch.Stop();
+                Runtime = watch.ElapsedMilliseconds.ToString() + "ms";
+
+                watch = new Stopwatch();
+                watch.Start();
+
+
+
                 while (red.Read() == true)
                 {
                     strOracleSQL = "insert into VT_SB_JKDNBJDWC (";
@@ -1064,143 +1127,146 @@ namespace SoftType_S
                 AccessConntion.Close();
                 AccessConntion.Dispose();
                 #endregion
+                watch.Stop();
+                Runtime = Runtime + "执行：" + watch.ElapsedMilliseconds.ToString() + "ms";
 
                 #region 获取特殊检定表的影响量数据
-                strSQL = "SELECT * FROM METER_SPECIAL_DATA WHERE  FK_LNG_METER_ID='" + PK_ID + "'";
+                //strSQL = "SELECT * FROM METER_SPECIAL_DATA WHERE  FK_LNG_METER_ID='" + PK_ID + "'";
 
-                if (AccessConntion.State == System.Data.ConnectionState.Closed)
-                    AccessConntion.Open();
-                ccmd = new OleDbCommand(strSQL, AccessConntion);
-                red = ccmd.ExecuteReader();
-                while (red.Read() == true)
-                {
-                    strOracleSQL = "insert into VT_SB_JKDNBJDWC (";
-                    strOracleSQL_Value = "";
-                    strOracleSQL_Name = "";
-
-
-
-                    strOracleSQL_Name = strOracleSQL_Name + "GZDBH,";   //工作单编号
-                    strOracleSQL_Value = strOracleSQL_Value + "'" + str_GZDBH ;
-                    strOracleSQL_Name = strOracleSQL_Name + "ZCBH,";   //资产编号
-                    strOracleSQL_Value = strOracleSQL_Value + "','" + MeterZCBH;
-
-                    strOracleSQL_Name = strOracleSQL_Name + "GLFXDM,";   //功率方向代码
-
-                    strValue = Get_GLFXDM(red["CHR_POWER_TYPE"].ToString().Trim());
-                    strOracleSQL_Value = strOracleSQL_Value + "','" + strValue;
-                    strOracleSQL_Name = strOracleSQL_Name + "GLYSDM,";   //功率因数代码
-                    if (red["AVR_PROJECT_NO"].ToString().Trim().Contains("0.5L"))
-                    {
-                        strValue = "1";
-                    }
-                    else
-                    {
-                        strValue = "2";
-                    }
-                    strOracleSQL_Value = strOracleSQL_Value + "','" + strValue;
-                    strOracleSQL_Name = strOracleSQL_Name + "FZDLDM,";   //负载电流代码
-                    if (red["AVR_PROJECT_NO"].ToString().Trim().Contains("1.2"))
-                    {
-                        strValue = "14";//1.2Un
-                    }
-                    else
-                    {
-                        strValue = "13";//0.8Un
-                    }
-
-                    strOracleSQL_Value = strOracleSQL_Value + "','" + strValue;
-
-                    strOracleSQL_Name = strOracleSQL_Name + "XBDM,";   //相别代码 三相、单相
-                    strValue = Get_XBDM(strXBDM);
-                    strOracleSQL_Value = strOracleSQL_Value + "','" + strValue;
-
-                    strOracleSQL_Name = strOracleSQL_Name + "FZLXDM,";   //负载类型代码 平衡负载、不平衡负载-1、2、3、4
-                    strValue = red["CHR_COMPONENT"].ToString().Trim();
-                    //strValue = "01";
-                    //if (csPublicMember.strFZLXDM == "01" || csPublicMember.strFZLXDM == "1") 
-                    //    strValue = "02";
-                    strOracleSQL_Value = strOracleSQL_Value + "','" + strValue;
-
-                    strOracleSQL_Name = strOracleSQL_Name + "FYDM,";   //分元代码 01、02、03、04
-                    strValue = red["CHR_COMPONENT"].ToString().Trim();
-                    strOracleSQL_Value = strOracleSQL_Value + "','" + strValue.PadLeft(2, '0');
-
-                    strValue = red["AVR_ERROR_MORE"].ToString().Trim();
-                    char[] csplit = { '|' };
-                    string[] strParm = null;
-                    strParm = strValue.Split(csplit);
-
-
-                    strOracleSQL_Name = strOracleSQL_Name + "WCZ1,";   //误差1
-                    if (strParm.Length > 1)
-                        strOracleSQL_Value = strOracleSQL_Value + "','" + strParm[0];
-                    else
-                        strOracleSQL_Value = strOracleSQL_Value + "','";
-
-                    strOracleSQL_Name = strOracleSQL_Name + "WCZ2,";   //误差2
-                    if (strParm.Length > 2)
-                        strOracleSQL_Value = strOracleSQL_Value + "','" + strParm[1];
-                    else
-                        strOracleSQL_Value = strOracleSQL_Value + "','";
-
-                    strOracleSQL_Name = strOracleSQL_Name + "WCZ3,";   //误差3
-                    if (strParm.Length > 4)
-                        strOracleSQL_Value = strOracleSQL_Value + "','" + strParm[2];
-                    else
-                        strOracleSQL_Value = strOracleSQL_Value + "','";
-
-                    strOracleSQL_Name = strOracleSQL_Name + "WCZ4,";   //误差4
-                    if (strParm.Length > 5)
-                        strOracleSQL_Value = strOracleSQL_Value + "','" + strParm[3];
-                    else
-                        strOracleSQL_Value = strOracleSQL_Value + "','";
-
-                    strOracleSQL_Name = strOracleSQL_Name + "WCZ5,";   //误差5
-                    if (strParm.Length > 7)
-                        strOracleSQL_Value = strOracleSQL_Value + "','" + strParm[4];
-                    else
-                        strOracleSQL_Value = strOracleSQL_Value + "','";
-
-                    strOracleSQL_Name = strOracleSQL_Name + "WCPJZ,";   //误差平均值
-                    if (strParm.Length > 2)
-                        strOracleSQL_Value = strOracleSQL_Value + "','" + strParm[strParm.Length - 2];
-                    else
-                        strOracleSQL_Value = strOracleSQL_Value + "','";
-
-                    strOracleSQL_Name = strOracleSQL_Name + "WCXYZ,";   //误差修约值
-                    if (strParm.Length > 2)
-                        strOracleSQL_Value = strOracleSQL_Value + "','" + strParm[strParm.Length - 1];
-                    else
-                        strOracleSQL_Value = strOracleSQL_Value + "','";
+                //if (AccessConntion.State == System.Data.ConnectionState.Closed)
+                //    AccessConntion.Open();
+                //ccmd = new OleDbCommand(strSQL, AccessConntion);
+                //red = ccmd.ExecuteReader();
+                //while (red.Read() == true)
+                //{
+                //    strOracleSQL = "insert into VT_SB_JKDNBJDWC (";
+                //    strOracleSQL_Value = "";
+                //    strOracleSQL_Name = "";
 
 
 
-                    strOracleSQL_Name = strOracleSQL_Name + "JLDM,";   //结论代码
-                    strValue = red["AVR_ERROR_CONCLUSION"].ToString().Trim();
-                    strOracleSQL_Value = strOracleSQL_Value + "','" + ResultsCode(strValue);
+                //    strOracleSQL_Name = strOracleSQL_Name + "GZDBH,";   //工作单编号
+                //    strOracleSQL_Value = strOracleSQL_Value + "'" + str_GZDBH ;
+                //    strOracleSQL_Name = strOracleSQL_Name + "ZCBH,";   //资产编号
+                //    strOracleSQL_Value = strOracleSQL_Value + "','" + MeterZCBH;
+
+                //    strOracleSQL_Name = strOracleSQL_Name + "GLFXDM,";   //功率方向代码
+
+                //    strValue = Get_GLFXDM(red["CHR_POWER_TYPE"].ToString().Trim());
+                //    strOracleSQL_Value = strOracleSQL_Value + "','" + strValue;
+                //    strOracleSQL_Name = strOracleSQL_Name + "GLYSDM,";   //功率因数代码
+                //    if (red["AVR_PROJECT_NO"].ToString().Trim().Contains("0.5L"))
+                //    {
+                //        strValue = "1";
+                //    }
+                //    else
+                //    {
+                //        strValue = "2";
+                //    }
+                //    strOracleSQL_Value = strOracleSQL_Value + "','" + strValue;
+                //    strOracleSQL_Name = strOracleSQL_Name + "FZDLDM,";   //负载电流代码
+                //    if (red["AVR_PROJECT_NO"].ToString().Trim().Contains("1.2"))
+                //    {
+                //        strValue = "14";//1.2Un
+                //    }
+                //    else
+                //    {
+                //        strValue = "13";//0.8Un
+                //    }
+
+                //    strOracleSQL_Value = strOracleSQL_Value + "','" + strValue;
+
+                //    strOracleSQL_Name = strOracleSQL_Name + "XBDM,";   //相别代码 三相、单相
+                //    strValue = Get_XBDM(strXBDM);
+                //    strOracleSQL_Value = strOracleSQL_Value + "','" + strValue;
+
+                //    strOracleSQL_Name = strOracleSQL_Name + "FZLXDM,";   //负载类型代码 平衡负载、不平衡负载-1、2、3、4
+                //    strValue = red["CHR_COMPONENT"].ToString().Trim();
+                //    //strValue = "01";
+                //    //if (csPublicMember.strFZLXDM == "01" || csPublicMember.strFZLXDM == "1") 
+                //    //    strValue = "02";
+                //    strOracleSQL_Value = strOracleSQL_Value + "','" + strValue;
+
+                //    strOracleSQL_Name = strOracleSQL_Name + "FYDM,";   //分元代码 01、02、03、04
+                //    strValue = red["CHR_COMPONENT"].ToString().Trim();
+                //    strOracleSQL_Value = strOracleSQL_Value + "','" + strValue.PadLeft(2, '0');
+
+                //    strValue = red["AVR_ERROR_MORE"].ToString().Trim();
+                //    char[] csplit = { '|' };
+                //    string[] strParm = null;
+                //    strParm = strValue.Split(csplit);
 
 
-                    strOracleSQL_Name = strOracleSQL_Name + "WCCZ,";   //不平衡负载与平衡负载的误差差值
-                    strValue = "";
-                    strOracleSQL_Value = strOracleSQL_Value + "','" + strValue;
+                //    strOracleSQL_Name = strOracleSQL_Name + "WCZ1,";   //误差1
+                //    if (strParm.Length > 1)
+                //        strOracleSQL_Value = strOracleSQL_Value + "','" + strParm[0];
+                //    else
+                //        strOracleSQL_Value = strOracleSQL_Value + "','";
 
-                    strOracleSQL_Name = strOracleSQL_Name + "WCCZXYZ,";   //误差差值修约值
-                    strValue = "";
-                    strOracleSQL_Value = strOracleSQL_Value + "','" + strValue;
+                //    strOracleSQL_Name = strOracleSQL_Name + "WCZ2,";   //误差2
+                //    if (strParm.Length > 2)
+                //        strOracleSQL_Value = strOracleSQL_Value + "','" + strParm[1];
+                //    else
+                //        strOracleSQL_Value = strOracleSQL_Value + "','";
 
-                    strOracleSQL_Name = strOracleSQL_Name + "DQBM";  //地区编码
-                    strOracleSQL_Value = strOracleSQL_Value + "','" + str_DQBM;
+                //    strOracleSQL_Name = strOracleSQL_Name + "WCZ3,";   //误差3
+                //    if (strParm.Length > 4)
+                //        strOracleSQL_Value = strOracleSQL_Value + "','" + strParm[2];
+                //    else
+                //        strOracleSQL_Value = strOracleSQL_Value + "','";
+
+                //    strOracleSQL_Name = strOracleSQL_Name + "WCZ4,";   //误差4
+                //    if (strParm.Length > 5)
+                //        strOracleSQL_Value = strOracleSQL_Value + "','" + strParm[3];
+                //    else
+                //        strOracleSQL_Value = strOracleSQL_Value + "','";
+
+                //    strOracleSQL_Name = strOracleSQL_Name + "WCZ5,";   //误差5
+                //    if (strParm.Length > 7)
+                //        strOracleSQL_Value = strOracleSQL_Value + "','" + strParm[4];
+                //    else
+                //        strOracleSQL_Value = strOracleSQL_Value + "','";
+
+                //    strOracleSQL_Name = strOracleSQL_Name + "WCPJZ,";   //误差平均值
+                //    if (strParm.Length > 2)
+                //        strOracleSQL_Value = strOracleSQL_Value + "','" + strParm[strParm.Length - 2];
+                //    else
+                //        strOracleSQL_Value = strOracleSQL_Value + "','";
+
+                //    strOracleSQL_Name = strOracleSQL_Name + "WCXYZ,";   //误差修约值
+                //    if (strParm.Length > 2)
+                //        strOracleSQL_Value = strOracleSQL_Value + "','" + strParm[strParm.Length - 1];
+                //    else
+                //        strOracleSQL_Value = strOracleSQL_Value + "','";
 
 
-                    strOracleSQL = strOracleSQL + strOracleSQL_Name + ")  Values (" + strOracleSQL_Value + "')";
+
+                //    strOracleSQL_Name = strOracleSQL_Name + "JLDM,";   //结论代码
+                //    strValue = red["AVR_ERROR_CONCLUSION"].ToString().Trim();
+                //    strOracleSQL_Value = strOracleSQL_Value + "','" + ResultsCode(strValue);
+
+
+                //    strOracleSQL_Name = strOracleSQL_Name + "WCCZ,";   //不平衡负载与平衡负载的误差差值
+                //    strValue = "";
+                //    strOracleSQL_Value = strOracleSQL_Value + "','" + strValue;
+
+                //    strOracleSQL_Name = strOracleSQL_Name + "WCCZXYZ,";   //误差差值修约值
+                //    strValue = "";
+                //    strOracleSQL_Value = strOracleSQL_Value + "','" + strValue;
+
+                //    strOracleSQL_Name = strOracleSQL_Name + "DQBM";  //地区编码
+                //    strOracleSQL_Value = strOracleSQL_Value + "','" + str_DQBM;
+
+
+                //    strOracleSQL = strOracleSQL + strOracleSQL_Name + ")  Values (" + strOracleSQL_Value + "')";
                   
-                    listSQL.Add(strOracleSQL);
-                }
-                red.Close();
-                AccessConntion.Close();
-                AccessConntion.Dispose();
+                //    listSQL.Add(strOracleSQL);
+                //}
+                //red.Close();
+                //AccessConntion.Close();
+                //AccessConntion.Dispose();
                 #endregion
+
             }
             catch (Exception error) { }
             finally
@@ -1945,6 +2011,171 @@ namespace SoftType_S
                 }
             }
         }
+        #region 别的厂家
+        public ObservableCollection<Clou_Report.Model.MemberForZJ> SetMemberForZj(string CheckT, bool Flag)
+        {
+            ObservableCollection<Clou_Report.Model.MemberForZJ> temp = new ObservableCollection<Clou_Report.Model.MemberForZJ>();
+            switch (OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "Cmb_Facory", "Value", "", BaseConfigPath))
+            {
+                case "科陆电子":
+                    temp = SetMemberForZj(CheckT);
+                    break;
+                case "格宁":
+                    temp = SetMemberForZj_GeNing(CheckT);
+                    break;
+                case "涵普":
+                    temp = SetMemberForZj_HanPu(CheckT);
+                    break;
+            }
+            return temp;
+        
+        }
+        public ObservableCollection<Clou_Report.Model.MemberForZJ> SetMemberForZj_HanPu(string CheckTime)
+        {
+            ObservableCollection<Clou_Report.Model.MemberForZJ> temp = new ObservableCollection<Clou_Report.Model.MemberForZJ>();
+            try
+            {
+                string ServerName = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_SqlServerName", "Value", "", BaseConfigPath);
+                string Con = string.Format("Server={0};Database=Meters;Trusted_Connection=SSPI", ServerName);
+                using (SqlConnection conn = new SqlConnection(Con))
+                {
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+                    string sql = string.Format("SELECT *  FROM [Meters].[dbo].[PM_Meters] WHERE FinishTime='{0}'", CheckTime);
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    SqlDataReader Myreader = null;
+                    Myreader = cmd.ExecuteReader();
+
+                    while (Myreader.Read())
+                    {
+                        temp.Add(new Clou_Report.Model.MemberForZJ()
+                        {
+                            StrZCBH = Myreader["Barcode"].ToString().Trim(),
+                            StrMeterID = Myreader["TestID"].ToString().Trim(),
+                            StrEquipment = Myreader["ProductName"].ToString().Trim(),
+                            StrEquipmentType = Myreader["METype"].ToString().Trim() == "0" ? "电子式" : "机械式",
+                            StrEquipmentSize = Myreader["Model"].ToString().Trim(),
+                            StrFactory = Myreader["Manufacturer"].ToString().Trim(),
+                            StrCheckTime = CheckTime.ToString().Trim(),
+                            StrResult = Myreader["Result"].ToString().Trim() == "1" ? "合格" : "不合格",
+
+
+
+                        });
+                    }
+                    //char[] csplit = { '|' };//总|尖|峰|平|谷|
+                    //string[] strParm = null;
+                    foreach (Clou_Report.Model.MemberForZJ member in temp)
+                    {
+                        member.StrElectric = Get_METER_COMMUNICATION_HanPu("",member.StrMeterID);
+                    }
+                    //conn.Close();
+
+                    return temp;
+                }
+            }
+            catch
+            {
+                return temp;
+            }
+        }
+        public ObservableCollection<Clou_Report.Model.MemberForZJ> SetMemberForZj_GeNing(string CheckTime)
+        {
+            ObservableCollection<Clou_Report.Model.MemberForZJ> temp = new ObservableCollection<Clou_Report.Model.MemberForZJ>();
+            try
+            {
+
+                using (OleDbConnection conn = new OleDbConnection(Sql_word_1 + datapath + Sql_word_2))
+                {
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+                    string sql = string.Format("Select * from ResultData WHERE TESTDATE='{0}'", CheckTime);
+                    OleDbCommand cmd = new OleDbCommand(sql, conn);
+                    OleDbDataReader Myreader = null;
+                    Myreader = cmd.ExecuteReader();
+
+                    while (Myreader.Read())
+                    {
+                        temp.Add(new Clou_Report.Model.MemberForZJ()
+                        {
+                            StrZCBH = Myreader["SerialNo"].ToString().Trim(),
+                            StrMeterID = Myreader["MeterID"].ToString().Trim(),
+                            StrEquipment = Myreader["WireModel"].ToString().Trim() + Myreader["Type"].ToString().Trim() +"电能表",
+                            StrEquipmentType = Myreader["Type"].ToString().Trim(),
+                            StrEquipmentSize = Myreader["Model"].ToString().Trim(),
+                            StrFactory = Myreader["MadePlace"].ToString().Trim(),
+                            StrCheckTime = CheckTime.ToString().Trim(),
+                            StrResult = Myreader["Conclusion"].ToString().Trim(),
+                            StrElectric = Myreader["CUNDUTOTAL"].ToString().Trim(),
+                            
+
+                        });
+                    }
+                    //char[] csplit = { '|' };//总|尖|峰|平|谷|
+                    //string[] strParm = null;
+                    //foreach (Clou_Report.Model.MemberForZJ member in temp)
+                    //{
+                    //    member.StrElectric = (Get_METER_COMMUNICATION("01701", member.StrMeterID).Split(csplit).Length > 0) ? Get_METER_COMMUNICATION("01701", member.StrMeterID).Split(csplit)[0] : "";
+                    //}
+                    //conn.Close();
+
+                    return temp;
+                }
+            }
+            catch
+            {
+                return temp;
+            }
+        }
+        #endregion 
+        public ObservableCollection<Clou_Report.Model.MemberForZJ> SetMemberForZj(string CheckTime)
+        {
+            ObservableCollection<Clou_Report.Model.MemberForZJ> temp=new ObservableCollection<Clou_Report.Model.MemberForZJ> ();
+            try
+            {
+
+               using (OleDbConnection conn = new OleDbConnection(Sql_word_1 + datapath + Sql_word_2))
+            {
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+                string sql=string.Format("Select * from METER_INFO WHERE DTM_TEST_DATE=#{0}#",CheckTime);
+                OleDbCommand cmd = new OleDbCommand(sql, conn);
+                OleDbDataReader Myreader = null;
+                Myreader = cmd.ExecuteReader();
+
+                while (Myreader.Read())
+                {
+                    temp.Add(new Clou_Report.Model.MemberForZJ()
+                    {
+                        StrZCBH=Myreader["AVR_ASSET_NO"].ToString().Trim(),
+                        StrMeterID=Myreader["PK_LNG_METER_ID"].ToString().Trim(),
+                        StrEquipment=Myreader["AVR_METER_NAME"].ToString().Trim(),
+                        StrEquipmentType=Myreader["AVR_METER_TYPE"].ToString().Trim(),
+                        StrEquipmentSize=Myreader["AVR_METER_MODEL"].ToString().Trim(),
+                        StrFactory=Myreader["AVR_FACTORY"].ToString().Trim(),
+                        StrCheckTime=CheckTime.ToString().Trim(),
+                        StrResult=Myreader["AVR_TOTAL_CONCLUSION"].ToString().Trim(),
+                       
+                        
+                    });
+                }
+                 char[] csplit = { '|' };//总|尖|峰|平|谷|
+                 string[] strParm = null;
+                 foreach(Clou_Report.Model.MemberForZJ member in temp)
+                 {
+                     member.StrElectric =(Get_METER_COMMUNICATION("01701", member.StrMeterID).Split(csplit).Length>0)?Get_METER_COMMUNICATION("01701", member.StrMeterID).Split(csplit)[0]:"";
+                 }
+                conn.Close();
+
+                return temp;
+            }
+            }
+            catch
+            {
+                return temp;
+            }
+        }
+       
          public  void UpdateToOracle(object o)
         {
             List<string > Lis_Id=(List<string>)o;

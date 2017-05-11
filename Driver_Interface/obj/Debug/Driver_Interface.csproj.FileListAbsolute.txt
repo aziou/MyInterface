@@ -24,3 +24,7 @@ F:\lizhaoxun20170508\MyInterface\Driver_Interface\bin\Debug\Driver_Interface.dll
 F:\lizhaoxun20170508\MyInterface\Driver_Interface\bin\Debug\Driver_Interface.pdb
 F:\lizhaoxun20170508\MyInterface\Driver_Interface\obj\Debug\Driver_Interface.dll
 F:\lizhaoxun20170508\MyInterface\Driver_Interface\obj\Debug\Driver_Interface.pdb
+F:\lizhaoxun20170508\新建文件夹\MyInterface\Driver_Interface\bin\Debug\Driver_Interface.dll
+F:\lizhaoxun20170508\新建文件夹\MyInterface\Driver_Interface\bin\Debug\Driver_Interface.pdb
+F:\lizhaoxun20170508\新建文件夹\MyInterface\Driver_Interface\obj\Debug\Driver_Interface.dll
+F:\lizhaoxun20170508\新建文件夹\MyInterface\Driver_Interface\obj\Debug\Driver_Interface.pdb

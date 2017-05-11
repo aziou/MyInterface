@@ -63,6 +63,8 @@ namespace TheNewInterface
             txt_IPADDRESS.Text = OperateData.FunctionXml.ReadElement(strSection, "Name", "txt_IPADDRESS", "Value", "", BaseConfigPath);
             txt_PORT.Text = OperateData.FunctionXml.ReadElement(strSection, "Name", "txt_PORT", "Value", "", BaseConfigPath);
             txt_ServerName.Text = OperateData.FunctionXml.ReadElement(strSection, "Name", "txt_ServerName", "Value", "", BaseConfigPath);
+            txt_SqlServerName.Text = OperateData.FunctionXml.ReadElement(strSection, "Name", "txt_SqlServerName", "Value", "", BaseConfigPath);
+            
             
         }
 

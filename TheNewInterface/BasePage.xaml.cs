@@ -52,6 +52,10 @@ namespace TheNewInterface
             cmb_Seal03.Items.Add("右耳封");
             cmb_Seal03.Items.Add("编程小门");
             cmb_Seal03.Items.Add("表盖封印");
+            //厂家
+            Cmb_Facory.Items.Add("科陆电子");
+            Cmb_Facory.Items.Add("格宁");
+            Cmb_Facory.Items.Add("涵普");
             //人员加载
             LoadUser();
             //地区编号
@@ -70,6 +74,7 @@ namespace TheNewInterface
             cmb_Seal02.Text = OperateData.FunctionXml.ReadElement(strSection, "Name", "cmb_Seal02", "Value", "", BaseConfigPath);
             cmb_Seal01.Text = OperateData.FunctionXml.ReadElement(strSection, "Name", "cmb_Seal01", "Value", "", BaseConfigPath);
             txt_Report.Text = OperateData.FunctionXml.ReadElement(strSection, "Name", "txt_Report", "Value", "", BaseConfigPath);
+            Cmb_Facory.Text = OperateData.FunctionXml.ReadElement(strSection, "Name", "Cmb_Facory", "Value", "", BaseConfigPath);
           
         }
 

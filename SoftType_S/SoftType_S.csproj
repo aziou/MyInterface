@@ -44,6 +44,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Clou_Report\Clou_Report.csproj">
+      <Project>{61BDD892-6D4E-47C6-9AAA-7ED5759FFFB3}</Project>
+      <Name>Clou_Report</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataCore\DataCore.csproj">
       <Project>{29CAA2A2-B45F-4F10-B333-D316EDCC1501}</Project>
       <Name>DataCore</Name>

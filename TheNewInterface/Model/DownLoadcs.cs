@@ -61,6 +61,13 @@ namespace TheNewInterface.Model
         public string Str_Connection
         { get; set; }
 
+        private string str_Address;
+        /// <summary>
+        /// 表地址
+        /// 
+        /// </summary>
+        public string Str_Address
+        { get; set; }
 
         private string str_Constant;
         /// <summary>

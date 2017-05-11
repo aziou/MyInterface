@@ -61,6 +61,7 @@ namespace TheNewInterface
             OperateData.FunctionXml.UpdateElement(strSection, key, UserName, value, UserNumber, BaseConfigPath);
 
             LoadUser();
+            MessageBox.Show("添加" + UserName + "成功！");
         }
 
         

@@ -99,7 +99,7 @@ namespace TheNewInterface
                     lab_MeterNum.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
                     TextBox txt_MeterZcbh = new TextBox();
                     txt_MeterZcbh.Name = "MeterZcbh_" + Num_B.ToString().PadLeft(2,'0');
-                    txt_MeterZcbh.Width = 150;
+                    txt_MeterZcbh.Width = 200;
                     txt_MeterZcbh.Height = 25;
                     txt_MeterZcbh.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
                     System.Windows.Thickness Mar = new Thickness(0, 0, 0, 5);

@@ -24,3 +24,7 @@ F:\lizhaoxun20170508\MyInterface\DataCore\bin\Debug\DataCore.dll
 F:\lizhaoxun20170508\MyInterface\DataCore\bin\Debug\DataCore.pdb
 F:\lizhaoxun20170508\MyInterface\DataCore\obj\Debug\DataCore.dll
 F:\lizhaoxun20170508\MyInterface\DataCore\obj\Debug\DataCore.pdb
+F:\lizhaoxun20170508\新建文件夹\MyInterface\DataCore\bin\Debug\DataCore.dll
+F:\lizhaoxun20170508\新建文件夹\MyInterface\DataCore\bin\Debug\DataCore.pdb
+F:\lizhaoxun20170508\新建文件夹\MyInterface\DataCore\obj\Debug\DataCore.dll
+F:\lizhaoxun20170508\新建文件夹\MyInterface\DataCore\obj\Debug\DataCore.pdb

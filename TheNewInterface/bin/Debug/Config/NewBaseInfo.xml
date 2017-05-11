@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="gb2312" standalone="yes"?>
 <NewUser>
   <CloumMIS>
-    <Item Name="txt_DataPath" Value="F:\lizhaoxun20170508\CL3000S-H-NW\Resource\Client\DataBase\ClouMeterData.mdb" />
-    <Item Name="txt_equipment" Value="05523" />
-    <Item Name="txt_Jyy" Value="C654E9458D7F4A8AA858D1E0D4FED922" />
-    <Item Name="txt_Hyy" Value="8FA43578DB7670B0E0430A96B84570B0" />
+    <Item Name="txt_DataPath" Value="F:\CL3000S-H\DataBase\ClouMeterData.mdb" />
+    <Item Name="txt_equipment" Value="04312" />
+    <Item Name="txt_Jyy" Value="936DE52D80C40048E0430A96E5040048" />
+    <Item Name="txt_Hyy" Value="936DE52D78B60048E0430A96E5040048" />
     <Item Name="cmb_SoftType" Value="CL3000S" />
     <Item Name="cmb_Company" Value="湛江" />
-    <Item Name="cmb_Jyy" Value="韩慧珊" />
-    <Item Name="cmb_Hyy" Value="陈金怡" />
+    <Item Name="cmb_Jyy" Value="陈芳" />
+    <Item Name="cmb_Hyy" Value="冯静云" />
     <Item Name="cmb_Seal03" Value="左耳封" />
-    <Item Name="cmb_Seal02" Value="编程小门" />
+    <Item Name="cmb_Seal02" Value="右耳封" />
     <Item Name="cmb_Seal01" Value="编程小门" />
-    <Item Name="AccessLink" Value="Provider=Microsoft.Jet.OleDb.4.0;Data Source=F:\lizhaoxun20170508\CL3000S-H-NW\Resource\Client\DataBase\ClouMeterData.mdb;Persist Security Info=False" />
-    <Item Name="TheWorkNum" Value="03190010000036939982" />
+    <Item Name="AccessLink" Value="Provider=Microsoft.Jet.OleDb.4.0;Data Source=F:\CL3000S-H\DataBase\ClouMeterData.mdb;Persist Security Info=False" />
+    <Item Name="TheWorkNum" Value="03080010000039426167" />
     <Item Name="" Value="" />
     <Item Name="OracleLink" Value="Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=10.150.26.131)(PORT=1530)))(CONNECT_DATA=(SERVICE_NAME= yxscdb)));User Id=PMS_JL; Password=PMS_JL#123" />
     <Item Name="txt_ServerName" Value="yxscdb" />
@@ -22,20 +22,25 @@
     <Item Name="txt_PORT" Value="1530" />
     <Item Name="txt_PASSWORD" Value="PMS_JL#123" />
     <Item Name="txt_CompanyNum" Value="030800" />
-    <Item Name="WorkNumLoad" Value="select GZDBH from {0} where wcbz='0' and rymc ='韩慧珊' and DQBM='030800'order by GZDBH desc " />
-    <Item Name="txt_Report" Value="C:\Users\chenjinyi\Desktop\证书" />
+    <Item Name="WorkNumLoad" Value="select GZDBH from {0} where wcbz='0' and rymc ='陈芳' and DQBM='030800'order by GZDBH desc " />
+    <Item Name="txt_Report" Value="D:\用户数据\jljd1\桌面\证书" />
     <Item Name="CompanyNum" Value="" />
-    <Item Name="txt_MeterNum" Value="12" />
+    <Item Name="txt_MeterNum" Value="24" />
+    <Item Name="Cmb_Facory" Value="科陆电子" />
+    <Item Name="txt_SqlServerName" Value="LAPTOP-9UIDVNED\SQLEXPRESS" />
+    <Item Name="CheckTimeFlag" Value="2017/5/11 15:25:39" />
   </CloumMIS>
   <User>
-    <Item UserName="陈金怡" UserNumber="8FA43578DB7670B0E0430A96B84570B0" />
-    <Item UserName="黄笑媚" UserNumber="8FA43578DB9070B0E0430A96B84570B0" />
-    <Item UserName="韩慧珊" UserNumber="C654E9458D7F4A8AA858D1E0D4FED922" />
-    <Item UserName="张建丽" UserNumber="8FA43578DB8D70B0E0430A96B84570B0" />
-    <Item UserName="陈玉兰" UserNumber="8FA43578DB8E70B0E0430A96B84570B0" />
-    <Item UserName="袁淑仪" UserNumber="8FA43578D77B70B0E0430A96B84570B0" />
-    <Item UserName="叶素文" UserNumber="8FA43578DBB670B0E0430A96B84570B0" />
-    <Item UserName="陈婷婷" UserNumber="8FA43578DC8A70B0E0430A96B84570B0" />
+    <Item UserName="冯静云" UserNumber="936DE52D78B60048E0430A96E5040048" />
+    <Item UserName="郑志齐" UserNumber="936DE52D805B0048E0430A96E5040048" />
+    <Item UserName="陈纲" UserNumber="936DE52D84420048E0430A96E5040048" />
+    <Item UserName="陈芳" UserNumber="936DE52D80C40048E0430A96E5040048" />
+    <Item UserName="江晓婷" UserNumber="F2416B89570641C1AE5A9345BB348132" />
+    <Item UserName="郑秀霞" UserNumber="936DE52D7FF80048E0430A96E5040048" />
+    <Item UserName="李端" UserNumber="936DE52D78640048E0430A96E5040048" />
+    <Item UserName="黄楚凝" UserNumber="7708341F7E14B0BB79C08BF6FF9A8DB" />
+    <Item UserName="黄映屏" UserNumber="936DE52D78620048E0430A96E5040048" />
+    <Item UserName="董琼常" UserNumber="936DE52D78610048E0430A96E5040048" />
   </User>
   <DQBM>
     <Item Company="东莞" CompanyNum="031900" />
