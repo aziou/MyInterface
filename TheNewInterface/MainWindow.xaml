@@ -44,7 +44,7 @@
                         <ComboBox Width="80"  Height="25"  Name="cmb_Condition" VerticalContentAlignment="Center" Loaded="cmb_Condition_Loaded" SelectionChanged="cmb_Condition_SelectionChanged" IsEditable="True" />
                         <ComboBox Width="200" Height="25" Name="cmb_CheckTime" Loaded="cmb_CheckTime_Loaded" SelectionChanged="cmb_CheckTime_SelectionChanged" IsEditable="True"/>
                         <Button Name="btn_FindMeter" Width="80" Height="25" Content="查询" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="btn_FindMeter_Click"/>
-                        <CheckBox Name="chk_ShowLess" Width="150" Height="25" Content="加载前20个检定日期" VerticalContentAlignment="Center" Margin="5,0,0,0" IsChecked="True" Click="chk_ShowLess_Click" />
+                        <CheckBox Name="chk_ShowLess" Width="150" Height="25" Content="加载前20个检定日期" VerticalContentAlignment="Center" Margin="5,0,0,0" IsChecked="True" Click="chk_ShowLess_Click" Checked="chk_ShowLess_Checked" />
 
                     </WrapPanel>
                     <StackPanel  Grid.Column="2" Grid.Row="0" Grid.RowSpan="2"  VerticalAlignment="Top">

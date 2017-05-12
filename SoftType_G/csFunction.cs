@@ -68,20 +68,20 @@ namespace SoftType_G
             {
 
 
-                mysql = Get_VT_SB_JKDNBJDJL(PKid, out SealList);
+                DeletedMidDataBaeInfo(PKid, out SealList);
 
 
-                excuteSuccess = OperateData.PublicFunction.ExcuteToOracle(mysql, out ErrorResult);
+                excuteSuccess = OperateData.PublicFunction.ExcuteToOracle(SealList, out ErrorResult);
 
                 if (excuteSuccess == 0)
                 {
 
-                    return MeterZCBH + "删除中间库成功！";
+                    return PKid + "删除中间库成功！";
                 }
                 else
                 {
 
-                    return MeterZCBH + "删除中间库失败！" + ErrorResult;
+                    return PKid + "删除中间库失败！" + ErrorResult;
                 }
 
 
@@ -89,7 +89,7 @@ namespace SoftType_G
             catch (Exception e)
             {
 
-                return MeterZCBH + "删除中间库失败！" + e.ToString();
+                return PKid + "删除中间库失败！" + e.ToString();
             }
 
 
@@ -130,31 +130,6 @@ namespace SoftType_G
 
 
         }
-        private void DeletedAllMidDataBaeInfo(out List<string> DeleteSQL)
-        {
-            bool blnOK = true;
-            List<string> lisSQL = new List<string>();
-            string strSQL = "";
-            strSQL = "delete from VT_SB_JKDNBJDJL  where  gzdbh='" + str_GZDBH + "'";
-            lisSQL.Add(strSQL);
-            strSQL = "delete from vt_sb_jkzdjcjl  where  gzdbh='" + str_GZDBH + "' ";
-            lisSQL.Add(strSQL);
-            strSQL = "delete from VT_SB_JKFYBGJL  where  gzdbh='" + str_GZDBH + "' ";
-            lisSQL.Add(strSQL);
-            strSQL = "delete from VT_SB_JKDNBJDWC   where  gzdbh='" + str_GZDBH + "' ";
-            lisSQL.Add(strSQL);
-            strSQL = "delete from VT_SB_JKXLWCJL   where  gzdbh='" + str_GZDBH + "' ";
-            lisSQL.Add(strSQL);
-            strSQL = "delete from VT_SB_JKSDTQWCJL  where  gzdbh='" + str_GZDBH + "'  ";
-            lisSQL.Add(strSQL);
-            strSQL = "delete from VT_SB_JKDNBSSJL  where  gzdbh='" + str_GZDBH + "'  ";
-            lisSQL.Add(strSQL);
-            strSQL = "delete from vt_sb_jkrjswc   where  gzdbh='" + str_GZDBH + "'  ";
-            lisSQL.Add(strSQL);
-            strSQL = "delete from VT_SB_JKDNBZZJL   where  gzdbh='" + str_GZDBH + "' ";
-            lisSQL.Add(strSQL);
-            DeleteSQL = lisSQL;
-        }
         private void DeletedMidDataBaeInfo(string DeleteMeterZCBH, out List<string> DeleteSQL)
         {
             bool blnOK = true;
@@ -177,6 +152,31 @@ namespace SoftType_G
             strSQL = "delete from vt_sb_jkrjswc   where  gzdbh='" + str_GZDBH + "' and zcbh='" + DeleteMeterZCBH + "' ";
             lisSQL.Add(strSQL);
             strSQL = "delete from VT_SB_JKDNBZZJL   where  gzdbh='" + str_GZDBH + "' and zcbh='" + DeleteMeterZCBH + "' ";
+            lisSQL.Add(strSQL);
+            DeleteSQL = lisSQL;
+        }
+        private void DeletedAllMidDataBaeInfo(out List<string> DeleteSQL)
+        {
+            bool blnOK = true;
+            List<string> lisSQL = new List<string>();
+            string strSQL = "";
+            strSQL = "delete from VT_SB_JKDNBJDJL  where  gzdbh='" + str_GZDBH + "'";
+            lisSQL.Add(strSQL);
+            strSQL = "delete from vt_sb_jkzdjcjl  where  gzdbh='" + str_GZDBH + "' ";
+            lisSQL.Add(strSQL);
+            strSQL = "delete from VT_SB_JKFYBGJL  where  gzdbh='" + str_GZDBH + "' ";
+            lisSQL.Add(strSQL);
+            strSQL = "delete from VT_SB_JKDNBJDWC   where  gzdbh='" + str_GZDBH + "' ";
+            lisSQL.Add(strSQL);
+            strSQL = "delete from VT_SB_JKXLWCJL   where  gzdbh='" + str_GZDBH + "' ";
+            lisSQL.Add(strSQL);
+            strSQL = "delete from VT_SB_JKSDTQWCJL  where  gzdbh='" + str_GZDBH + "'  ";
+            lisSQL.Add(strSQL);
+            strSQL = "delete from VT_SB_JKDNBSSJL  where  gzdbh='" + str_GZDBH + "'  ";
+            lisSQL.Add(strSQL);
+            strSQL = "delete from vt_sb_jkrjswc   where  gzdbh='" + str_GZDBH + "'  ";
+            lisSQL.Add(strSQL);
+            strSQL = "delete from VT_SB_JKDNBZZJL   where  gzdbh='" + str_GZDBH + "' ";
             lisSQL.Add(strSQL);
             DeleteSQL = lisSQL;
         }

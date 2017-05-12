@@ -2012,6 +2012,24 @@ namespace SoftType_S
             }
         }
         #region 别的厂家
+        public ObservableCollection<Clou_Report.Model.MemberForZJ> SetMemberForZj(string CheckT, bool Flag,List<string> outPutList)
+        {
+            ObservableCollection<Clou_Report.Model.MemberForZJ> temp = new ObservableCollection<Clou_Report.Model.MemberForZJ>();
+            switch (OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "Cmb_Facory", "Value", "", BaseConfigPath))
+            {
+                case "科陆电子":
+                    temp = SetMemberForZj(CheckT, outPutList);
+                    break;
+                case "格宁":
+                    temp = SetMemberForZj_GeNing(CheckT, outPutList);
+                    break;
+                case "涵普":
+                    temp = SetMemberForZj_HanPu(CheckT, outPutList);
+                    break;
+            }
+            return temp;
+
+        }
         public ObservableCollection<Clou_Report.Model.MemberForZJ> SetMemberForZj(string CheckT, bool Flag)
         {
             ObservableCollection<Clou_Report.Model.MemberForZJ> temp = new ObservableCollection<Clou_Report.Model.MemberForZJ>();
@@ -2079,6 +2097,60 @@ namespace SoftType_S
                 return temp;
             }
         }
+        public ObservableCollection<Clou_Report.Model.MemberForZJ> SetMemberForZj_HanPu(string CheckTime,List<string> lis_Id)
+        {
+            ObservableCollection<Clou_Report.Model.MemberForZJ> temp = new ObservableCollection<Clou_Report.Model.MemberForZJ>();
+            try
+            {
+                string ServerName = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_SqlServerName", "Value", "", BaseConfigPath);
+                string Con = string.Format("Server={0};Database=Meters;Trusted_Connection=SSPI", ServerName);
+                using (SqlConnection conn = new SqlConnection(Con))
+                {
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+                    foreach (string temp_id in lis_Id)
+                    {
+                        string sql = string.Format("SELECT *  FROM [Meters].[dbo].[PM_Meters] WHERE FinishTime='{0}' and TestID='{1}'", CheckTime, temp_id);
+                        SqlCommand cmd = new SqlCommand(sql, conn);
+                        SqlDataReader Myreader = null;
+                        Myreader = cmd.ExecuteReader();
+
+                        while (Myreader.Read())
+                        {
+                            temp.Add(new Clou_Report.Model.MemberForZJ()
+                            {
+                                StrZCBH = Myreader["Barcode"].ToString().Trim(),
+                                StrMeterID = Myreader["TestID"].ToString().Trim(),
+                                StrEquipment = Myreader["ProductName"].ToString().Trim(),
+                                StrEquipmentType = Myreader["METype"].ToString().Trim() == "0" ? "电子式" : "机械式",
+                                StrEquipmentSize = Myreader["Model"].ToString().Trim(),
+                                StrFactory = Myreader["Manufacturer"].ToString().Trim(),
+                                StrCheckTime = CheckTime.ToString().Trim(),
+                                StrResult = Myreader["Result"].ToString().Trim() == "1" ? "合格" : "不合格",
+
+
+
+                            });
+                        }
+                        //char[] csplit = { '|' };//总|尖|峰|平|谷|
+                        //string[] strParm = null;
+                        foreach (Clou_Report.Model.MemberForZJ member in temp)
+                        {
+                            member.StrElectric = Get_METER_COMMUNICATION_HanPu("", member.StrMeterID);
+                        }
+                        Myreader.Dispose();
+                    }
+                    
+                    conn.Close();
+
+                    return temp;
+                }
+            }
+            catch
+            {
+                return temp;
+            }
+        }
         public ObservableCollection<Clou_Report.Model.MemberForZJ> SetMemberForZj_GeNing(string CheckTime)
         {
             ObservableCollection<Clou_Report.Model.MemberForZJ> temp = new ObservableCollection<Clou_Report.Model.MemberForZJ>();
@@ -2118,6 +2190,54 @@ namespace SoftType_S
                     //    member.StrElectric = (Get_METER_COMMUNICATION("01701", member.StrMeterID).Split(csplit).Length > 0) ? Get_METER_COMMUNICATION("01701", member.StrMeterID).Split(csplit)[0] : "";
                     //}
                     //conn.Close();
+
+                    return temp;
+                }
+            }
+            catch
+            {
+                return temp;
+            }
+        }
+        public ObservableCollection<Clou_Report.Model.MemberForZJ> SetMemberForZj_GeNing(string CheckTime, List<string> lis_Id)
+        {
+            ObservableCollection<Clou_Report.Model.MemberForZJ> temp = new ObservableCollection<Clou_Report.Model.MemberForZJ>();
+            try
+            {
+
+                using (OleDbConnection conn = new OleDbConnection(Sql_word_1 + datapath + Sql_word_2))
+                {
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+                    foreach (string temp_id in lis_Id)
+                    {
+                        string sql = string.Format("Select * from ResultData WHERE TESTDATE='{0}'and MeterID={1}", CheckTime,temp_id);
+                        OleDbCommand cmd = new OleDbCommand(sql, conn);
+                        OleDbDataReader Myreader = null;
+                        Myreader = cmd.ExecuteReader();
+
+                        while (Myreader.Read())
+                        {
+                            temp.Add(new Clou_Report.Model.MemberForZJ()
+                            {
+                                StrZCBH = Myreader["SerialNo"].ToString().Trim(),
+                                StrMeterID = Myreader["MeterID"].ToString().Trim(),
+                                StrEquipment = Myreader["WireModel"].ToString().Trim() + Myreader["Type"].ToString().Trim() + "电能表",
+                                StrEquipmentType = Myreader["Type"].ToString().Trim(),
+                                StrEquipmentSize = Myreader["Model"].ToString().Trim(),
+                                StrFactory = Myreader["MadePlace"].ToString().Trim(),
+                                StrCheckTime = CheckTime.ToString().Trim(),
+                                StrResult = Myreader["Conclusion"].ToString().Trim(),
+                                StrElectric = Myreader["CUNDUTOTAL"].ToString().Trim(),
+
+
+                            });
+                        }
+                        Myreader.Dispose();
+                    }
+                    
+                   
+                    conn.Close();
 
                     return temp;
                 }
@@ -2169,6 +2289,58 @@ namespace SoftType_S
 
                 return temp;
             }
+            }
+            catch
+            {
+                return temp;
+            }
+        }
+        public ObservableCollection<Clou_Report.Model.MemberForZJ> SetMemberForZj(string CheckTime, List<string> lis_Id)
+        {
+            ObservableCollection<Clou_Report.Model.MemberForZJ> temp = new ObservableCollection<Clou_Report.Model.MemberForZJ>();
+            try
+            {
+
+                using (OleDbConnection conn = new OleDbConnection(Sql_word_1 + datapath + Sql_word_2))
+                {
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+                    foreach (string Temp_id in lis_Id)
+                    {
+                        string sql = string.Format("Select * from METER_INFO WHERE DTM_TEST_DATE=#{0}# and PK_LNG_METER_ID='{1}'", CheckTime, Temp_id);
+                        OleDbCommand cmd = new OleDbCommand(sql, conn);
+                        OleDbDataReader Myreader = null;
+                        Myreader = cmd.ExecuteReader();
+
+                        while (Myreader.Read())
+                        {
+                            temp.Add(new Clou_Report.Model.MemberForZJ()
+                            {
+                                StrZCBH = Myreader["AVR_ASSET_NO"].ToString().Trim(),
+                                StrMeterID = Myreader["PK_LNG_METER_ID"].ToString().Trim(),
+                                StrEquipment = Myreader["AVR_METER_NAME"].ToString().Trim(),
+                                StrEquipmentType = Myreader["AVR_METER_TYPE"].ToString().Trim(),
+                                StrEquipmentSize = Myreader["AVR_METER_MODEL"].ToString().Trim(),
+                                StrFactory = Myreader["AVR_FACTORY"].ToString().Trim(),
+                                StrCheckTime = CheckTime.ToString().Trim(),
+                                StrResult = Myreader["AVR_TOTAL_CONCLUSION"].ToString().Trim(),
+
+
+                            });
+                        }
+                        char[] csplit = { '|' };//总|尖|峰|平|谷|
+                        string[] strParm = null;
+                        foreach (Clou_Report.Model.MemberForZJ member in temp)
+                        {
+                            member.StrElectric = (Get_METER_COMMUNICATION("01701", member.StrMeterID).Split(csplit).Length > 0) ? Get_METER_COMMUNICATION("01701", member.StrMeterID).Split(csplit)[0] : "";
+                        }
+                        Myreader.Dispose();
+                       
+                    }
+                    conn.Close();
+
+                    return temp;
+                }
             }
             catch
             {

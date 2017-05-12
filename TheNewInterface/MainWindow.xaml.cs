@@ -383,7 +383,7 @@ namespace TheNewInterface
                     i = t < countItem ? t : countItem;
                     MeterUp_info.Clear();
 
-                    ViewModel.AllMeterInfo.CreateInstance().MeterBaseInfo[Convert.ToInt16(temp.LNG_BENCH_POINT_NO)-1].CHR_UPLOAD_FLAG = "未上传";
+                    ViewModel.AllMeterInfo.CreateInstance().MeterBaseInfo[Convert.ToInt16(t)-1].CHR_UPLOAD_FLAG = "未上传";
                     MeterUp_info.Add(cs_Function.DeleteMis(temp.AVR_ASSET_NO.Trim()));
                     MeterUp_Up.Add(temp.PK_LNG_METER_ID);
                     foreach (string temp_id in MeterUp_info)
@@ -669,6 +669,7 @@ namespace TheNewInterface
         {
             if (cmb_Condition.SelectedIndex == 0)
             {
+                if (cmb_CheckTime.SelectedValue == null) return;
                 string CheckTime = cmb_CheckTime.SelectedValue.ToString();
                 string Sql = string.Format("Select  * from {0} where {1} =#{2}#", csPublicMember.strTableName, csPublicMember.strCondition, CheckTime);
                 
@@ -804,7 +805,15 @@ namespace TheNewInterface
             ColName.Add("使用单位");
             ColName.Add("是否已使用");
             ObservableCollection<Clou_Report.Model.MemberForZJ> ZJMember = new ObservableCollection<Clou_Report.Model.MemberForZJ>();
-            ZJMember=function.SetMemberForZj(cmb_CheckTime.Text,true);
+            List<string> outputId = new List<string>();
+            foreach (MeterBaseInfoFactor temp in ViewModel.AllMeterInfo.CreateInstance().MeterBaseInfo)
+            {
+                if (temp.BolIfup == true)
+                {
+                    outputId.Add(temp.PK_LNG_METER_ID);
+                }
+            }
+            ZJMember = function.SetMemberForZj(cmb_CheckTime.Text, true, outputId);
             Clou_Report.Report_Excel ExcelforZj = new Clou_Report.Report_Excel();
             ExcelforZj.OutputExcelForZj(ZJMember, ColName);
             MessageBox.Show("导出物资成功","提示",MessageBoxButton.OK,MessageBoxImage.Exclamation);
@@ -2166,6 +2175,11 @@ namespace TheNewInterface
 
 
             }));
+        }
+
+        private void chk_ShowLess_Checked(object sender, RoutedEventArgs e)
+        {
+            ReLoadCheckTime();
         }
        
     }

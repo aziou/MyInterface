@@ -147,7 +147,12 @@ namespace Clou_Report
             //保存   
             using (MemoryStream ms = new MemoryStream())
             {
-                using (FileStream fs = new FileStream(str_Path + @"\" + FileName + @".xls", FileMode.Create, FileAccess.Write))
+                if (!Directory.Exists(str_Path + @"\" + Convert.ToDateTime(ColmemberforZj[0].StrCheckTime).ToString("yyyyMMdd_HH时mm分").ToString()))
+                { 
+                    Directory.CreateDirectory(str_Path + @"\" + Convert.ToDateTime(ColmemberforZj[0].StrCheckTime).ToString("yyyyMMdd_HH时mm分").ToString());
+                }
+                using (FileStream fs = new FileStream(str_Path + @"\" +Convert.ToDateTime(ColmemberforZj[0].StrCheckTime).ToString("yyyyMMdd_HH时mm分").ToString()+@"\"+
+             FileName + @".xls", FileMode.Create, FileAccess.Write))
                 {
                     workbook.Write(fs);
                 }
