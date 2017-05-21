@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://mk.gd.soa.csg.cn" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="CXDNBXXServerService" targetNamespace="http://mk.gd.soa.csg.cn" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema xmlns:ns0="http://mk.gd.soa.csg.cn" elementFormDefault="qualified" targetNamespace="http://mk.gd.soa.csg.cn">
+      <xsd:complexType name="SBJLZCInType">
+        <xsd:sequence>
+          <xsd:element name="ZCBH" type="xsd:string" />
+          <xsd:element name="DQBM" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="CXDNBXXRequestType">
+        <xsd:sequence>
+          <xsd:element name="SB_JLZC_IN" type="ns0:SBJLZCInType" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="CXDNBXXResponseType">
+        <xsd:sequence>
+          <xsd:element name="replyCode" type="xsd:string" />
+          <xsd:element name="SB_JLZC_OUT" type="ns0:SBJLZCOutType" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="SBJLZCOutType">
+        <xsd:sequence>
+          <xsd:element name="SBBS" type="xsd:string" />
+          <xsd:element name="ZCBH" type="xsd:string" />
+          <xsd:element name="SBTMH" type="xsd:string" />
+          <xsd:element name="CCBH" type="xsd:string" />
+          <xsd:element name="EDDYDM" type="xsd:string" />
+          <xsd:element name="BDDLDM" type="xsd:string" />
+          <xsd:element name="ZQDDJDM" type="xsd:string" />
+          <xsd:element name="BMWSDM" type="xsd:string" />
+          <xsd:element name="FSWSDM" type="xsd:string" />
+          <xsd:element name="XXDM" type="xsd:string" />
+          <xsd:element name="EDPLDM" type="xsd:string" />
+          <xsd:element name="ZSSLXDM" type="xsd:string" />
+          <xsd:element name="JLFXDM" type="xsd:string" />
+          <xsd:element name="YGCSDM" type="xsd:string" />
+          <xsd:element name="WGCSDM" type="xsd:string" />
+          <xsd:element name="DNBYLDM" type="xsd:string" />
+          <xsd:element name="DNBLXDM" type="xsd:string" />
+          <xsd:element name="ZSBL" type="xsd:string" />
+          <xsd:element name="GZBS" type="xsd:string" />
+          <xsd:element name="ZZBZDM" type="xsd:string" />
+          <xsd:element name="SYJSBZ" type="xsd:string" />
+          <xsd:element name="ZNBZ" type="xsd:string" />
+          <xsd:element name="FSBZ" type="xsd:string" />
+          <xsd:element name="LZBZ" type="xsd:string" />
+          <xsd:element name="YFFLXDM" type="xsd:string" />
+          <xsd:element name="JKBBZ" type="xsd:string" />
+          <xsd:element name="DJBZ" type="xsd:string" />
+          <xsd:element name="JRFSDM" type="xsd:string" />
+          <xsd:element name="SYSM" type="xsd:string" />
+          <xsd:element name="TXJKFSDM" type="xsd:string" />
+          <xsd:element name="DNBBTLDM" type="xsd:string" />
+          <xsd:element name="TXXYDM" type="xsd:string" />
+          <xsd:element name="SCCJBS" type="xsd:string" />
+          <xsd:element name="SBLBDM" type="xsd:string" />
+          <xsd:element name="CSBS" type="xsd:string" />
+          <xsd:element name="DHPCH" type="xsd:string" />
+          <xsd:element name="SBZTDM" type="xsd:string" />
+          <xsd:element name="GDDWBS" type="xsd:string" />
+          <xsd:element name="CCRQ" type="xsd:string" />
+          <xsd:element name="SCTYRQ" type="xsd:string" />
+          <xsd:element name="CQDWBS" type="xsd:string" />
+          <xsd:element name="CQGSDM" type="xsd:string" />
+          <xsd:element name="ZJJDRQ" type="xsd:string" />
+          <xsd:element name="SBDJ" type="xsd:string" />
+          <xsd:element name="TXDZ" type="xsd:string" />
+          <xsd:element name="TXMKLXDM" type="xsd:string" />
+          <xsd:element name="WZPLBM" type="xsd:string" />
+          <xsd:element name="GDZCH" type="xsd:string" />
+          <xsd:element name="GDZCBZ" type="xsd:string" />
+          <xsd:element name="FYXZDM" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="I_DNJLSBSNJD_CXDNBXXResponse" type="ns0:CXDNBXXResponseType" />
+      <xsd:element name="I_DNJLSBSNJD_CXDNBXXRequest" type="ns0:CXDNBXXRequestType" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="I_DNJLSBSNJD_CXDNBXXResponse">
+    <wsdl:part name="parameters" element="tns:I_DNJLSBSNJD_CXDNBXXResponse" />
+  </wsdl:message>
+  <wsdl:message name="I_DNJLSBSNJD_CXDNBXX">
+    <wsdl:part name="parameters" element="tns:I_DNJLSBSNJD_CXDNBXXRequest" />
+  </wsdl:message>
+  <wsdl:portType name="I_DNJLSBSNJD_CXDNBXX">
+    <wsdl:operation name="I_DNJLSBSNJD_CXDNBXX">
+      <wsdl:documentation>营销系统提供接口，室内检定装置调用该接口查询电能表信息</wsdl:documentation>
+      <wsdl:input name="I_DNJLSBSNJD_CXDNBXX" message="tns:I_DNJLSBSNJD_CXDNBXX" />
+      <wsdl:output name="I_DNJLSBSNJD_CXDNBXXResponse" message="tns:I_DNJLSBSNJD_CXDNBXXResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CXDNBXXServerServiceSoapBinding" type="tns:I_DNJLSBSNJD_CXDNBXX">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="I_DNJLSBSNJD_CXDNBXX">
+      <soap:operation soapAction="I_DNJLSBSNJD_CXDNBXX" style="document" />
+      <wsdl:input name="I_DNJLSBSNJD_CXDNBXX">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="I_DNJLSBSNJD_CXDNBXXResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CXDNBXXServerService">
+    <wsdl:port name="I_DNJLSBSNJD_CXDNBXXPort" binding="tns:CXDNBXXServerServiceSoapBinding">
+      <soap:address location="http://10.150.41.170:7011/PMS_WS/services/I_DNJLSBSNJD_CXDNBXX" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

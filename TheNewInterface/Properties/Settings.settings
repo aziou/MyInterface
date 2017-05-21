@@ -5,5 +5,11 @@
     <Setting Name="TheNewInterface_WebReference_CXDNBXXServerService" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://10.150.23.35:7010/PMS_WS/services/I_DNJLSBSNJD_CXDNBXX</Value>
     </Setting>
+    <Setting Name="TheNewInterface_WebDnbService_CXDNBXXServerService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://172.31.12.140:7001/PMS_WS/services/I_DNJLSBSNJD_CXDNBXX</Value>
+    </Setting>
+    <Setting Name="TheNewInterface_WebReferenceSZ_CXDNBXXServerService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://10.150.41.170:7011/PMS_WS/services/I_DNJLSBSNJD_CXDNBXX</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

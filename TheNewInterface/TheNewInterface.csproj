@@ -76,6 +76,16 @@
     <Compile Include="ViewModel\AllMeterInfo.cs" />
     <Compile Include="ViewModel\MeterInfoItem.cs" />
     <Compile Include="ViewModel\ViewMember.cs" />
+    <Compile Include="Web References\WebDnbService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\WebReferenceSZ\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
     <Compile Include="Web References\WebReference\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -142,6 +152,22 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Web References\WebDnbService\CXDNBXXServerService.wsdl" />
+    <None Include="Web References\WebDnbService\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\WebDnbService\SBJLZCOutType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\WebReferenceSZ\CXDNBXXServerService.wsdl" />
+    <None Include="Web References\WebReferenceSZ\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\WebReferenceSZ\SBJLZCOutType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\WebReference\CXDNBXXServerService.wsdl" />
     <None Include="Web References\WebReference\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
@@ -176,9 +202,17 @@
       <Project>{743689C5-FAB0-497F-879A-1EBA5C0B1A86}</Project>
       <Name>SoftType_G</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SoftType_G_ZD\SoftType_G_ZD.csproj">
+      <Project>{8D231550-C878-43FA-BC4C-A4A3DDA88F9A}</Project>
+      <Name>SoftType_G_ZD</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SoftType_S\SoftType_S.csproj">
       <Project>{1E78AD15-37B8-43C1-A13A-4B8AB423EEFD}</Project>
       <Name>SoftType_S</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ViewLocalData\ViewLocalData.csproj">
+      <Project>{941286B9-1289-48FF-B507-4AE5AC8EA1C7}</Project>
+      <Name>ViewLocalData</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -201,6 +235,28 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>TheNewInterface_WebReference_CXDNBXXServerService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://10.150.41.170:7011/PMS_WS/services/I_DNJLSBSNJD_CXDNBXX%3fwsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\WebReferenceSZ\</RelPath>
+      <UpdateFromURL>http://10.150.41.170:7011/PMS_WS/services/I_DNJLSBSNJD_CXDNBXX%3fwsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>TheNewInterface_WebReferenceSZ_CXDNBXXServerService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://172.31.12.140:7001/PMS_WS/services/I_DNJLSBSNJD_CXDNBXX%3fwsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\WebDnbService\</RelPath>
+      <UpdateFromURL>http://172.31.12.140:7001/PMS_WS/services/I_DNJLSBSNJD_CXDNBXX%3fwsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>TheNewInterface_WebDnbService_CXDNBXXServerService</CachedSettingsPropName>
     </WebReferenceUrl>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

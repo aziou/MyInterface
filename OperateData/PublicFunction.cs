@@ -7,13 +7,14 @@ using System.Data;
 using System.Collections.ObjectModel;
 using DataCore;
 using System.IO;
-using System.Data.OracleClient;
+//using System.Data.OracleClient;
 using System.Data.SqlClient;
+using Oracle.ManagedDataAccess.Client;
 namespace OperateData
 {
     public class PublicFunction
     {
-        public string Sql_word_1 = "Provider=Microsoft.Jet.OleDb.4.0;Data Source=";
+        public string Sql_word_1 = "Provider=Microsoft.ACE.OleDb.12.0;Data Source=";
         public string Sql_word_2 = ";Persist Security Info=False";
         public readonly string BaseConfigPath = System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml";
         public readonly string datapath = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "AccessLink", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
@@ -26,7 +27,7 @@ namespace OperateData
         /// <param name="SQL"></param>
         private  void ExcuteAccess(string SQL)
         {
-            using (OleDbConnection conn = new OleDbConnection(Sql_word_1 + datapath + Sql_word_2))
+            using (OleDbConnection conn = new OleDbConnection(datapath))
             {
                 if (conn.State == ConnectionState.Closed)
                     conn.Open();
@@ -67,12 +68,40 @@ namespace OperateData
         /// 执行access  _SQL
         /// </summary>
         /// <param name="SQL"></param>
+        public bool ExcuteAccess(List<string> SQL_list,string Tmppath,bool Is3000G)
+        {
+            try
+            {
+
+                using (OleDbConnection conn = new OleDbConnection(datapath))
+                {
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+                    foreach (string temp in SQL_list)
+                    {
+                        OleDbCommand cmd = new OleDbCommand(temp, conn);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                }
+                return true;
+            }
+            catch (Exception Exlist)
+            {
+                return false;
+            }
+
+        }
+        /// <summary>
+        /// 执行access  _SQL
+        /// </summary>
+        /// <param name="SQL"></param>
         public bool ExcuteAccess(List<string> SQL_list,string local)
         {
             try
             {
 
-                using (OleDbConnection conn = new OleDbConnection(Sql_word_1 + datapath + Sql_word_2))
+                using (OleDbConnection conn = new OleDbConnection(datapath))
                 {
                     if (conn.State == ConnectionState.Closed)
                         conn.Open();
@@ -136,7 +165,7 @@ namespace OperateData
         {
             
             List<string> OutMessage = new List<string>();
-            using (OleDbConnection conn = new OleDbConnection(Sql_word_1 + datapath + Sql_word_2))
+            using (OleDbConnection conn = new OleDbConnection(datapath))
             {
                 try
                 {
@@ -183,7 +212,7 @@ namespace OperateData
         public ObservableCollection<MeterBaseInfoFactor> GetGeNingBaseInfo(string CheckTime, string SQL)
         {
             ObservableCollection<MeterBaseInfoFactor> Temp_Base = new ObservableCollection<MeterBaseInfoFactor>();
-           using (OleDbConnection conn = new OleDbConnection(Sql_word_1 + datapath + Sql_word_2))
+            using (OleDbConnection conn = new OleDbConnection(datapath))
                 {
                     if (conn.State == ConnectionState.Closed)
                         conn.Open();
@@ -253,9 +282,10 @@ namespace OperateData
         public ObservableCollection<MeterBaseInfoFactor> GetBaseInfo(string CheckTime,string SQL,string Soft_Type)
         {
             ObservableCollection<MeterBaseInfoFactor> Temp_Base = new ObservableCollection<MeterBaseInfoFactor>();
+            int itemsNum = 0;
             if (Soft_Type == "CL3000S")
             {
-                using (OleDbConnection conn = new OleDbConnection(Sql_word_1 + datapath + Sql_word_2))
+                using (OleDbConnection conn = new OleDbConnection(datapath))
                 {
                     if (conn.State == ConnectionState.Closed)
                         conn.Open();
@@ -268,6 +298,7 @@ namespace OperateData
                     {
                         Temp_Base.Add(new MeterBaseInfoFactor()
                         {
+                            Int_ItemsNum=itemsNum,
                             PK_LNG_METER_ID = Myreader["PK_LNG_METER_ID"].ToString(),
                             LNG_BENCH_POINT_NO = Myreader["LNG_BENCH_POINT_NO"].ToString(),
                             AVR_ASSET_NO = Myreader["AVR_ASSET_NO"].ToString(),
@@ -280,6 +311,7 @@ namespace OperateData
                             AVR_SEAL_2 = Myreader["AVR_SEAL_2"].ToString(),
                             AVR_SEAL_3 = Myreader["AVR_SEAL_3"].ToString(),
                         });
+                        itemsNum++;
                     }
                     conn.Close();
                     return Temp_Base;
@@ -288,7 +320,7 @@ namespace OperateData
             }
             else
             {
-                using (OleDbConnection conn = new OleDbConnection(Sql_word_1 + datapath + Sql_word_2))
+                using (OleDbConnection conn = new OleDbConnection(datapath))
                 {
                     if (conn.State == ConnectionState.Closed)
                         conn.Open();
@@ -308,7 +340,7 @@ namespace OperateData
                             AVR_IB = Myreader["chrIb"].ToString(),
                             AVR_TEST_PERSON = Myreader["chrJyy"].ToString(),
                             AVR_TOTAL_CONCLUSION = Myreader["chrJdjl"].ToString(),
-                            CHR_UPLOAD_FLAG = Myreader["chrSetNetState"].ToString(),
+                            CHR_UPLOAD_FLAG = Myreader["chrSetNetState"].ToString() == "1" ? "已上传" : "未上传",
                             AVR_SEAL_1 = Myreader["chrQianFeng1"].ToString(),
                             AVR_SEAL_2 = Myreader["chrQianFeng2"].ToString(),
                             AVR_SEAL_3 = Myreader["chrQianFeng3"].ToString(),
@@ -328,65 +360,142 @@ namespace OperateData
         /// <param name="File_Path">存放目录</param>
         public static void WriteLog(string ExceptLog, string File_Path)
         {
-            if (!File.Exists(File_Path))
+            try
             {
-                #region 创建新文件并且写下Log
-                FileStream fs = new FileStream(File_Path, FileMode.Create);
-                StreamWriter sw = new StreamWriter(fs);
+                if (!File.Exists(File_Path))
+                {
+                    #region 创建新文件并且写下Log
+                    FileStream fs = new FileStream(File_Path, FileMode.Create);
+                    StreamWriter sw = new StreamWriter(fs);
 
-                try
-                {
-                    sw.WriteLine("{0} {1}", DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss"), ExceptLog);
-                    sw.Flush();
-                }
-                catch (Exception e)
-                {
-                    throw e;
-                }
-                finally
-                {
-                    if (sw != null)
+                    try
                     {
-                        sw.Close();
+                        sw.WriteLine("{0} {1}", DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss"), ExceptLog);
+                        sw.Flush();
                     }
-                }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+                    finally
+                    {
+                        if (sw != null)
+                        {
+                            sw.Close();
+                        }
+                    }
 
-                #endregion
+                    #endregion
+                }
+                else
+                {
+                    #region 写入LOG
+                    FileStream fs = new FileStream(File_Path, FileMode.Append);
+                    StreamWriter sw = new StreamWriter(fs);
+
+                    try
+                    {
+                        sw.WriteLine("{0} {1}", DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss"), ExceptLog);
+                        sw.Flush();
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+                    finally
+                    {
+                        if (sw != null)
+                        {
+                            sw.Close();
+                        }
+                    }
+
+                    #endregion
+
+                }
             }
-            else
-            {
-                #region 写入LOG
-                FileStream fs = new FileStream(File_Path, FileMode.Append);
-                StreamWriter sw = new StreamWriter(fs);
-
-                try
-                {
-                    sw.WriteLine("{0} {1}", DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss"), ExceptLog);
-                    sw.Flush();
-                }
-                catch (Exception e)
-                {
-                    throw e;
-                }
-                finally
-                {
-                    if (sw != null)
-                    {
-                        sw.Close();
-                    }
-                }
+            catch(Exception E)
+            { 
             
-                #endregion
-                
             }
+            
         }
 
+        /// <summary>
+        /// 写入本地日志文件(清空)
+        /// </summary>
+        /// <param name="ExceptLog">错误日志</param>
+        /// <param name="File_Path">存放目录</param>
+        public static void WriteLog(string ExceptLog, string File_Path,bool IsFirst)
+        {
+            try
+            {
+                if (!File.Exists(File_Path))
+                {
 
+                    #region 创建新文件并且写下Log
+                    FileStream fs = new FileStream(File_Path, FileMode.Create);
+                    StreamWriter sw = new StreamWriter(fs);
+
+                    try
+                    {
+                        sw.WriteLine("{0} {1}", DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss"), ExceptLog);
+                        sw.Flush();
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+                    finally
+                    {
+                        if (sw != null)
+                        {
+                            sw.Close();
+                        }
+                    }
+
+                    #endregion
+                }
+                else
+                {
+                    File.Delete(File_Path);
+                    #region 创建新文件并且写下Log
+                    FileStream fs = new FileStream(File_Path, FileMode.Create);
+                    StreamWriter sw = new StreamWriter(fs);
+
+                    try
+                    {
+                        sw.WriteLine("{0} {1}", DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss"), ExceptLog);
+                        sw.Flush();
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+                    finally
+                    {
+                        if (sw != null)
+                        {
+                            sw.Close();
+                        }
+                    }
+
+                    #endregion
+
+                }
+            }
+            catch (Exception E)
+            {
+
+            }
+
+        }
         public  void GetSingleOracleData(string sql,string GetKey, out List<string> RetureList)
         {
             List<string> tempList = new List<string>();
             try
                 {
+
             using (OracleConnection conn = new OracleConnection(OracleLink))
             {
                 
@@ -399,8 +508,9 @@ namespace OperateData
                     {
                         tempList.Add(myreader[GetKey].ToString().Trim());
                     }
-               
+                    conn.Close();
             }
+
                 }
             catch (Exception exForMis)
             {
@@ -508,7 +618,7 @@ namespace OperateData
         {
             int result = 0;
             string OracleLink = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "OracleLink", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
-      
+
             try
             {
                 using (OracleConnection conn = new OracleConnection(OracleLink))
@@ -521,6 +631,7 @@ namespace OperateData
 
                         cmd.ExecuteNonQuery();
                     }
+
                     conn.Close();
 
                 }

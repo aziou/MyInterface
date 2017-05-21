@@ -36,6 +36,22 @@ namespace DataCore
                 OnPropertyChanged("BolIfup");
             }
         }
+        private int int_ItemsNum;
+        /// <summary>
+        /// items KEY
+        /// </summary>
+        public int Int_ItemsNum
+        {
+            get
+            {
+                return int_ItemsNum;
+            }
+            set
+            {
+                int_ItemsNum = value;
+                OnPropertyChanged("Int_ItemsNum");
+            }
+        }
         //唯一编号 
         private string pk_LNG_METER_ID;
         public string PK_LNG_METER_ID

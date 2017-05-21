@@ -6,12 +6,12 @@ using System.Collections.ObjectModel;
 using DataCore;
 using System.Data;
 using System.Data.OleDb;
-
+using OperateData;
 namespace SoftType_G
 {
     public class csFunction:Mis_Interface_Driver.MisDriver
     {
-        public string Sql_word_1 = "Provider=Microsoft.Jet.OleDb.4.0;Data Source=";
+        public string Sql_word_1 = "Provider=Microsoft.ACE.OleDb.12.0;Data Source=";
         public string Sql_word_2 = ";Persist Security Info=False";
         public readonly string BaseConfigPath = System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml";
         public  readonly string datapath = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_DataPath", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
@@ -21,7 +21,7 @@ namespace SoftType_G
         public static string str_GZDBH = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "TheWorkNum", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
 
         public static string str_pkId = "";
-        public static string str_DQBM = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "cmb_Company", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml"), strMinIb = "", strMaxIb = "", strXBDM = "", strJDTime = "";
+        public static string str_DQBM =  OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_CompanyNum", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml"), strMinIb = "", strMaxIb = "", strXBDM = "", strJDTime = "";
         public  ObservableCollection<MeterBaseInfoFactor> GetBaseInfo(string CheckTime, string SQL)
         {
             ObservableCollection<MeterBaseInfoFactor> Temp_Base = new ObservableCollection<MeterBaseInfoFactor>();
@@ -188,13 +188,20 @@ namespace SoftType_G
             string ErrorResult;
             List<string> SealList = new List<string>();
             List<string> mysql = new List<string>();
+            str_pkId = PKid;
             try
             {
 
 
                 mysql = Get_VT_SB_JKDNBJDJL(PKid, out SealList);
-
-
+                foreach(string temp in mysql)
+                {
+                    //PublicFunction.WriteLog(temp, OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_Report", "Value", "", BaseConfigPath)+@"\Log.txt");
+                    PublicFunction.WriteLog(temp, OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_Report", "Value", "", BaseConfigPath) + @"\Log.txt",true);
+                
+                }
+              
+                
                 excuteSuccess = OperateData.PublicFunction.ExcuteToOracle(mysql, out ErrorResult);
 
                 if (excuteSuccess == 0)
@@ -229,7 +236,10 @@ namespace SoftType_G
             {
 
                 mysql = Get_VT_SB_JKDNBJDWC(OnlyIdNum);
-
+                foreach (string temp in mysql)
+                {
+                    PublicFunction.WriteLog(temp, OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_Report", "Value", "", BaseConfigPath) + @"\Log.txt");
+                }
 
 
                 excuteSuccess = OperateData.PublicFunction.ExcuteToOracle(mysql, out ErrorReason);
@@ -272,7 +282,10 @@ namespace SoftType_G
             {
 
                 mysql = Get_VT_SB_JKRJSWC(OnlyIdNum);
-
+                foreach (string temp in mysql)
+                {
+                    PublicFunction.WriteLog(temp, OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_Report", "Value", "", BaseConfigPath) + @"\Log.txt");
+                }
 
 
                 excuteSuccess = OperateData.PublicFunction.ExcuteToOracle(mysql, out ErrorReason);
@@ -316,7 +329,10 @@ namespace SoftType_G
             {
 
                 mysql = Get_VT_SB_JKXLWCJL(OnlyIdNum, out list_Demand);
-
+                foreach (string temp in mysql)
+                {
+                    PublicFunction.WriteLog(temp, OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_Report", "Value", "", BaseConfigPath) + @"\Log.txt");
+                }
 
 
                 excuteSuccess = OperateData.PublicFunction.ExcuteToOracle(mysql, out ErrorReason);
@@ -364,7 +380,10 @@ namespace SoftType_G
             {
 
                 mysql = Get_VT_SB_JKSDTQWCJL(OnlyIdNum);
-
+                foreach (string temp in mysql)
+                {
+                    PublicFunction.WriteLog(temp, OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_Report", "Value", "", BaseConfigPath) + @"\Log.txt");
+                }
 
 
                 excuteSuccess = OperateData.PublicFunction.ExcuteToOracle(mysql, out ErrorReason);
@@ -407,7 +426,10 @@ namespace SoftType_G
             {
 
                 mysql = Get_VT_SB_JKDNBSSJL(OnlyIdNum);
-
+                foreach (string temp in mysql)
+                {
+                    PublicFunction.WriteLog(temp, OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_Report", "Value", "", BaseConfigPath) + @"\Log.txt");
+                }
 
 
                 excuteSuccess = OperateData.PublicFunction.ExcuteToOracle(mysql, out ErrorReason);
@@ -451,7 +473,10 @@ namespace SoftType_G
 
                 mysql = VT_SB_JKDNBZZJL(OnlyIdNum);
 
-
+                foreach (string temp in mysql)
+                {
+                    PublicFunction.WriteLog(temp, OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_Report", "Value", "", BaseConfigPath) + @"\Log.txt");
+                }
 
                 excuteSuccess = OperateData.PublicFunction.ExcuteToOracle(mysql, out ErrorReason);
                 if (excuteSuccess == 0)
@@ -495,7 +520,8 @@ namespace SoftType_G
            
             List<string> lis_Sql = new List<string>();
             List<string> lis_Seal = new List<string>();
-       
+            str_GZDBH = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "TheWorkNum", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
+
             string strSQL = "SELECT * FROM meterinfo where intMyId=" + str_PkID + "";
             OleDbConnection AccessConntion = new OleDbConnection(AccessLink);
             AccessConntion.Open();
@@ -635,11 +661,11 @@ namespace SoftType_G
                 strOracleSQL_Value = strOracleSQL_Value + "','" + strValue;
 
                 strOracleSQL_Name = strOracleSQL_Name + "JDQZDNSZWCSYJLDM,";  //计度器总电能示值误差试验结论代码
-                strValue = Get_METER_COMMUNICATION("031");
+                strValue = ResultsCode(Get_METER_COMMUNICATION("031"));
                 strOracleSQL_Value = strOracleSQL_Value + "','" + strValue;
 
                 strOracleSQL_Name = strOracleSQL_Name + "FLSDDNSSWCSYJLDM,";  //费率时段电能示数误差试验结论代码
-                strValue = Get_METER_COMMUNICATION("032");
+                strValue = ResultsCode(Get_METER_COMMUNICATION("032"));
                 strOracleSQL_Value = strOracleSQL_Value + "','" + strValue;
 
                 strOracleSQL_Name = strOracleSQL_Name + "XLZQWCSYJLDM,";  //需量周期误差试验结论代码
@@ -707,14 +733,14 @@ namespace SoftType_G
 
                 strOracleSQL_Name = strOracleSQL_Name + "JDRYBH,";  //检定员编号
                 strOracleSQL_Value = strOracleSQL_Value + "','" + OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_Jyy", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
-                ;
+                
 
                 strOracleSQL_Name = strOracleSQL_Name + "HYRYBH,";  //核验员编号
                 strValue = OldRead["chrHyy"].ToString().Trim();
                 string strSection = "MIS_Info/UserName/Item";
                 string strXmlValue ="";
                 strOracleSQL_Value = strOracleSQL_Value + "','" + OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_Hyy", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
-                ; ;
+                
 
                 strOracleSQL_Name = strOracleSQL_Name + "DQBM,";  //地区编码
                 strOracleSQL_Value = strOracleSQL_Value + "','" + str_DQBM;
@@ -758,7 +784,7 @@ namespace SoftType_G
                 str_Seal03 = SwitchSealNum(str_Seal03);
 
                 ColSeal.Add(str_Seal01); ColSeal.Add(str_Seal02); ColSeal.Add(str_Seal03);
-                for (int iCirc = 1; iCirc < 3; iCirc++)
+                for (int iCirc = 1; iCirc < 4; iCirc++)
                 {
                     string strCode = "chrQianFeng" + iCirc.ToString().Trim();
                     strOracleSQL_Name = "";
@@ -818,7 +844,8 @@ namespace SoftType_G
         /// <returns></returns>
         private static List<string> Get_VT_SB_JKDNBJDWC(string str_PkID)
         {
-            
+            str_GZDBH = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "TheWorkNum", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
+
             List<string> list_SQL = new List<string>();
             string strSQL = "SELECT * FROM METERERROR WHERE  intMyId=" + str_PkID + "";
             string strValue = "";
@@ -971,7 +998,8 @@ namespace SoftType_G
         /// <returns></returns>
         private static List<string> Get_VT_SB_JKRJSWC(string PKId)
         {
-            
+            str_GZDBH = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "TheWorkNum", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
+
             List<string> list_SQL = new List<string>();
             
             string strValue = "";
@@ -1060,7 +1088,8 @@ namespace SoftType_G
         /// <returns></returns>
         private static List<string> Get_VT_SB_JKXLWCJL(string pk_ID,out List<string> DemandList)
         {
-            
+            str_GZDBH = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "TheWorkNum", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
+
             List<string> list_sql = new List<string>();
             List<string> lis_Demand= new List<string>();
            
@@ -1153,7 +1182,8 @@ namespace SoftType_G
         /// <returns></returns>
         private static List<string> Get_VT_SB_JKSDTQWCJL(string PK_ID)
         {
-            
+            str_GZDBH = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "TheWorkNum", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
+
             List<string> list_sql = new List<string>();
             string strValue = "";
             string strOracleSQL_Name = "";
@@ -1229,7 +1259,8 @@ namespace SoftType_G
         /// <returns></returns>
         private static List<string> Get_VT_SB_JKDNBSSJL(string PK_IDL)
         {
-            
+            str_GZDBH = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "TheWorkNum", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
+
             List<string> list_sql = new List<string>();
             string strValue = "";
             string strTypeCode = "";
@@ -1268,11 +1299,18 @@ namespace SoftType_G
                                 strOracleSQL_Value = strOracleSQL_Value + "','" + str_DQBM;
 
 
-                                strOracleSQL_Name = strOracleSQL_Name + "BSS,";  // 抄表日期----检定日期代替 
+                                strOracleSQL_Name = strOracleSQL_Name + "BSS,";  //
                                 strValue = strParm[iCircLx];
+                                if (strValue == "")
+                                {
+                                    strOracleSQL_Name = "";
+                                    strOracleSQL_Value = "";
+                                    strOracleSQL = "insert into VT_SB_JKDNBSSJL (";
+                                    continue;
+                                }
                                 strOracleSQL_Value = strOracleSQL_Value + "','" + strValue;
 
-                                strOracleSQL_Name = strOracleSQL_Name + "CBSJ";  //抄表时间----检定日期代替
+                                strOracleSQL_Name = strOracleSQL_Name + "CBSJ";  //
                                 strValue = strJDTime;
                                 strOracleSQL_Value = strOracleSQL_Value + "',to_date('" + strValue + "','yyyy-mm-dd hh24:mi:ss')";
 
@@ -1299,7 +1337,8 @@ namespace SoftType_G
         /// <returns></returns>
         private static List<string> VT_SB_JKDNBZZJL(string PK_IDL)
         {
-           
+            str_GZDBH = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "TheWorkNum", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
+
             List<string> list_sql = new List<string>();
             string strValue = "";
             string strTypeCode = "";
@@ -1466,7 +1505,7 @@ namespace SoftType_G
 
             OperateData.PublicFunction MyDb = new OperateData.PublicFunction();
             strResults = MyDb.GetSingleData(strSQL, AccessLink);
-
+            
 
             return strResults;
         }

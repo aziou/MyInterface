@@ -12,7 +12,7 @@ namespace SoftType_S
 {
     public class csFunction : Mis_Interface_Driver.MisDriver
     {
-        public string Sql_word_1 = "Provider=Microsoft.Jet.OleDb.4.0;Data Source=";
+        public string Sql_word_1 = "Provider=Microsoft.ACE.OleDb.12.0;Data Source=";
         public string Sql_word_2 = ";Persist Security Info=False";
         public readonly string BaseConfigPath = System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml";
         public readonly string datapath = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_DataPath", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
@@ -40,6 +40,7 @@ namespace SoftType_S
                 {
                     Temp_Base.Add(new MeterBaseInfoFactor()
                     {
+
                         PK_LNG_METER_ID = Myreader["PK_LNG_METER_ID"].ToString(),
                         LNG_BENCH_POINT_NO = Myreader["LNG_BENCH_POINT_NO"].ToString(),
                         AVR_ASSET_NO = Myreader["AVR_ASSET_NO"].ToString(),
@@ -185,6 +186,8 @@ namespace SoftType_S
         #region 上传数据
         public override string UpadataBaseInfo(string PKid, out List<string> Col_For_Seal)
         {
+            str_GZDBH = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "TheWorkNum", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
+      
             int excuteSuccess = 0;
             string ErrorResult;
             str_pkId = PKid;
@@ -194,17 +197,13 @@ namespace SoftType_S
             try
             {
 
-                Stopwatch watch = new Stopwatch();
-                watch.Start();
+              
                 mysql = Get_VT_SB_JKDNBJDJL(PKid, out SealList);
-                watch.Stop();
-                Runtime = watch.ElapsedMilliseconds.ToString() + "ms";
+               
 
-                watch = new Stopwatch();
-                watch.Start();
+               
                 excuteSuccess = OperateData.PublicFunction.ExcuteToOracle(mysql, out ErrorResult);
-                watch.Stop();
-                Runtime =Runtime+"执行："+ watch.ElapsedMilliseconds.ToString() + "ms";
+               
 
                 if (excuteSuccess == 0)
                 {
@@ -237,19 +236,12 @@ namespace SoftType_S
             List<string> mysql = new List<string>();
             try
             {
-                Stopwatch watch = new Stopwatch();
-                watch.Start();
+              
                 mysql = Get_VT_SB_JKDNBJDWC(OnlyIdNum);
-                watch.Stop();
-                Runtime = watch.ElapsedMilliseconds.ToString() + "ms";
-
-                watch = new Stopwatch();
-                watch.Start();
+               
+               
                 excuteSuccess = OperateData.PublicFunction.ExcuteToOracle(mysql, out ErrorReason);
-                watch.Stop();
-                Runtime = Runtime + "执行：" + watch.ElapsedMilliseconds.ToString() + "ms";
-
-
+              
               
 
 
@@ -526,7 +518,7 @@ namespace SoftType_S
             OleDbConnection AccessConntion = new OleDbConnection(AccessLink);
             AccessConntion.Open();
             OleDbCommand ccmd = new OleDbCommand(strSQL, AccessConntion);
-
+          
 
             Stopwatch watch = new Stopwatch();
             watch.Start();
@@ -671,11 +663,11 @@ namespace SoftType_S
 
                 strOracleSQL_Name = strOracleSQL_Name + "JDQZDNSZWCSYJLDM,";  //计度器总电能示值误差试验结论代码
                 strValue = Get_METER_COMMUNICATION("005");
-                strOracleSQL_Value = strOracleSQL_Value + "','" + strValue;
+                strOracleSQL_Value = strOracleSQL_Value + "','" + ResultsCode(strValue);
 
                 strOracleSQL_Name = strOracleSQL_Name + "FLSDDNSSWCSYJLDM,";  //费率时段电能示数误差试验结论代码
                 strValue = Get_METER_COMMUNICATION("006");
-                strOracleSQL_Value = strOracleSQL_Value + "','" + strValue;
+                strOracleSQL_Value = strOracleSQL_Value + "','" + ResultsCode(strValue);
 
 
                 //strOracleSQL_Name = strOracleSQL_Name + "XLZQWCSYJLDM,";  //需量周期误差试验结论代码
@@ -720,7 +712,7 @@ namespace SoftType_S
                 string strSection = "MIS_Info/UserName/Item";
                 string strXmlValue = "";
                 strOracleSQL_Value = strOracleSQL_Value + "','" + OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_Hyy", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
-                ;
+                
                 strOracleSQL_Name = strOracleSQL_Name + "DQBM,";  //地区编码
                 strOracleSQL_Value = strOracleSQL_Value + "','" + str_DQBM;
 
@@ -809,6 +801,7 @@ namespace SoftType_S
 
                 AccessConntion.Close();
                 OldRead.Close();
+                
                 watch.Stop();
                 Runtime = Runtime + "执行：" + watch.ElapsedMilliseconds.ToString() + "ms";
             }

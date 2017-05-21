@@ -344,5 +344,11 @@ namespace TheNewInterface
         }
         private static string _strTableName = "";
 
+        public static string strBino
+        {
+            get { return _strBino; }
+            set { lock (lockValue) { _strBino = value; } }
+        }
+        private static string _strBino = "";
     }
 }

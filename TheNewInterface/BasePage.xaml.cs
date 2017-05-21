@@ -159,7 +159,7 @@ namespace TheNewInterface
             }
             #region 数据库链接字符串
             string LinkAccessWord = "";
-            string Sql_word_1 = "Provider=Microsoft.Jet.OleDb.4.0;Data Source=";
+            string Sql_word_1 = "Provider=Microsoft.ACE.OleDb.12.0;Data Source=";
             string Sql_word_2 = ";Persist Security Info=False";
             LinkAccessWord = Sql_word_1 + txt_DataPath.Text.ToString().Trim() + Sql_word_2;
             OperateData.FunctionXml.UpdateElement(strSection, "Name", "AccessLink", "Value", Sql_word_1+txt_DataPath.Text.ToString().Trim()+Sql_word_2, BaseConfigPath);

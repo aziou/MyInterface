@@ -1,7 +1,7 @@
 ﻿<Window x:Class="TheNewInterface.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="上传接口2.0.1" 
+        Title="上传接口2.0.2" 
         MinHeight="800" MaxHeight="800"
         MinWidth="1200" MaxWidth="1200">
     <Window.Resources>
@@ -25,7 +25,7 @@
 
         <TabControl Name="Tab" >
     
-                <TabItem Header="Update"  IsSelected="True">
+                <TabItem Header="上传数据"  IsSelected="True">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
@@ -42,6 +42,8 @@
                     </Grid.ColumnDefinitions>
                     <WrapPanel Grid.Column="1" VerticalAlignment="Center">
                         <ComboBox Width="80"  Height="25"  Name="cmb_Condition" VerticalContentAlignment="Center" Loaded="cmb_Condition_Loaded" SelectionChanged="cmb_Condition_SelectionChanged" IsEditable="True" />
+                        <ComboBox Width="50" Height="25" Name="cmb_TimeCondition" IsEditable="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+
                         <ComboBox Width="200" Height="25" Name="cmb_CheckTime" Loaded="cmb_CheckTime_Loaded" SelectionChanged="cmb_CheckTime_SelectionChanged" IsEditable="True"/>
                         <Button Name="btn_FindMeter" Width="80" Height="25" Content="查询" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="btn_FindMeter_Click"/>
                         <CheckBox Name="chk_ShowLess" Width="150" Height="25" Content="加载前20个检定日期" VerticalContentAlignment="Center" Margin="5,0,0,0" IsChecked="True" Click="chk_ShowLess_Click" Checked="chk_ShowLess_Checked" />
@@ -56,7 +58,7 @@
                         <WrapPanel >
                             <Label Width="80" Height="25"  Content="工作单号:" VerticalContentAlignment="Center"/>
                             <ComboBox Width="200" Height="25" Name="cmb_WorkNumList" Loaded="cmb_WorkNumList_Loaded" IsEditable="True"/>
-                            <CheckBox Width="150" Height="25" Content="获取终端检定工作单" VerticalContentAlignment="Center" Margin="5,0,0,0" Name="chk_Terminal" Click="chk_Terminal_Click"/>
+                            <CheckBox Width="150" Height="25" Content="获取终端检定工作单" VerticalContentAlignment="Center" Margin="5,0,0,0" Name="chk_Terminal" Click="chk_Terminal_Click" />
                             <RadioButton Width="50" Height="25" Content="首检" IsChecked="True" GroupName="FirstCheck" VerticalContentAlignment="Center"/>
                             <RadioButton Width="65" Height="25" Content="非首检" GroupName="FirstCheck" VerticalContentAlignment="Center"/>
                         </WrapPanel>
@@ -152,7 +154,7 @@
                 </Grid>
                 </TabItem>
             
-                <TabItem Header="Excel">
+                <TabItem Header="浏览中间库">
           <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="80"/>
@@ -816,7 +818,54 @@
         </StackPanel >-->
 
                 </Grid>
-        </TabItem>
+                 </TabItem>
+            <TabItem Header="浏览本地数据" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="9*"/>
+                        <RowDefinition Height="9*"/>
+                    </Grid.RowDefinitions>
+                        <WrapPanel HorizontalAlignment="Center" >
+                        <ComboBox Name="cmb_local_condition" Width="80" Height="25" VerticalContentAlignment="Center" IsEditable="True" SelectionChanged="cmb_local_condition_SelectionChanged"/>
+                        <ComboBox Name="cmb_local_symbol" Width="40" Height="25" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsEditable="True" />
+                        <ComboBox Name="cmb_local_Input" Width="180" Height="25" SelectionChanged="cmb_local_Input_SelectionChanged" Loaded="cmb_local_Input_Loaded"  IsEditable="True" />
+                        <Button Name="btn_local_Search" Width="80" Height="25" VerticalContentAlignment="Center" Click="btn_local_Search_Click" Content="查找"/>
+                        <Button Name="btn_local_Test" Width="80" Height="25" VerticalContentAlignment="Center" Click="btn_local_Test_Click" Visibility="Hidden" />
+                        <Button Name="btn_local_Edit" Width="80" Height="25" VerticalContentAlignment="Center" Content="可编辑" Click="btn_local_Edit_Click"/>
+                    </WrapPanel>
+                     <DataGrid Grid.Row="1" CellEditEnding="DataGrid_BaseInfo_CellEditEnding"   AutoGenerateColumns="True" CanUserAddRows="True" Name="DataGrid_BaseInfo" ItemsSource="{Binding DataBase}"  SelectedCellsChanged="DataGrid_BaseInfo_SelectedCellsChanged" IsReadOnly="True">
+                        
+                    </DataGrid>
+                    <TabControl Grid.Row="2">
+                        <TabItem Header="结论表">
+                            <DataGrid CellEditEnding="DataGrid_BaseInfo_CellEditEnding"   AutoGenerateColumns="True" CanUserAddRows="True" Name="DataGrid_ResultInfo" ItemsSource="{Binding ResultDataBase}"   IsReadOnly="True">
+
+                            </DataGrid>
+                        </TabItem>
+                        <TabItem Header="多功能表">
+                            <DataGrid CellEditEnding="DataGrid_BaseInfo_CellEditEnding"   AutoGenerateColumns="True" CanUserAddRows="True" Name="DataGrid_MultiInfo" ItemsSource="{Binding MultiDataBase}" IsReadOnly="True">
+
+                            </DataGrid>
+                        </TabItem>
+                        <TabItem Header="误差表">
+                            <DataGrid CellEditEnding="DataGrid_BaseInfo_CellEditEnding"   AutoGenerateColumns="True" CanUserAddRows="True" Name="DataGrid_ErrorInfo" ItemsSource="{Binding ErrorDataBase}"  IsReadOnly="True">
+
+                            </DataGrid>
+                        </TabItem>
+                        <TabItem Header="潜动起动表">
+                            <DataGrid CellEditEnding="DataGrid_BaseInfo_CellEditEnding"   AutoGenerateColumns="True" CanUserAddRows="True" Name="DataGrid_QiDiInfo" ItemsSource="{Binding QiDongDataBase}"  IsReadOnly="True">
+
+                            </DataGrid>
+                        </TabItem>
+                        <TabItem Header="走字表">
+                            <DataGrid CellEditEnding="DataGrid_BaseInfo_CellEditEnding"   AutoGenerateColumns="True" CanUserAddRows="True" Name="DataGrid_RunInfo" ItemsSource="{Binding RunDataBase}"   IsReadOnly="True">
+
+                            </DataGrid>
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

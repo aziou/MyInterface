@@ -19,6 +19,8 @@ namespace TheNewInterface.Model
         public string Str_Txm
         { get; set; }
 
+       
+
         private string str_Dy;
         public string Str_Dy
         { get; set; }
@@ -83,7 +85,12 @@ namespace TheNewInterface.Model
         public string Str_WGConstant
         { get; set; }
 
-
+        private string str_CJ;
+        /// <summary>
+        /// name_factory 
+        /// </summary>
+        public string Str_CJ
+        { get; set; }
 
     }
 }

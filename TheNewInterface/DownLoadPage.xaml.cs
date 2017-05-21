@@ -58,6 +58,7 @@ namespace TheNewInterface
         private void LoadMessage()
         {
             cmb_MeterType.Items.Add("电能表");
+            cmb_MeterType.Items.Add("终端表");
             cmb_MeterType.SelectedIndex = 0;
             string strSection = "NewUser/CloumMIS/Item";
             string MeterNumber = "";
@@ -447,8 +448,8 @@ namespace TheNewInterface
         {
             ObservableCollection<TheNewInterface.Model.DownLoadcs> DownInfo = new ObservableCollection<Model.DownLoadcs>();
             WebReference.CXDNBXXServerService downloadServer = new WebReference.CXDNBXXServerService();
-             WebReference.SBJLZCInType InTypeMis=new WebReference.SBJLZCInType ();
-            WebReference.SBJLZCOutType OutTypeMis=new WebReference.SBJLZCOutType ();
+            WebReference.SBJLZCInType InTypeMis = new WebReference.SBJLZCInType();
+            WebReference.SBJLZCOutType OutTypeMis = new WebReference.SBJLZCOutType();
             int Count=1;
             foreach(string temp in zcbh_list)
             {
@@ -461,13 +462,15 @@ namespace TheNewInterface
                     Str_Zcbh=OutTypeMis.ZCBH,
                     Str_Ccbh=OutTypeMis.CCBH,
                     Str_Txm=OutTypeMis.SBTMH,
+                    Str_Address=OutTypeMis.TXDZ,
                     Str_Dy=OutTypeMis.EDDYDM,
-                    Str_Dl=OutTypeMis.BDDLDM,
+                    Str_Dl=Convert.ToInt16( OutTypeMis.BDDLDM).ToString(),
                     Str_Rank=OutTypeMis.ZQDDJDM,
                     Str_Constant=OutTypeMis.YGCSDM,
                     Str_Clfs=OutTypeMis.XXDM,
                     Str_Prevent=OutTypeMis.ZNBZ,
                     Str_Connection=OutTypeMis.JRFSDM,
+                    Str_CJ=OutTypeMis.SCCJBS,
                    Str_WGConstant=OutTypeMis.WGCSDM,
                     Str_Bnum = Count.ToString(),
                     Str_IsCheck="1",
@@ -497,46 +500,99 @@ namespace TheNewInterface
                 temp.Str_Constant = CodeTransMean(CodeConstant, temp.Str_Constant);
                 temp.Str_WGConstant = CodeTransMean(CodeConstant, temp.Str_WGConstant);
                 temp.Str_Connection = CodeTransMean(CodeClfs, temp.Str_Connection);
+                temp.Str_CJ = ChangeSSCJBS(temp.Str_CJ);
                 temp.Str_Prevent = CodeTransMean(CodePrevent, temp.Str_Prevent);
             }
         }
         private bool MakeUpdateTemp(ObservableCollection<TheNewInterface.Model.DownLoadcs> OutTypeInfo)
         {
             List<string> Sql_list = new List<string>();
-            string SQL = "";
-            string AllValue="",Value="";
-            foreach (TheNewInterface.Model.DownLoadcs temp in OutTypeInfo)
-            { 
-                Value=string.Format("AVR_UB='{0}'",temp.Str_Dy);
-                AllValue=Value+",";
-                Value = string.Format("AVR_ASSET_NO='{0}'", temp.Str_Zcbh);
-                AllValue =AllValue+ Value + ",";
-                Value = string.Format("AVR_MADE_NO='{0}'", temp.Str_Ccbh);
-                AllValue = AllValue + Value + ",";
-                Value = string.Format("AVR_BAR_CODE='{0}'", temp.Str_Txm);
-                AllValue = AllValue + Value + ",";
-                Value = string.Format("AVR_IB='{0}'", temp.Str_Dl);
-                AllValue = AllValue + Value + ",";
-                Value = string.Format("AVR_WIRING_MODE='{0}'", temp.Str_Clfs);
-                AllValue = AllValue + Value + ",";
-                Value = string.Format("AVR_AR_CLASS='{0}'", temp.Str_Rank);
-                AllValue = AllValue + Value + ",";
-                Value = string.Format("CHR_CHECKED='{0}'", temp.Str_IsCheck);
-                AllValue = AllValue + Value + ",";
-                Value = string.Format("CHR_CT_CONNECTION_FLAG='{0}'", temp.Str_Connection);
-                AllValue = AllValue + Value + ",";
-                Value = string.Format("AVR_AR_CONSTANT='{0}'", temp.Str_WGConstant.Trim() == "" ? temp.Str_Constant : temp.Str_Constant + "(" + temp.Str_WGConstant + ")");
-                AllValue = AllValue + Value + ",";
-                Value = string.Format("CHR_CC_PREVENT_FLAG='{0}'", temp.Str_Prevent);
-                AllValue = AllValue + Value;
-                SQL = string.Format("update TMP_METER_INFO SET {1} WHERE {2} = {0}", temp.Str_Bnum, AllValue, "LNG_BENCH_POINT_NO");
-                Sql_list.Add(SQL);
+            string SQL = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "cmb_SoftType", "Value", "", BaseConfigPath);
+            string AllValue="",Value="",softType="";
+            if (softType == "CL3000S")
+            {
+                foreach (TheNewInterface.Model.DownLoadcs temp in OutTypeInfo)
+                {
+                    Value = string.Format("AVR_UB='{0}'", temp.Str_Dy);
+                    AllValue = Value + ",";
+                    Value = string.Format("AVR_ASSET_NO='{0}'", temp.Str_Zcbh);
+                    AllValue = AllValue + Value + ",";
+                    Value = string.Format("AVR_ADDRESS='{0}'", temp.Str_Address);
+                    AllValue = AllValue + Value + ",";
+                    Value = string.Format("AVR_MADE_NO='{0}'", temp.Str_Ccbh);
+                    AllValue = AllValue + Value + ",";
+                    Value = string.Format("AVR_BAR_CODE='{0}'", temp.Str_Txm);
+                    AllValue = AllValue + Value + ",";
+                    Value = string.Format("AVR_IB='{0}'", temp.Str_Dl);
+                    AllValue = AllValue + Value + ",";
+                    Value = string.Format("AVR_WIRING_MODE='{0}'", temp.Str_Clfs);
+                    AllValue = AllValue + Value + ",";
+                    Value = string.Format("AVR_AR_CLASS='{0}'", temp.Str_Rank);
+                    AllValue = AllValue + Value + ",";
+                    Value = string.Format("CHR_CHECKED='{0}'", temp.Str_IsCheck);
+                    AllValue = AllValue + Value + ",";
+                    //Value = string.Format("AVR_FACTORY='{0}'", temp.Str_CJ);
+                    //AllValue = AllValue + Value + ",";
+                    Value = string.Format("CHR_CT_CONNECTION_FLAG='{0}'", temp.Str_Connection);
+                    AllValue = AllValue + Value + ",";
+                    Value = string.Format("AVR_AR_CONSTANT='{0}'", temp.Str_WGConstant.Trim() == "" ? temp.Str_Constant : temp.Str_Constant + "(" + temp.Str_WGConstant + ")");
+                    AllValue = AllValue + Value + ",";
+                    Value = string.Format("CHR_CC_PREVENT_FLAG='{0}'", temp.Str_Prevent);
+                    AllValue = AllValue + Value;
+                    SQL = string.Format("update TMP_METER_INFO SET {1} WHERE {2} = {0}", temp.Str_Bnum, AllValue, "LNG_BENCH_POINT_NO");
+                    Sql_list.Add(SQL);
+                }
+                OperateData.PublicFunction csFunction = new PublicFunction();
+                return csFunction.ExcuteAccess(Sql_list);
             }
-            OperateData.PublicFunction csFunction = new PublicFunction();
-            return csFunction.ExcuteAccess(Sql_list);
+            else
+            {
+                foreach (TheNewInterface.Model.DownLoadcs temp in OutTypeInfo)
+                {
+                    Value = string.Format("chrUb='{0}'", temp.Str_Dy);
+                    AllValue = Value + ",";
+                    Value = string.Format("chrJlbh='{0}'", temp.Str_Zcbh);
+                    AllValue = AllValue + Value + ",";
+                    Value = string.Format("chrCcbh='{0}'", temp.Str_Ccbh);
+                    AllValue = AllValue + Value + ",";
+                    Value = string.Format("chrAddr='{0}'", temp.Str_Address);
+                    AllValue = AllValue + Value + ",";
+                    Value = string.Format("chrTxm='{0}'", temp.Str_Txm);
+                    AllValue = AllValue + Value + ",";
+                    Value = string.Format("chrIb='{0}'", temp.Str_Dl);
+                    AllValue = AllValue + Value + ",";
+                    Value = string.Format("intClfs={0}", temp.Str_Clfs);
+                    AllValue = AllValue + Value + ",";
+                    Value = string.Format("chrBdj='{0}'", temp.Str_Rank);
+                    AllValue = AllValue + Value + ",";
+                    Value = string.Format("intYaoJian={0}", temp.Str_IsCheck);
+                    AllValue = AllValue + Value + ",";
+                    Value = string.Format("chrHgq='{0}'", temp.Str_Connection);
+                    AllValue = AllValue + Value + ",";
+                    Value = string.Format("chrZzcj='{0}'", temp.Str_CJ);
+                    AllValue = AllValue + Value + ",";
+                    Value = string.Format("chrBcs='{0}'", temp.Str_Constant);
+                    AllValue = AllValue + Value + ",";
+                    Value = string.Format("chrZnq='{0}'", temp.Str_Prevent);
+                    AllValue = AllValue + Value;
+                    SQL = string.Format("update MeterInfoTmp SET {1} WHERE {2} = {0}", temp.Str_Bnum, AllValue, "intBno");
+                    Sql_list.Add(SQL);
+                }
+                OperateData.PublicFunction csFunction = new PublicFunction();
+                return csFunction.ExcuteAccess(Sql_list,OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "AccessLink", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml"),true);
+            }
+            
+            
         
         }
         #region Code Changes
+        private string ChangeSSCJBS(string cjdm)
+        {
+            string sql = string.Format("select * from sb_jlsbsccj where sccjbs='{0}'", cjdm);
+            string Value = "";
+            Value=OperateOracle.operateData.ExcuteOneWord(sql);
+            return Value;
+        }
         private void LoadDictory()
         {
             //电压

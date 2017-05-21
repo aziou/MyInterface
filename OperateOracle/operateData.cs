@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.OleDb;
 using System.Data;
-using System.Data.OracleClient;
+
+using Oracle.ManagedDataAccess.Client;
 namespace OperateOracle
 {
     public class operateData
@@ -49,7 +50,8 @@ namespace OperateOracle
                     listTableName.Add(myReader["ZCBH"].ToString());
                 }
 
-
+                myReader.Dispose();
+                conn.Close();
                 OraTableList = listTableName;
 
             }
@@ -150,7 +152,7 @@ namespace OperateOracle
                             StrWD = myReader["WD"].ToString(),
                             StrSD = myReader["SD"].ToString(),
                             IntMeterNum = Convert.ToInt32(myReader["BW"]),
-                            StrJdrq = myReader["JDRQ"].ToString(),
+                            StrJdrq = myReader["HYRQ"].ToString(),
                             StrJyy = myReader["JDRYBH"].ToString(),
                             StrJddw = myReader["BZ"].ToString(),  //检定单位
                             StrHyy = myReader["HYRYBH"].ToString(),
@@ -169,10 +171,11 @@ namespace OperateOracle
                         });
 
                     }
+                    myReader.Dispose();
                 }
                 else
                 {
-                    sql = "SELECT * FROM " + FromName + " WHERE " + KeywordTpye + " " + Relation1 + " '" + Keyword + "' ORDER BY JDRQ DESC";
+                    sql = "SELECT * FROM " + FromName + " WHERE " + KeywordTpye + " " + Relation1 + " '" + Keyword + "' ORDER BY HYRQ DESC";
 
                     OracleCommand adp = new OracleCommand(sql, Conn);
                     OracleDataReader myReader = null;
@@ -193,7 +196,7 @@ namespace OperateOracle
                             StrWD = myReader["WD"].ToString(),
                             StrSD = myReader["SD"].ToString(),
                             IntMeterNum = Convert.ToInt32(myReader["BW"]),
-                            StrJdrq = myReader["JDRQ"].ToString(),
+                            StrJdrq = myReader["HYRQ"].ToString(),
                             StrJyy = myReader["JDRYBH"].ToString(),
                             StrJddw = myReader["BZ"].ToString(),  //检定单位
                             StrHyy = myReader["HYRYBH"].ToString(),
@@ -212,12 +215,14 @@ namespace OperateOracle
                         });
 
                     }
+                    myReader.Dispose();
                 }
 
                 #endregion
 
 
-
+               
+                Conn.Close();
                 TempTableInfoList = tempInfoMeter;
                 return result;
 
@@ -243,7 +248,7 @@ namespace OperateOracle
                 if (Keyword.Substring(0, 1) == "E" || Keyword.Substring(0, 1) == "F" || Keyword.Contains("ZP") || Keyword.Contains("ZF"))
                 {
                     //string sql = "SELECT * FROM Vt_Sb_Jkzdjcjl WHERE to_char(JDRQ,'yyyy/MM/dd HH24:MI:SS') BETWEEN '" + ConditionShow + "' AND '" + endTime + " ' AND JDRYBH = '" + man + "' ORDER BY JDRQ,to_number(BW)";
-                    string sql = "SELECT * FROM  Vt_Sb_Jkzdjcjl WHERE JDRQ > to_date('" + ConditionShow + "','yyyy-mm-dd,hh24:mi:ss') AND JDRQ <to_date('" + endTime + "','yyyy-mm-dd,hh24:mi:ss') AND JDRYBH = '" + man + "'  ORDER BY JDRQ DESC,to_number(BW)";
+                    string sql = "SELECT * FROM  Vt_Sb_Jkzdjcjl WHERE HYRQ > to_date('" + ConditionShow + "','yyyy-mm-dd,hh24:mi:ss') AND HYRQ <to_date('" + endTime + "','yyyy-mm-dd,hh24:mi:ss') AND JDRYBH = '" + man + "'  ORDER BY HYRQ DESC,to_number(BW)";
 
                     OracleCommand adp = new OracleCommand(sql, Conn);
                     OracleDataReader myReader = null;
@@ -285,10 +290,11 @@ namespace OperateOracle
 
 
                     }
+                    myReader.Dispose();
                 }
                 else
                 {
-                    string sql = "SELECT * FROM " + FromName + " WHERE JDRQ > to_date('" + ConditionShow + "','yyyy-mm-dd,hh24:mi:ss') AND JDRQ <to_date('" + endTime + "','yyyy-mm-dd,hh24:mi:ss') AND JDRYBH = '" + man + "' ORDER BY JDRQ DESC,to_number(BW)";
+                    string sql = "SELECT * FROM " + FromName + " WHERE HYRQ > to_date('" + ConditionShow + "','yyyy-mm-dd,hh24:mi:ss') AND HYRQ <to_date('" + endTime + "','yyyy-mm-dd,hh24:mi:ss') AND JDRYBH = '" + man + "' ORDER BY to_number(BW) asc";
                     OracleCommand adp = new OracleCommand(sql, Conn);
                     OracleDataReader myReader = null;
                     myReader = adp.ExecuteReader();
@@ -327,10 +333,12 @@ namespace OperateOracle
                         });
 
                     }
+                    myReader.Dispose();
                 }
 
 
-
+               
+                Conn.Close();
                 TempTableInfoList = tempInfoMeter;
                 return result;
             }
@@ -395,6 +403,7 @@ namespace OperateOracle
                         }
 
                     }
+                    myReader.Dispose();
                 }
                 else
                 {
@@ -440,10 +449,12 @@ namespace OperateOracle
 
 
                     }
+                    myReader.Dispose();
                 }
 
 
-
+               
+                Conn.Close();
                 TempTableInfoList = tempInfoMeter;
                 return result;
             }
@@ -497,7 +508,8 @@ namespace OperateOracle
                     });
 
                 }
-
+                myReader.Dispose();
+                Conn.Close();
                 Table_temp = tempInfoMeter;
                 return result;
 
@@ -535,7 +547,8 @@ namespace OperateOracle
                     });
 
                 }
-
+                myReader.Dispose();
+                Conn.Close();
                 Table_temp = tempInfoMeter;
                 return result;
             }
@@ -577,7 +590,7 @@ namespace OperateOracle
                     });
 
                 }
-
+                Conn.Close();
                 Table_temp = tempInfoMeter;
                 return result;
             }
@@ -620,7 +633,8 @@ namespace OperateOracle
                     });
 
                 }
-
+                myReader.Dispose();
+                Conn.Close();
                 Table_temp = tempInfoMeter;
                 return result;
             }
@@ -661,7 +675,8 @@ namespace OperateOracle
                     });
 
                 }
-
+                myReader.Dispose();
+                Conn.Close();
                 Table_temp = tempInfoMeter;
                 return result;
             }
@@ -701,7 +716,8 @@ namespace OperateOracle
                     });
 
                 }
-
+                myReader.Dispose();
+                Conn.Close();
                 Table_temp = tempInfoMeter;
                 return result;
             }
@@ -744,7 +760,8 @@ namespace OperateOracle
                     });
 
                 }
-
+                myReader.Dispose();
+                Conn.Close();
                 Table_temp = tempInfoMeter;
                 return result;
             }
@@ -785,7 +802,8 @@ namespace OperateOracle
                     });
 
                 }
-
+                myReader.Dispose();
+                Conn.Close();
                 Table_temp = tempInfoMeter;
                 return result;
             }
@@ -826,7 +844,8 @@ namespace OperateOracle
                     });
 
                 }
-
+                myReader.Dispose();
+                Conn.Close();
                 Table_temp = tempInfoMeter;
                 return result;
             }
@@ -834,6 +853,40 @@ namespace OperateOracle
             {
                 Table_temp = null;
                 return -1;
+            }
+        }
+
+        public static string  ExcuteOneWord(string Sql_str)
+        {
+            int result = 0;
+            string Name_cj = "";
+            string OracleCoon = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "OracleLink", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
+
+            try
+            {
+                OracleConnection Conn = new OracleConnection(OracleCoon);
+                if (Conn.State == ConnectionState.Closed)
+                    Conn.Open();
+                string sql = Sql_str;
+                OracleCommand adp = new OracleCommand(sql, Conn);
+                OracleDataReader myReader = null;
+                myReader = adp.ExecuteReader();
+                int count = 0;
+              
+                while (myReader.Read())
+                {
+                    count++;
+
+                   Name_cj=myReader["SCCJMC"].ToString().Trim();
+
+                }
+                myReader.Dispose();
+                Conn.Close();
+                return Name_cj;
+            }
+            catch (Exception e)
+            {
+                return "";
             }
         }
         public int GetAllMeter(int MeterNum)
