@@ -156,3 +156,4 @@ D:\A_temp\MyInterface2017059\MyInterface\SoftType_S\bin\Debug\OperateData.pdb
 D:\A_temp\MyInterface2017059\MyInterface\SoftType_S\obj\Debug\SoftType_S.csprojResolveAssemblyReference.cache
 D:\A_temp\MyInterface2017059\MyInterface\SoftType_S\obj\Debug\SoftType_S.dll
 D:\A_temp\MyInterface2017059\MyInterface\SoftType_S\obj\Debug\SoftType_S.pdb
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_S\bin\Debug\Oracle.ManagedDataAccess.dll

@@ -482,3 +482,8 @@ D:\A_temp\MyInterface2017059\MyInterface\TheNewInterface\obj\x86\Debug\TheNewInt
 D:\A_temp\MyInterface2017059\MyInterface\TheNewInterface\obj\x86\Debug\TheNewInterface.g.resources
 D:\A_temp\MyInterface2017059\MyInterface\TheNewInterface\obj\x86\Debug\TheNewInterface.Properties.Resources.resources
 D:\A_temp\MyInterface2017059\MyInterface\TheNewInterface\obj\x86\Debug\TheNewInterface.csproj.GenerateResource.Cache
+D:\AziouStudio\The_GSC_Update\MyInterface\TheNewInterface\bin\Debug\SoftType_G_ZD.dll
+D:\AziouStudio\The_GSC_Update\MyInterface\TheNewInterface\bin\Debug\ViewLocalData.dll
+D:\AziouStudio\The_GSC_Update\MyInterface\TheNewInterface\bin\Debug\Oracle.ManagedDataAccess.dll
+D:\AziouStudio\The_GSC_Update\MyInterface\TheNewInterface\bin\Debug\SoftType_G_ZD.pdb
+D:\AziouStudio\The_GSC_Update\MyInterface\TheNewInterface\bin\Debug\ViewLocalData.pdb

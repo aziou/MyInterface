@@ -173,3 +173,4 @@ D:\A_temp\MyInterface2017059\MyInterface\OperateOracle\bin\Debug\DataCore.pdb
 D:\A_temp\MyInterface2017059\MyInterface\OperateOracle\obj\Debug\OperateOracle.csprojResolveAssemblyReference.cache
 D:\A_temp\MyInterface2017059\MyInterface\OperateOracle\obj\Debug\OperateOracle.dll
 D:\A_temp\MyInterface2017059\MyInterface\OperateOracle\obj\Debug\OperateOracle.pdb
+D:\AziouStudio\The_GSC_Update\MyInterface\OperateOracle\bin\Debug\Oracle.ManagedDataAccess.dll

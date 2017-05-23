@@ -185,6 +185,8 @@ namespace SoftType_G_ZD
         public override string UpadataBaseInfo(string PKid, out List<string> Col_For_Seal)
         {
             int excuteSuccess = 0;
+            str_GZDBH = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "TheWorkNum", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
+
             string ErrorResult;
             List<string> SealList = new List<string>();
             List<string> mysql = new List<string>();

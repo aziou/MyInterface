@@ -101,3 +101,4 @@ D:\A_temp\MyInterface2017059\MyInterface\Clou_Report\bin\Debug\DataCore.pdb
 D:\A_temp\MyInterface2017059\MyInterface\Clou_Report\obj\Debug\Clou_Report.csprojResolveAssemblyReference.cache
 D:\A_temp\MyInterface2017059\MyInterface\Clou_Report\obj\Debug\Clou_Report.dll
 D:\A_temp\MyInterface2017059\MyInterface\Clou_Report\obj\Debug\Clou_Report.pdb
+D:\AziouStudio\The_GSC_Update\MyInterface\Clou_Report\bin\Debug\Oracle.ManagedDataAccess.dll

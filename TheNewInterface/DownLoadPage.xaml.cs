@@ -446,46 +446,96 @@ namespace TheNewInterface
         }
         private void GetMisInfo(List<string> zcbh_list)
         {
-            ObservableCollection<TheNewInterface.Model.DownLoadcs> DownInfo = new ObservableCollection<Model.DownLoadcs>();
-            WebReference.CXDNBXXServerService downloadServer = new WebReference.CXDNBXXServerService();
-            WebReference.SBJLZCInType InTypeMis = new WebReference.SBJLZCInType();
-            WebReference.SBJLZCOutType OutTypeMis = new WebReference.SBJLZCOutType();
-            int Count=1;
-            foreach(string temp in zcbh_list)
+            string CompanyName = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_CompanyNum", "Value", "", BaseConfigPath);
+
+            if (CompanyName != "090000")
             {
-                InTypeMis.ZCBH=temp.Trim();
-                InTypeMis.DQBM = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_CompanyNum", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
-                downloadServer.I_DNJLSBSNJD_CXDNBXX(InTypeMis,out OutTypeMis);
-                if (OutTypeMis == null) { MessageBox.Show("无法查到该表的数据，请确认资产编号以及地区编号！"); return; }
-                DownInfo.Add(new TheNewInterface.Model.DownLoadcs()
+                ObservableCollection<TheNewInterface.Model.DownLoadcs> DownInfo = new ObservableCollection<Model.DownLoadcs>();
+                WebReference.CXDNBXXServerService downloadServer = new WebReference.CXDNBXXServerService();
+                WebReference.SBJLZCInType InTypeMis = new WebReference.SBJLZCInType();
+                WebReference.SBJLZCOutType OutTypeMis = new WebReference.SBJLZCOutType();
+                int Count = 1;
+                foreach (string temp in zcbh_list)
                 {
-                    Str_Zcbh=OutTypeMis.ZCBH,
-                    Str_Ccbh=OutTypeMis.CCBH,
-                    Str_Txm=OutTypeMis.SBTMH,
-                    Str_Address=OutTypeMis.TXDZ,
-                    Str_Dy=OutTypeMis.EDDYDM,
-                    Str_Dl=Convert.ToInt16( OutTypeMis.BDDLDM).ToString(),
-                    Str_Rank=OutTypeMis.ZQDDJDM,
-                    Str_Constant=OutTypeMis.YGCSDM,
-                    Str_Clfs=OutTypeMis.XXDM,
-                    Str_Prevent=OutTypeMis.ZNBZ,
-                    Str_Connection=OutTypeMis.JRFSDM,
-                    Str_CJ=OutTypeMis.SCCJBS,
-                   Str_WGConstant=OutTypeMis.WGCSDM,
-                    Str_Bnum = Count.ToString(),
-                    Str_IsCheck="1",
-                });
-                Count++;
-                
-            }
-            ChangeCode(ref DownInfo);
-            if (MakeUpdateTemp(DownInfo))
-            {
-                MessageBox.Show("下载成功！", "提示");
+                    InTypeMis.ZCBH = temp.Trim();
+                    InTypeMis.DQBM = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_CompanyNum", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
+                    downloadServer.I_DNJLSBSNJD_CXDNBXX(InTypeMis, out OutTypeMis);
+                    if (OutTypeMis == null) { MessageBox.Show("无法查到该表的数据，请确认资产编号以及地区编号！"); return; }
+                    DownInfo.Add(new TheNewInterface.Model.DownLoadcs()
+                    {
+                        Str_Zcbh = OutTypeMis.ZCBH,
+                        Str_Ccbh = OutTypeMis.CCBH,
+                        Str_Txm = OutTypeMis.SBTMH,
+                        Str_Address = OutTypeMis.TXDZ,
+                        Str_Dy = OutTypeMis.EDDYDM,
+                        Str_Dl = Convert.ToInt16(OutTypeMis.BDDLDM).ToString(),
+                        Str_Rank = OutTypeMis.ZQDDJDM,
+                        Str_Constant = OutTypeMis.YGCSDM,
+                        Str_Clfs = OutTypeMis.XXDM,
+                        Str_Prevent = OutTypeMis.ZNBZ,
+                        Str_Connection = OutTypeMis.JRFSDM,
+                        Str_CJ = OutTypeMis.SCCJBS,
+                        Str_WGConstant = OutTypeMis.WGCSDM,
+                        Str_Bnum = Count.ToString(),
+                        Str_IsCheck = "1",
+                    });
+                    Count++;
+
+                }
+                ChangeCode(ref DownInfo);
+                if (MakeUpdateTemp(DownInfo))
+                {
+                    MessageBox.Show("下载成功！", "提示");
+                }
+                else
+                {
+                    MessageBox.Show("下载失败！", "提示");
+                }
             }
             else
             {
-                MessageBox.Show("下载失败！", "提示");
+
+                ObservableCollection<TheNewInterface.Model.DownLoadcs> DownInfo = new ObservableCollection<Model.DownLoadcs>();
+                WebReferenceSZ.CXDNBXXServerService downloadServer = new WebReferenceSZ.CXDNBXXServerService();
+                WebReferenceSZ.SBJLZCInType InTypeMis = new WebReferenceSZ.SBJLZCInType();
+                WebReferenceSZ.SBJLZCOutType OutTypeMis = new WebReferenceSZ.SBJLZCOutType();
+                int Count = 1;
+                foreach (string temp in zcbh_list)
+                {
+                    InTypeMis.ZCBH = temp.Trim();
+                    InTypeMis.DQBM = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "txt_CompanyNum", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
+                    downloadServer.I_DNJLSBSNJD_CXDNBXX(InTypeMis, out OutTypeMis);
+                    if (OutTypeMis == null) { MessageBox.Show("无法查到该表的数据，请确认资产编号以及地区编号！"); return; }
+                    DownInfo.Add(new TheNewInterface.Model.DownLoadcs()
+                    {
+                        Str_Zcbh = OutTypeMis.ZCBH,
+                        Str_Ccbh = OutTypeMis.CCBH,
+                        Str_Txm = OutTypeMis.SBTMH,
+                        Str_Address = OutTypeMis.TXDZ,
+                        Str_Dy = OutTypeMis.EDDYDM,
+                        Str_Dl = Convert.ToInt16(OutTypeMis.BDDLDM).ToString(),
+                        Str_Rank = OutTypeMis.ZQDDJDM,
+                        Str_Constant = OutTypeMis.YGCSDM,
+                        Str_Clfs = OutTypeMis.XXDM,
+                        Str_Prevent = OutTypeMis.ZNBZ,
+                        Str_Connection = OutTypeMis.JRFSDM,
+                        Str_CJ = OutTypeMis.SCCJBS,
+                        Str_WGConstant = OutTypeMis.WGCSDM,
+                        Str_Bnum = Count.ToString(),
+                        Str_IsCheck = "1",
+                    });
+                    Count++;
+
+                }
+                ChangeCode(ref DownInfo);
+                if (MakeUpdateTemp(DownInfo))
+                {
+                    MessageBox.Show("下载成功！", "提示");
+                }
+                else
+                {
+                    MessageBox.Show("下载失败！", "提示");
+                }
             }
         }
         private void ChangeCode(ref ObservableCollection<TheNewInterface.Model.DownLoadcs> OutTypeInfo)
@@ -507,8 +557,8 @@ namespace TheNewInterface
         private bool MakeUpdateTemp(ObservableCollection<TheNewInterface.Model.DownLoadcs> OutTypeInfo)
         {
             List<string> Sql_list = new List<string>();
-            string SQL = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "cmb_SoftType", "Value", "", BaseConfigPath);
-            string AllValue="",Value="",softType="";
+            string softType = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "cmb_SoftType", "Value", "", BaseConfigPath);
+            string AllValue = "", Value = "", SQL = "";
             if (softType == "CL3000S")
             {
                 foreach (TheNewInterface.Model.DownLoadcs temp in OutTypeInfo)

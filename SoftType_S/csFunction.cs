@@ -620,6 +620,7 @@ namespace SoftType_S
                 strOracleSQL_Value = strOracleSQL_Value + "','" + ResultsCode(strValue);
                 strOracleSQL_Name = strOracleSQL_Name + "CSSYJLDM,";  //常数试验结论代码
                 strValue = Get_METER_RESULTS("106");
+                if (strValue == "") strValue = Get_METER_Run("");
                 strOracleSQL_Value = strOracleSQL_Value + "','" + ResultsCode(strValue);
 
                 strOracleSQL_Name = strOracleSQL_Name + "QDDL,";  //起动电流
@@ -646,6 +647,7 @@ namespace SoftType_S
 
                 strOracleSQL_Name = strOracleSQL_Name + "JBWCSYJLDM,";  //基本误差试验结论代码
                 strValue = Get_METER_RESULTS("103");
+                if (strValue == "")strValue= Get_METER_Error();
                 strOracleSQL_Value = strOracleSQL_Value + "','" + ResultsCode(strValue);
                 strOracleSQL_Name = strOracleSQL_Name + "RJSWCSYJLDM,";  //日计时误差试验结论代码
                 strValue = Get_METER_COMMUNICATION("002");
@@ -1678,6 +1680,40 @@ namespace SoftType_S
 
             OperateData.PublicFunction MyDb = new OperateData.PublicFunction();
             strResults = MyDb.GetSingleData(strSQL, AccessLink);
+
+
+            return strResults;
+        }
+        /// <summary>
+        /// 走字数据
+        /// </summary>
+        /// <param name="strSection"></param>
+        /// <param name="RESULT_ID"></param>
+        /// <returns></returns>
+        private static string Get_METER_Run(string RESULT_ID)
+        {
+            string strResults = "";
+            string strSQL = " SELECT AVR_CONCLUSION FROM METER_ENERGY_TEST_DATA where  FK_LNG_METER_ID='" + str_pkId + "'";
+
+            OperateData.PublicFunction MyDb = new OperateData.PublicFunction();
+            strResults = MyDb.GetSingleData(strSQL, AccessLink);
+
+
+            return strResults;
+        }
+        /// <summary>
+        /// 误差数据遍历
+        /// </summary>
+        /// <param name="strSection"></param>
+        /// <param name="RESULT_ID"></param>
+        /// <returns></returns>
+        private static string Get_METER_Error()
+        {
+            string strResults = "";
+            string strSQL = " SELECT AVR_ERROR_CONCLUSION FROM METER_ERROR where  FK_LNG_METER_ID='" + str_pkId + "'";
+
+            OperateData.PublicFunction MyDb = new OperateData.PublicFunction();
+            strResults = MyDb.CheckErrorData(strSQL, AccessLink);
 
 
             return strResults;

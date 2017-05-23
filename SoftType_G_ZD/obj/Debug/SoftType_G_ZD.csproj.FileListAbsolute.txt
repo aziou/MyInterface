@@ -46,3 +46,15 @@ D:\A_temp\MyInterface2017059\MyInterface\SoftType_G_ZD\bin\Debug\OperateData.pdb
 D:\A_temp\MyInterface2017059\MyInterface\SoftType_G_ZD\obj\Debug\SoftType_G_ZD.csprojResolveAssemblyReference.cache
 D:\A_temp\MyInterface2017059\MyInterface\SoftType_G_ZD\obj\Debug\SoftType_G_ZD.dll
 D:\A_temp\MyInterface2017059\MyInterface\SoftType_G_ZD\obj\Debug\SoftType_G_ZD.pdb
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_G_ZD\bin\Debug\SoftType_G_ZD.dll
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_G_ZD\bin\Debug\SoftType_G_ZD.pdb
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_G_ZD\bin\Debug\DataCore.dll
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_G_ZD\bin\Debug\Mis_Interface_Driver.dll
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_G_ZD\bin\Debug\OperateData.dll
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_G_ZD\bin\Debug\Oracle.ManagedDataAccess.dll
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_G_ZD\bin\Debug\DataCore.pdb
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_G_ZD\bin\Debug\Mis_Interface_Driver.pdb
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_G_ZD\bin\Debug\OperateData.pdb
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_G_ZD\obj\Debug\SoftType_G_ZD.csprojResolveAssemblyReference.cache
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_G_ZD\obj\Debug\SoftType_G_ZD.dll
+D:\AziouStudio\The_GSC_Update\MyInterface\SoftType_G_ZD\obj\Debug\SoftType_G_ZD.pdb

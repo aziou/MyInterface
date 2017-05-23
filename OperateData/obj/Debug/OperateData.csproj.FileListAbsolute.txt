@@ -86,3 +86,4 @@ D:\A_temp\MyInterface2017059\MyInterface\OperateData\bin\Debug\DataCore.pdb
 D:\A_temp\MyInterface2017059\MyInterface\OperateData\obj\Debug\OperateData.csprojResolveAssemblyReference.cache
 D:\A_temp\MyInterface2017059\MyInterface\OperateData\obj\Debug\OperateData.dll
 D:\A_temp\MyInterface2017059\MyInterface\OperateData\obj\Debug\OperateData.pdb
+D:\AziouStudio\The_GSC_Update\MyInterface\OperateData\bin\Debug\Oracle.ManagedDataAccess.dll

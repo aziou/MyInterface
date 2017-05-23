@@ -186,6 +186,8 @@ namespace SoftType_G
         {
             int excuteSuccess = 0;
             string ErrorResult;
+            str_GZDBH = OperateData.FunctionXml.ReadElement("NewUser/CloumMIS/Item", "Name", "TheWorkNum", "Value", "", System.AppDomain.CurrentDomain.BaseDirectory + @"\config\NewBaseInfo.xml");
+
             List<string> SealList = new List<string>();
             List<string> mysql = new List<string>();
             str_pkId = PKid;
@@ -1301,7 +1303,7 @@ namespace SoftType_G
 
                                 strOracleSQL_Name = strOracleSQL_Name + "BSS,";  //
                                 strValue = strParm[iCircLx];
-                                if (strValue == "")
+                                if (strValue.Trim() == "")
                                 {
                                     strOracleSQL_Name = "";
                                     strOracleSQL_Value = "";

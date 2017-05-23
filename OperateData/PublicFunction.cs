@@ -306,7 +306,7 @@ namespace OperateData
                             AVR_IB = Myreader["AVR_IB"].ToString(),
                             AVR_TEST_PERSON = Myreader["AVR_TEST_PERSON"].ToString(),
                             AVR_TOTAL_CONCLUSION = Myreader["AVR_TOTAL_CONCLUSION"].ToString(),
-                            CHR_UPLOAD_FLAG = Myreader["CHR_UPLOAD_FLAG"].ToString()=="1"?"已上传":"未上传",
+                            CHR_UPLOAD_FLAG = Myreader["CHR_UPLOAD_FLAG"].ToString().Trim()=="1"?"已上传":"未上传",
                             AVR_SEAL_1 = Myreader["AVR_SEAL_1"].ToString(),
                             AVR_SEAL_2 = Myreader["AVR_SEAL_2"].ToString(),
                             AVR_SEAL_3 = Myreader["AVR_SEAL_3"].ToString(),
@@ -570,6 +570,42 @@ namespace OperateData
                 if (red.Read() == true)
                 {
                     strResult = red[0].ToString().Trim();
+                }
+                red.Close();
+                AccessConntion.Close();
+                AccessConntion.Dispose();
+            }
+            catch { }
+            finally
+            {
+                AccessConntion.Close();
+            }
+            return strResult;
+        }
+
+        /// <summary>
+        /// 误差结论遍历
+        /// </summary>
+        /// <param name="strSQL">SQL语句</param>
+        /// <param name="strOleDbConntion">数据库链接字符串</param>
+        /// <returns>返回第一个字段</returns>
+        public string CheckErrorData(string strSQL, string strOleDbConntion)
+        {
+            string strResult = "合格";
+            OleDbConnection AccessConntion = new OleDbConnection(strOleDbConntion);
+            try
+            {
+                AccessConntion.Open();
+                OleDbCommand ccmd = new OleDbCommand(strSQL, AccessConntion);
+                OleDbDataReader red = ccmd.ExecuteReader();
+                while (red.Read() == true)
+                {
+                    if (red[0].ToString().Trim().Contains("不"))
+                    {
+                        strResult = "不合格";
+                        break;
+                    }
+                    
                 }
                 red.Close();
                 AccessConntion.Close();
